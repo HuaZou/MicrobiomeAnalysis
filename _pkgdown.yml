@@ -1,0 +1,8 @@
+reference:
+  - title: "Data import"
+    desc: >
+      Functions for importing external data and converting other R object
+      as phyloseq or reverse converting
+    contents:
+      - starts_with("import")
+      - import_biom

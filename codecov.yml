@@ -1,0 +1,13 @@
+# disable project and patch check
+coverage:
+  status:
+    project:
+      default:
+        enabled: false
+    patch:
+      default:
+        enabled: false
+    changes: no
+
+after_success:
+    - Rscript -e 'covr::codecov()'
