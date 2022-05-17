@@ -7,7 +7,7 @@ html_preview: false
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# MicrobiomeAnalysis: An comprehensive R package for managing and analyzing microbiome data 
+# MicrobiomeAnalysis: A comprehensive R package for managing and analyzing microbiome data 
 
 ```{r, echo=FALSE, results="hide", message=FALSE}
 Biocpkg <- function (pkg) {

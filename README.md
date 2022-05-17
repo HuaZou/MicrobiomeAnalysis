@@ -1,6 +1,6 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# MicrobiomeAnalysis: An comprehensive R package for managing and analyzing microbiome data
+# MicrobiomeAnalysis: A comprehensive R package for managing and analyzing microbiome data
 
 This package has many unique features:
 
@@ -20,12 +20,12 @@ Requiring the R-base version more than **4.1.2**. Some of the
 dependencies from CRAN or bioconductor, but others, are only obtained
 from github. the version of dependencies are as follows:
 
--   phyloseq (\>= 1.38.0)
--   ggplot2 (\>= 3.3.5)
--   dplyr (\>= 1.0.8)
--   tibble (\>= 3.1.6)
--   ggplot2 (\>= 3.3.5)
--   Biobase (\>= 2.54.0)
+-   phyloseq (>= 1.38.0)
+-   ggplot2 (>= 3.3.5)
+-   dplyr (>= 1.0.8)
+-   tibble (>= 3.1.6)
+-   ggplot2 (>= 3.3.5)
+-   Biobase (>= 2.54.0)
 
 There are two methods to install the aforementioned packages.
 

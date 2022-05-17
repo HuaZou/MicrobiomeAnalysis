@@ -4,7 +4,7 @@ library(magrittr)
 
 
 # build package
-# roxygen2::roxygenise("~/Documents/github/MicrobiomeAnalysis/")
+# roxygen2::roxygenise(getwd())
 # devtools::check(document = FALSE)
 # devtools::build(binary = FALSE, manual = TRUE, quiet = FALSE)
 

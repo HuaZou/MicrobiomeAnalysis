@@ -1,5 +1,5 @@
 ---
-title: "MicrobiomeAnalysis: An comprehensive R package for managing and analyzing microbiome data"
+title: "MicrobiomeAnalysis: A comprehensive R package for managing and analyzing microbiome data"
 author: 
   - name: Hua Zou
     affiliation: UCAS
