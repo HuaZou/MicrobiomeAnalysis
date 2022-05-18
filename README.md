@@ -116,6 +116,8 @@ Welcome any contributions or comments, and you can file them
 
 Thanks all the developers of the methods integrated into
 **MicrobiomeAnalysis**. The reference package is
+[microbiomeMarker](https://github.com/yiluheihei/microbiomeMarker). The
+R codes of differentail analysis methods are almost from
 [microbiomeMarker](https://github.com/yiluheihei/microbiomeMarker).
 
 ## :eight_pointed_black_star: Citation

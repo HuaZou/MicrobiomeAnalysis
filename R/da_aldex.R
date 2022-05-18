@@ -15,7 +15,7 @@
 #'
 #' @author Created by Yang Cao; modified by Hua Zou (5/17/2022 Shenzhen China)
 #'
-#' @param object a [`phyloseq::phyloseq-class`] object
+#' @param ps a [`phyloseq::phyloseq-class`] object
 #' @param group character, the variable to set the group
 #' @param taxa_rank character to specify taxonomic rank to perform
 #'   differential analysis on. Should be one of
