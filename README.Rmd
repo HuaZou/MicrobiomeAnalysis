@@ -142,7 +142,7 @@ Using the following command and Choosing the `html` for more details.
 utils::browseVignettes(package="MicrobiomeAnalysis")
 ```
 
-**[the tutorial of Microbiota Data Analysis by MicrobiomeAnalysis](https://zouhua.top/MicrobiomeAnalysis/) made by bookdown**.
+**[the tutorial of Microbiota Data Analysis by MicrobiomeAnalysis](https://zouhua.top/MicrobiomeAnalysis_book/) made by bookdown**.
 
 
 ## :sparkling_heart: Contributing
