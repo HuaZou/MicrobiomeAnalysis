@@ -30,6 +30,7 @@ This the constructor to build the \code{\linkS4class{microbiomeMarker}} object, 
 use the \code{new()} constructor.
 }
 \examples{
+
 microbiomeMarker(
     marker_table = marker_table(data.frame(
         feature = c("speciesA", "speciesB"),
@@ -58,6 +59,7 @@ microbiomeMarker(
         row.names = c("sample1", "sample2")
     ))
 )
+
 }
 \seealso{
 \code{\link[phyloseq:phyloseq]{phyloseq::phyloseq()}}

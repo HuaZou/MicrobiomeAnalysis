@@ -21,6 +21,7 @@ a \code{\linkS4class{microbiomeMarker}} object.
 This function replace the \code{marker_table} slot of \code{object} with \code{value}.
 }
 \examples{
+
 data(enterotypes_arumugam)
 mm <- run_limma_voom(
     enterotypes_arumugam,
@@ -33,4 +34,5 @@ mm_marker <- marker_table(mm)
 mm_marker
 marker_table(mm) <- mm_marker[1:2, ]
 marker_table(mm)
+
 }

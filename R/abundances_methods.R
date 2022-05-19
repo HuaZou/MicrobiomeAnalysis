@@ -36,9 +36,10 @@ setGeneric(
 #' @rdname abundances-methods
 setMethod(
     abundances, "otu_table",
-    function(object, 
+    function(object,
         transform = c("identity", "log10", "log10p"),
         norm = FALSE) {
+
         transform <- match.arg(transform, c("identity", "log10", "log10p"))
         obj_transed <- transform_abundances(object, transform = transform)
         abd <- as(otu_table(obj_transed), "matrix")
@@ -50,7 +51,7 @@ setMethod(
             }
         }
 
-        abd
+        return(abd)
     }
 )
 
@@ -62,6 +63,7 @@ setMethod(
     function(object,
         transform = c("identity", "log10", "log10p"),
         norm = FALSE) {
+
         transform <- match.arg(transform, c("identity", "log10", "log10p"))
         otu <- otu_table(object)
         if (norm) {
@@ -72,7 +74,7 @@ setMethod(
         }
         otu <- abundances(otu, transform = transform, norm = norm)
 
-        otu
+        return(otu)
     }
 )
 
@@ -83,10 +85,11 @@ setMethod(
     abundances, "microbiomeMarker",
     function(object,
         transform = c("identity", "log10", "log10p")) {
+
         transform <- match.arg(transform, c("identity", "log10", "log10p"))
         otu <- otu_table(object)
         otu <- abundances(otu, transform = transform, norm = FALSE)
 
-        otu
+        return(otu)
     }
 )

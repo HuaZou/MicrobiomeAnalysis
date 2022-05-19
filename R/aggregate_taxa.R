@@ -1,25 +1,37 @@
 ## Note: This function is copied from package microbiome
 
 #' @title Aggregate Taxa
+#'
 #' @description Summarize phyloseq data into a higher phylogenetic level.
+#'
 #' @details This provides a convenient way to aggregate phyloseq OTUs
 #' (or other taxa) when the phylogenetic tree is missing. Calculates the
 #' sum of OTU abundances over all OTUs that map to the same higher-level
 #' group. Removes ambiguous levels from the taxonomy table. Returns a
 #' phyloseq object with the summarized abundances.
+#'
 #' @param x \code{\link{phyloseq-class}} object
 #' @param level Summarization level (from \code{rank_names(pseq)})
 #' @param verbose verbose
+#'
 #' @return Summarized phyloseq object
+#'
 #' @examples
 #' data(caporaso)
 #' caporaso_phylum <- aggregate_taxa(caporaso, "Phylum")
+#'
 #' @importFrom phyloseq taxa_are_rows<- merge_phyloseq
+#'
 #' @export
+#'
 #' @references See citation('microbiome')
+#'
 #' @author Contact: Leo Lahti \email{microbiome-admin@@googlegroups.com}
+#'
 #' @keywords utilities
+#'
 aggregate_taxa <- function(x, level, verbose = FALSE) {
+
     if (!level %in% rank_names(x)) {
         stop(
             "The level argument should be one of the options
@@ -171,5 +183,5 @@ aggregate_taxa <- function(x, level, verbose = FALSE) {
         )
     }
 
-    x2
+    return(x2)
 }

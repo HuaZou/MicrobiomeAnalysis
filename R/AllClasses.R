@@ -6,15 +6,20 @@
 #' markers and variables represents feature of the marker.
 #'
 #' @name marker_table-class
+#'
 #' @aliases marker_table-class
+#'
 #' @field names,row.names a character vector, inherited from the input
 #' data.frame
 #' @field .data a list, each element corresponding the each column of the
 #' input data.frame
 #' @field .S3Class character, the S3 class `marker_table` inherited from:
 #' "`data.frame`"
+#'
 #' @author Yang Cao
+#'
 #' @exportClass marker_table
+#'
 setClass("marker_table", contains = "data.frame")
 
 # validator of marker_table
@@ -57,24 +62,32 @@ setClassUnion("numericOrNULL", c("numeric", "NULL"))
 
 # microbiomeMarker class --------------------------------------------------
 
-#' The main class for microbiomeMarker data
+#' @title The main class for microbiomeMarker data
 #'
+#' @description
 #' `microbiomeMarker-class` is inherited from the [`phyloseq::phyloseq-class`]
 #' by adding a custom slot `microbiome_marker` to save the differential analysis
 #' results. And it provides a seamless interface with **phyloseq**, which makes
 #' **microbiomeMarker** simple and easy to use. For more details on see the
 #' document of [`phyloseq::phyloseq-class`].
+#'
 #' @name microbiomeMarker-class
+#'
 #' @aliases microbiomeMarker-class
+#'
 #' @importClassesFrom phyloseq phyloseq
+#'
 #' @slot marker_table a data.frame, a [`marker_table-class`] object.
 #' @slot norm_method character, method used to normalize the input `phyloseq`
 #'   object.
 #' @slot diff_method character, method used for marker identification.
+#'
 #' @seealso [`phyloseq::phyloseq-class`], [`marker_table-class`],
 #' [summarize_taxa()]
+#'
 #' @exportClass microbiomeMarker
 #' @return a [`microbiomeMarker-class`] object.
+#'
 `microbiomeMarker-class` <- setClass("microbiomeMarker",
     slots = c(
         marker_table = "marker_tableOrNULL",
@@ -89,21 +102,29 @@ setClassUnion("numericOrNULL", c("numeric", "NULL"))
     )
 )
 
-#' Build microbiomeMarker-class objects
+#' @title Build microbiomeMarker-class objects
 #'
+#' @description
 #' This the constructor to build the [`microbiomeMarker-class`] object, don't
 #' use the `new()` constructor.
+#'
 #' @param marker_table a [`marker_table-class`] object differtial analysis.
 #' @param norm_method character, method used to normalize the input `phyloseq`
 #'   object.
 #' @param diff_method character, method used for microbiome marker
 #'   identification.
 #' @param ... arguments passed to [phyloseq::phyloseq()]
+#'
 #' @seealso [phyloseq::phyloseq()]
+#'
 #' @name microbiomeMarker
+#'
 #' @export
+#'
 #' @return  a [`microbiomeMarker-class`] object.
+#'
 #' @examples
+#'
 #' microbiomeMarker(
 #'     marker_table = marker_table(data.frame(
 #'         feature = c("speciesA", "speciesB"),
@@ -132,6 +153,7 @@ setClassUnion("numericOrNULL", c("numeric", "NULL"))
 #'         row.names = c("sample1", "sample2")
 #'     ))
 #' )
+#'
 microbiomeMarker <- function(marker_table = NULL,
     norm_method = NULL,
     diff_method = NULL,
@@ -213,6 +235,7 @@ setValidity("microbiomeMarker", validity_microbiomeMarker)
 
 # postHocTest  class ------------------------------------------------------
 
+#' @title
 #' The postHocTest Class, represents the result of post-hoc test result among
 #' multiple groups
 #'
@@ -228,12 +251,19 @@ setValidity("microbiomeMarker", validity_microbiomeMarker)
 #' @slot conf_level confidence level
 #' @slot method method used for post-hoc test
 #' @slot method_str method illustration
+#'
 #' @name postHocTest-class
+#'
 #' @aliases postHocTest-class
+#'
 #' @author Yang Cao
+#'
 #' @exportClass postHocTest
+#'
 #' @importClassesFrom IRanges DataFrameList
+#'
 #' @return a [`postHocTest-class`] object.
+#'
 setClass("postHocTest",
     slots = c(
         result = "DataFrameList",
@@ -283,8 +313,9 @@ validity_postHocTest <- function(object) {
 setValidity("postHocTest", validity_postHocTest)
 
 
-#' Build postHocTest object
+#' @title Build postHocTest object
 #'
+#' @description
 #' This function is used for create `postHocTest` object, and is only used for
 #' developers.
 #'
@@ -294,9 +325,13 @@ setValidity("postHocTest", validity_postHocTest)
 #' @param method character, method for posthoc test.
 #' @param  method_str character, illustrates which method is used for posthoc
 #'   test.
+#'
 #' @return a [`postHocTest-class`] object.
+#'
 #' @export
+#'
 #' @examples
+#'
 #' \dontrun{
 #' require(IRanges)
 #' pht <- postHocTest(

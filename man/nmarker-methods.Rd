@@ -23,6 +23,7 @@ an integer, the number of microbiome markers
 Get the number of microbiome markers
 }
 \examples{
+
 mt <- marker_table(data.frame(
     feature = c("speciesA", "speciesB"),
     enrich_group = c("groupA", "groupB"),
@@ -32,4 +33,5 @@ mt <- marker_table(data.frame(
     row.names = c("marker1", "marker2")
 ))
 nmarker(mt)
+
 }

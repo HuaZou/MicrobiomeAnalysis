@@ -1,14 +1,20 @@
-#' Assign a new OTU table
+#' @title Assign a new OTU table
 #'
-#' Assign a new OTU table in microbiomeMarker object
+#' @description Assign a new OTU table in microbiomeMarker object
+#'
 #' @param x [`microbiomeMarker-class`]
 #' @param value [`otu_table-class`], [`phyloseq-class`],
 #'   or [`microbiomeMarker-class`]
+#'
 #' @docType methods
+#'
 #' @name assign-otu_table
+#'
 #' @importMethodsFrom phyloseq otu_table<-
 #' @importClassesFrom phyloseq otu_table
+#'
 #' @return a [`microbiomeMarker-class`] object.
+#'
 NULL
 
 #' @rdname assign-otu_table

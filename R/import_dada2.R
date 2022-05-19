@@ -58,6 +58,7 @@
 #' ps <- import_dada2(seq_tab = seq_tab, tax_tab = tax_tab, sam_tab = sam_tab)
 #' ps
 #' }
+#'
 import_dada2 <- function(
     seq_tab,
     tax_tab = NULL,
@@ -101,3 +102,5 @@ import_dada2 <- function(
 
     return(ps)
 }
+
+

@@ -1,7 +1,7 @@
 # available taxonomic ranks, Summarize represents summarized tax
 available_ranks <- c(
     "Kingdom", "Phylum", "Class", "Order",
-    "Family", "Genus", "Species"
+    "Family", "Genus", "Species", "Strain", "unique"
 )
 available_ranks <- factor(
     available_ranks,

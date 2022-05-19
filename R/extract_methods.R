@@ -1,6 +1,6 @@
-#' Extract `marker_table` object
+#' @title Extract `marker_table` object
 #'
-#' Operators acting on `marker_table` to extract parts.
+#' @description Operators acting on `marker_table` to extract parts.
 #'
 #' @name [
 #' @aliases [,marker_table,ANY,ANY,ANY-method
@@ -11,6 +11,7 @@
 #' @export
 #' @rdname extract-methods
 #' @seealso [`base::Extract()`]
+#'
 setMethod("[", "marker_table", function(x, i, j, ...) {
     newx <- marker_table(data.frame(x)[i, j, drop = FALSE])
     newx

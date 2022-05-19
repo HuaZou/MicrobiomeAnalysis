@@ -109,6 +109,21 @@ run_aldex <- function(ps,
                       denom = c("all", "iqlr", "zero", "lvha"),
                       paired = FALSE) {
 
+  ps = phyloseq::subset_samples(
+         enterotypes_arumugam,
+         Enterotype %in% c("Enterotype 3", "Enterotype 2", "Enterotype 1"))
+  group = "Enterotype"
+  taxa_rank = "Genus"
+  transform = "identity"
+  norm = "none"
+  norm_para = list()
+  method = "kruskal"
+  p_adjust = "none"
+  pvalue_cutoff = 0.05
+  mc_samples = 128
+  denom = "all"
+  paired = FALSE
+
   stopifnot(inherits(ps, "phyloseq"))
   ps <- check_rank_names(ps) %>%
     check_taxa_rank(taxa_rank)
@@ -384,7 +399,7 @@ aldex_kw <- function(reads,
     padj = e_padj
   )
 
-  res
+  return(res)
 }
 
 # enriched group for kw and glm anova
@@ -401,7 +416,7 @@ get_aldex_kwglm_enrich_group <- function(mc_instance_ldf, conditions) {
   max_idx <- apply(instance_mean, 1, which.max)
   enrich_group <- names(instance_mean)[max_idx]
 
-  enrich_group
+  return(enrich_group)
 }
 
 # Each element of mc instances of a clr object represents all instances of a
@@ -417,7 +432,7 @@ convert_instance <- function(mc_instance, mc_samples) {
     }
   )
 
-  mc_instance_ldf
+  return(mc_instance_ldf)
 }
 
 
@@ -462,7 +477,7 @@ t_fast <- function(x, group, paired = FALSE) {
     res <- pt(abs(t), df = df, lower.tail = FALSE) * 2
   }
 
-  res
+  return(res)
 }
 
 # wilcox.fast function replaces wilcox.test
@@ -540,5 +555,5 @@ wilcox_fast <- function(x, group, paired = FALSE) {
     }
   }
 
-  res
+  return(res)
 }

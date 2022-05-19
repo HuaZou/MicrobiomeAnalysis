@@ -2,12 +2,10 @@ library(MicrobiomeAnalystR)
 library(phyloseq)
 library(magrittr)
 
-
 # build package
 # roxygen2::roxygenise(getwd())
 # devtools::check(document = FALSE)
 # devtools::build(binary = FALSE, manual = TRUE, quiet = FALSE)
-
 
 # Human Moving Picture from MicrobiomeAnalyst server ----------------------
 download.file(

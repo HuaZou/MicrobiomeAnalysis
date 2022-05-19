@@ -1,15 +1,22 @@
 # marker_table class -----------------------------------------------------------
 
-#' Build or access the marker_table
+#' @title Build or access the marker_table
 #'
+#' @description
 #' This is the recommended function for both building and accessing microbiome
 #' marker table ([`marker_table-class`]).
+#'
 #' @param object an object among the set of classes defined by the
 #' microbiomeMarker package that contain `marker_table`
+#'
 #' @export
+#'
 #' @rdname marker_table-methods
+#'
 #' @return a [`marker_table-class`] object.
+#'
 #' @examples
+#'
 #' data(enterotypes_arumugam)
 #' mm <- run_limma_voom(
 #'     enterotypes_arumugam,
@@ -45,19 +52,26 @@ setMethod("marker_table", "microbiomeMarker", function(object) {
 
 
 # Assign marker_table -----------------------------------------------------
-#' Assign marker_table to `object`
+#' @title Assign marker_table to `object`
 #'
+#' @description
 #' This function replace the `marker_table` slot of `object` with `value`.
 #'
 #' @param object a [`microbiomeMarker-class`] object to modify.
 #' @param value new value to replace the `marker_table` slot of `object`.
 #'   Either a `marker_table-class`, a `data.frame` that can be coerced
 #'   into `marker_table-class`.
+#'
 #' @export
+#'
 #' @rdname assign-marker_table
+#'
 #' @aliases assign-marker_table marker_table<-
+#'
 #' @return a [`microbiomeMarker-class`] object.
+#'
 #' @examples
+#'
 #' data(enterotypes_arumugam)
 #' mm <- run_limma_voom(
 #'     enterotypes_arumugam,
@@ -70,6 +84,7 @@ setMethod("marker_table", "microbiomeMarker", function(object) {
 #' mm_marker
 #' marker_table(mm) <- mm_marker[1:2, ]
 #' marker_table(mm)
+#'
 "marker_table<-" <- function(object, value) {
     if (!inherits(value, "marker_table") && !is.null(value)) {
         value <- marker_table(value)
@@ -92,6 +107,7 @@ setMethod("marker_table", "microbiomeMarker", function(object) {
 #' @rdname microbiomeMarker-class
 #' @param object a `microbiomeMarker-class` object
 #' @export
+#'
 setMethod("show", "microbiomeMarker", function(object) {
     cat("microbiomeMarker-class inherited from phyloseq-class", fill = TRUE)
     norm <- object@norm_method
@@ -118,7 +134,7 @@ setMethod("show", "microbiomeMarker", function(object) {
             fill = TRUE
         )
     }
-    
+
     if (!is.null(object@marker_table)) {
         cat(
             "marker_table() Marker Table:       [",
@@ -185,13 +201,20 @@ setMethod("show", "microbiomeMarker", function(object) {
 
 # get the number of markers -----------------------------------------------
 
-#' Get the number of microbiome markers
+#' @title Get the number of microbiome markers
+#'
 #' @param object a [`microbiomeMarker-class`] or [`marker_table-class`] object
+#'
 #' @docType methods
+#'
 #' @rdname nmarker-methods
+#'
 #' @return an integer, the number of microbiome markers
+#'
 #' @export
+#'
 #' @examples
+#'
 #' mt <- marker_table(data.frame(
 #'     feature = c("speciesA", "speciesB"),
 #'     enrich_group = c("groupA", "groupB"),
@@ -201,6 +224,7 @@ setMethod("show", "microbiomeMarker", function(object) {
 #'     row.names = c("marker1", "marker2")
 #' ))
 #' nmarker(mt)
+#'
 setGeneric("nmarker", function(object) standardGeneric("nmarker"))
 
 #' @rdname nmarker-methods

@@ -32,6 +32,7 @@ This function is used for create \code{postHocTest} object, and is only used for
 developers.
 }
 \examples{
+
 \dontrun{
 require(IRanges)
 pht <- postHocTest(

@@ -57,6 +57,7 @@ sam_tab <- read.table(
 ps <- import_dada2(seq_tab = seq_tab, tax_tab = tax_tab, sam_tab = sam_tab)
 ps
 }
+
 }
 \author{
 Created by Yang Cao; modified by Hua Zou (5/14/2022 Shenzhen China)

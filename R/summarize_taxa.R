@@ -1,5 +1,6 @@
-#' Summarize taxa into a taxonomic level within each sample
+#' @title Summarize taxa into a taxonomic level within each sample
 #'
+#' @description
 #' Provides summary information of the representation of a taxonomic levels
 #' within each sample.
 #'
@@ -9,12 +10,17 @@
 #' @param absolute logical, whether return the absolute abundance or
 #'   relative abundance, default `FALSE`.
 #' @param sep a character string to separate the taxonomic levels.
+#'
 #' @return a [`phyloseq::phyloseq-class`] object, where each row represents a
 #'   taxa, and each col represents the taxa abundance of each sample.
+#'
 #' @export
+#'
 #' @examples
+#'
 #' data(enterotypes_arumugam)
 #' summarize_taxa(enterotypes_arumugam)
+#'
 summarize_taxa <- function(ps,
     level = rank_names(ps)[1],
     absolute = TRUE,
@@ -86,6 +92,7 @@ extract_prefix <- function(ranks) {
     rank_name,
     absolute = TRUE,
     sep = "|") {
+
     if (!absolute) {
         ps <- transform_sample_counts(ps, function(x) x / sum(x))
     }
@@ -99,7 +106,7 @@ extract_prefix <- function(ranks) {
 
     ranks <- setdiff(available_ranks, "Summarize")
     rank_level <- match(rank_name, ranks)
-    select_ranks <- intersect(ranks[seq_len(rank_level)], rank_names(ps))
+    select_ranks <- dplyr::intersect(ranks[seq_len(rank_level)], rank_names(ps))
 
     consensus <- taxas[, select_ranks] %>%
         purrr::pmap_chr(paste, sep = sep)
@@ -147,7 +154,7 @@ add_prefix <- function(ps) {
     lvl <- colnames(tax)
     prefix <- get_prefix(lvl)
 
-    tax_new <- mapply(function(x, y) paste0(x, y), 
+    tax_new <- mapply(function(x, y) paste0(x, y),
         prefix, tax, SIMPLIFY = FALSE)
     tax_new <- do.call(cbind, tax_new)
     row.names(tax_new) <- row.names(tax)
