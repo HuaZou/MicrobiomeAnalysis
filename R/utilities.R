@@ -625,8 +625,6 @@ transpose_and_2df <- function(ot) {
 #' [`Biobase::ExpressionSet`] or [`phyloseq::otu_table-class`] or
 #' [`phyloseq::otu_table-class`] or matrix/metadata.
 #'
-#' @export
-#'
 check_sample_names <- function(object) {
 
   # phyloseq
@@ -687,8 +685,6 @@ check_sample_names <- function(object) {
 #'
 #' @importFrom RColorBrewer brewer.pal.info brewer.pal
 #'
-#' @export
-#'
 default_color <- function(number = 74) {
 
   dat_color <- RColorBrewer::brewer.pal.info
@@ -709,8 +705,6 @@ default_color <- function(number = 74) {
 #' This funciton is to obtain eigenvalues/variances of dimensions
 #'
 #' @param X (Required). Ordination result.
-#'
-#' @export
 #'
 get_eigValue <- function (X) {
 

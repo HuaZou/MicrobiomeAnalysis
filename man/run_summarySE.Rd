@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities_statistics.R
 \name{run_summarySE}
 \alias{run_summarySE}
-\title{Summarizes data}
+\title{Summarizes data for mean median sd etc}
 \usage{
 run_summarySE(
   data,

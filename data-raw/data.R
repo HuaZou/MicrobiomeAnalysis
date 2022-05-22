@@ -7,6 +7,9 @@ library(magrittr)
 # devtools::check(document = FALSE)
 # devtools::build(binary = FALSE, manual = TRUE, quiet = FALSE)
 
+# build pkgdown
+# pkgdown::build_site() # Run to build the website
+
 # Human Moving Picture from MicrobiomeAnalyst server ----------------------
 download.file(
   "https://www.microbiomeanalyst.ca/MicrobiomeAnalyst/resources/data/treebiom.zip",

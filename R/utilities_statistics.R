@@ -1,5 +1,4 @@
-#' Calculate the Median abundance of features per group
-#' @noRd
+#' @title Calculate the Median abundance of features per group (two groups)
 #'
 #' @param profile matrix; (Required).
 #' @param metadata matrix; (Required).
@@ -8,6 +7,10 @@
 #' @importFrom dplyr %>%
 #' @importFrom tibble column_to_rownames rownames_to_column
 #' @import stats
+#'
+#' @aliases calculate_median_abundance
+#'
+#' @export
 #'
 calculate_median_abundance <- function(profile, metadata, groups){
 
@@ -45,8 +48,7 @@ calculate_median_abundance <- function(profile, metadata, groups){
 }
 
 
-#' Calculate the Mean abundance of features per group
-#' @noRd
+#' @title Calculate the Mean abundance of features per group (two groups)
 #'
 #' @param profile (Required). matrix.
 #' @param metadata (Required). matrix.
@@ -55,6 +57,10 @@ calculate_median_abundance <- function(profile, metadata, groups){
 #' @importFrom dplyr %>%
 #' @importFrom tibble column_to_rownames rownames_to_column
 #' @import stats
+#'
+#' @aliases calculate_mean_abundance
+#'
+#' @export
 #'
 calculate_mean_abundance <- function(profile, metadata, groups){
 
@@ -92,8 +98,7 @@ calculate_mean_abundance <- function(profile, metadata, groups){
 }
 
 
-#' Calculate the Rank Mean abundance of features per group
-#' @noRd
+#' @title Calculate the Rank Mean abundance of features per group(two groups)
 #'
 #' @param profile (Required). matrix.
 #' @param metadata (Required). matrix.
@@ -102,6 +107,10 @@ calculate_mean_abundance <- function(profile, metadata, groups){
 #' @importFrom dplyr %>%
 #' @importFrom tibble column_to_rownames rownames_to_column
 #' @import stats
+#'
+#' @aliases calculate_MeanRank_abundance
+#'
+#' @export
 #'
 calculate_MeanRank_abundance <- function(profile, metadata, groups) {
 
@@ -133,8 +142,7 @@ calculate_MeanRank_abundance <- function(profile, metadata, groups) {
 }
 
 
-#' Calculate the Mean abundance of features per group
-#' @noRd
+#' @title Calculate the Mean abundance of features per group (two groups)
 #'
 #' @param profile (Required). matrix.
 #' @param metadata (Required). matrix.
@@ -143,6 +151,10 @@ calculate_MeanRank_abundance <- function(profile, metadata, groups) {
 #' @importFrom dplyr %>%
 #' @importFrom tibble column_to_rownames rownames_to_column
 #' @import stats
+#'
+#' @aliases calculate_geometricmean_abundance
+#'
+#' @export
 #'
 calculate_geometricmean_abundance <- function(profile, metadata, groups) {
 
@@ -181,8 +193,7 @@ calculate_geometricmean_abundance <- function(profile, metadata, groups) {
 }
 
 
-#' Calculate the Occurrence of features per group
-#' @noRd
+#' @title Calculate the Occurrence of features per group (two groups)
 #'
 #' @param profile (Required). matrix.
 #' @param metadata (Required). matrix.
@@ -191,6 +202,10 @@ calculate_geometricmean_abundance <- function(profile, metadata, groups) {
 #' @importFrom dplyr %>%
 #' @importFrom tibble column_to_rownames rownames_to_column
 #' @import stats
+#'
+#' @aliases calculate_occurrence_taxa
+#'
+#' @export
 #'
 calculate_occurrence_taxa <- function(profile, metadata, groups) {
 
@@ -248,13 +263,15 @@ calculate_occurrence_taxa <- function(profile, metadata, groups) {
 #'
 #' 95% confidential interval Odds Ratio per feature
 #'
-#' @export
-#'
 #' @importFrom dplyr %>% select all_of
 #' @importFrom tibble rownames_to_column
 #' @importFrom stats glm
 #'
 #' @usage run_OddRatio(datx, daty, GroupName)
+#'
+#' @aliases run_OddRatio
+#'
+#' @export
 #'
 run_OddRatio <- function(datx, daty, GroupName){
 
@@ -340,7 +357,7 @@ run_OddRatio <- function(datx, daty, GroupName){
 }
 
 
-#' Confidence Interval
+#' @title Confidence Interval
 #'
 #' @description
 #' Calculates the confidence interval of a vector of data.
@@ -376,7 +393,7 @@ run_CI <- function(x, ci = 0.95) {
 }
 
 
-#' Group Confidence Interval
+#' @title Group Confidence Interval
 #'
 #' @description
 #' Calculates the confidence interval of grouped data
@@ -422,7 +439,7 @@ run_group.CI <- function(x, data, ci = .95) {
 }
 
 
-#' Standard Error
+#' @title Standard Error
 #'
 #' @description
 #' Calculates the standard error interval of a vector of data
@@ -457,7 +474,7 @@ run_STDERR <- function(x) {
 }
 
 
-#' Group Standard Error Interval
+#' @title Group Standard Error Interval
 #'
 #' @description
 #' Calculates the standard error interval of grouped data.
@@ -487,7 +504,7 @@ run_group.STDERR <- function(x, data) {
 }
 
 
-#' Summarizes data
+#' @title Summarizes data for mean median sd etc
 #'
 #' @description
 #' Gives count, mean, standard deviation, standard error of the mean, and confidence interval (default 95%).
