@@ -5,4 +5,58 @@ reference:
       as phyloseq or reverse converting
     contents:
       - starts_with("import")
-      - import_biom
+      - phyloseq2DESeq2
+      - phyloseq2edgeR
+      - phyloseq2metagenomeSeq
+      - otu_table2metagenomeSeq
+  - title: "Microbiome marker"
+    desc: S4 class and methods for microbiomeMarker
+    contents:
+      - microbiomeMarker
+      - starts_with("microbiomeMarker-class")
+      - marker_table-class
+      - marker_table
+      - marker_table<-
+      - assign-otu_table
+      - abundances
+      - nclass
+      - nmarker
+      - starts_with("postHocTest-class")
+  - title: "Normalization"
+    contents:
+      - abundances
+      - transform_abundances
+      - starts_with("norm")
+  - title: "Differential analysis"
+    desc: Functions for identifying the microbiome markers
+    contents:
+      - run_aldex
+      - run_ancom
+      - run_ancombc
+      - run_distance
+      - run_deseq2
+      - run_edger
+      - run_lefse
+      - run_limma_voom
+      - run_metagenomeseq
+      - run_test_multiple_groups
+      - run_simple_stat
+      - run_sl
+      - run_test_two_groups
+      - run_simple_stat
+  - title: "Example data"
+    contents:
+      starts_with("data")
+  - title: Miscellaneous
+    contents:
+      - aggregate_taxa
+      - subset_marker
+      - summarize_taxa
+  - title: "Community hypothesis test"
+    contents:
+      - run_betadisper
+      - run_ANOSIM
+      - run_distance
+      - run_MANTEL
+      - run_MRPP
+      - run_PERMANOVA
