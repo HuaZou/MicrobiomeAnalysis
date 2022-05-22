@@ -9,6 +9,7 @@ library(magrittr)
 
 # build pkgdown
 # pkgdown::build_site() # Run to build the website
+# usethis::use_pkgdown_github_pages()  # deploy
 
 # Human Moving Picture from MicrobiomeAnalyst server ----------------------
 download.file(
