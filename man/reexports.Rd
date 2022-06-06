@@ -14,6 +14,27 @@
 \alias{import_qiime}
 \alias{import_mothur}
 \alias{import_biom}
+\alias{as.treedata}
+\alias{filter}
+\alias{select}
+\alias{mutate}
+\alias{group_by}
+\alias{ungroup}
+\alias{rename}
+\alias{distinct}
+\alias{arrange}
+\alias{pull}
+\alias{slice}
+\alias{nest}
+\alias{unnest}
+\alias{as_tibble}
+\alias{left_join}
+\alias{\%<>\%}
+\alias{td_filter}
+\alias{td_unnest}
+\alias{colData<-}
+\alias{remove_missing}
+\alias{extract}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -21,8 +42,22 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
+  \item{dplyr}{\code{\link[dplyr]{arrange}}, \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{filter}}, \code{\link[dplyr]{group_by}}, \code{\link[dplyr:mutate-joins]{left_join}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{pull}}, \code{\link[dplyr]{rename}}, \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}, \code{\link[dplyr:group_by]{ungroup}}}
+
+  \item{ggplot2}{\code{\link[ggplot2]{remove_missing}}}
+
+  \item{ggtree}{\code{\link[ggtree]{td_filter}}, \code{\link[ggtree]{td_unnest}}}
+
+  \item{magrittr}{\code{\link[magrittr:compound]{\%<>\%}}, \code{\link[magrittr:pipe]{\%>\%}}, \code{\link[magrittr:pipe]{\%>\%}}, \code{\link[magrittr:aliases]{extract}}}
 
   \item{phyloseq}{\code{\link[phyloseq]{import_biom}}, \code{\link[phyloseq]{import_mothur}}, \code{\link[phyloseq]{import_qiime}}, \code{\link[phyloseq:nsamples-methods]{nsamples}}, \code{\link[phyloseq:ntaxa-methods]{ntaxa}}, \code{\link[phyloseq:otu_table-methods]{otu_table}}, \code{\link[phyloseq:sample_data-methods]{sample_data}}, \code{\link[phyloseq:sample_names-methods]{sample_names}}, \code{\link[phyloseq:tax_table-methods]{tax_table}}, \code{\link[phyloseq:taxa_names-methods]{taxa_names}}}
+
+  \item{SummarizedExperiment}{\code{\link[SummarizedExperiment:SummarizedExperiment-class]{colData<-}}}
+
+  \item{tibble}{\code{\link[tibble]{as_tibble}}}
+
+  \item{tidyr}{\code{\link[tidyr]{nest}}, \code{\link[tidyr:nest]{unnest}}}
+
+  \item{tidytree}{\code{\link[tidytree]{as.treedata}}}
 }}
 

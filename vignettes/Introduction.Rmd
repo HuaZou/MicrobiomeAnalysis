@@ -112,8 +112,6 @@ ps_summarize_genus <- summarize_taxa(ps_object, level = "Genus")
 ps_summarize_genus
 ```
 
-
-
 # Multivariate Community Analysis
 
 Know more details of the aftermentioned statistical methods to see [@xia2018statistical].
@@ -246,6 +244,20 @@ mm <- run_sl(
     method = "LR")
 
 mm
+```
+
+
+# Visualization
+
+## Rarefaction Curves
+```{r}
+prare <- ggrarecurve(caporaso,
+                indexNames=c("Observe","Chao1","ACE"),
+                shadow=FALSE,
+                factorNames="SampleType"
+          ) +
+          theme(legend.spacing.y=unit(0.02,"cm"),
+                legend.text=element_text(size=6))
 ```
 
 

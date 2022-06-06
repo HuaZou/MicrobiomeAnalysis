@@ -529,7 +529,6 @@ run_group.STDERR <- function(x, data) {
 #' @examples
 #'
 #' \dontrun{
-#' library(dose)
 #' run_summarySE(ToothGrowth, measurevar="len", groupvars=c("supp", "dose"))
 #' }
 #'
@@ -539,6 +538,13 @@ run_summarySE <- function(data,
                           na.rm=FALSE,
                           conf.interval=0.95,
                           .drop=TRUE) {
+
+  data=ToothGrowth
+  measurevar="len"
+  groupvars=c("supp", "dose")
+  na.rm=FALSE
+  conf.interval=0.95
+  .drop=TRUE
 
   # New version of length which can handle NA's: if na.rm==T, don't count them
   length2 <- function (x, na.rm=FALSE) {
@@ -562,7 +568,8 @@ run_summarySE <- function(data,
   # )
 
   colnames(data)[which(colnames(data) == measurevar)] <- "measure"
-  datac <- data %>% dplyr::group_by(.dots = groupvars, .drop=.drop) %>%
+  #datac <- data %>% dplyr::group_by(.dots = groupvars, .drop=.drop) %>%
+  datac <- data %>% dplyr::group_by(!!as.symbol(groupvars), .drop=.drop) %>%
     dplyr::summarise(N = length2(measure, na.rm=na.rm),
                      mean = mean(measure, na.rm=na.rm),
                      median = median(measure, na.rm=na.rm),
