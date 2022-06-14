@@ -1,6 +1,7 @@
 # MicrobiomeAnalysis v1.0.2
 
 + Add differential analysis scripts from [microbiomeMarker](https://github.com/yiluheihei/microbiomeMarker). (2022-05-18)
++ Add ggrarecurve from [MicrobiotaProcess](https://github.com/YuLab-SMU/MicrobiotaProcess). (2022-06-14)
 
 
 # MicrobiomeAnalysis v1.0.1
