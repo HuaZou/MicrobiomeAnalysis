@@ -137,7 +137,12 @@ run_ANOSIM <- function(
       set.seed(seedNum)
     }
 
-    ANOSIM_res <- vegan::anosim(dis, datphe, permutations = 999)
+    # run
+    if (length(datphe) == 0 | length(unique(datphe)) == 1) {
+      ANOSIM_res <- res
+    } else {
+      ANOSIM_res <- vegan::anosim(dis, datphe, permutations = 999)
+    }
     return(ANOSIM_res)
   }
 

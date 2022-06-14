@@ -739,3 +739,34 @@ get_eigValue <- function (X) {
 
   return(eig)
 }
+
+
+#' @keywords internal
+get_otudata <- function(obj){
+  otudata <- obj@otu_table
+  otudata <- data.frame(otudata, check.names=FALSE)
+  if(obj@otu_table@taxa_are_rows){
+    otudata <- data.frame(t(otudata), check.names=FALSE)
+  }
+  return (otudata)
+}
+
+#' @keywords internal
+checkotu <- function(obj){
+  if (is.null(obj@otu_table)){
+    stop("The otu table is empty!")
+  }else{
+    otuda <- get_otudata(obj)
+    return(otuda)
+  }
+}
+
+#' @keywords internal
+checksample <- function(obj){
+  if (is.null(obj@sam_data)){
+    stop("The sample_data is empty")
+  }else{
+    sampleda <- get_sample(obj)
+    return(sampleda)
+  }
+}

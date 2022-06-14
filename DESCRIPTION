@@ -68,4 +68,5 @@ Suggests:
     permute,
     ade4,
     geosphere,
-    compositions
+    compositions,
+    plyr

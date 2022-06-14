@@ -11,7 +11,7 @@ ggrarecurve(obj, ...)
 
 \method{ggrarecurve}{phyloseq}(obj, chunks = 100, factorLevels = NULL, ...)
 
-\method{ggrarecurve}{data.frame}(obj, sampleda, factorLevels, chunks = 400, ...)
+\method{ggrarecurve}{data.frame}(obj, sampleda, factorLevels, chunks = 100, ...)
 
 \method{ggrarecurve}{rarecurve}(
   obj,
@@ -77,6 +77,7 @@ prare <- ggrarecurve(caporaso,
          theme(legend.spacing.y=unit(0.02,"cm"),
                legend.text=element_text(size=6))
 }
+
 }
 \author{
 Created by Shuangbin Xu; modified by Hua Zou

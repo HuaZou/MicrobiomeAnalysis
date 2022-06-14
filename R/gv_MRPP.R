@@ -137,7 +137,11 @@ run_MRPP <- function(
       set.seed(seedNum)
     }
 
-    MRPP_res <- vegan::mrpp(dis, datphe, permutations = 999)
+    if (length(datphe) == 0 | length(unique(datphe)) == 1) {
+      MRPP_res <- res
+    } else {
+      MRPP_res <- vegan::mrpp(dis, datphe, permutations = 999)
+    }
     return(MRPP_res)
   }
 

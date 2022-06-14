@@ -529,22 +529,22 @@ run_group.STDERR <- function(x, data) {
 #' @examples
 #'
 #' \dontrun{
-#' run_summarySE(ToothGrowth, measurevar="len", groupvars=c("supp", "dose"))
+#' summarySE(ToothGrowth, measurevar="len", groupvars=c("supp", "dose"))
 #' }
 #'
-run_summarySE <- function(data,
-                          measurevar,
-                          groupvars=NULL,
-                          na.rm=FALSE,
-                          conf.interval=0.95,
-                          .drop=TRUE) {
+summarySE <- function(data,
+                      measurevar,
+                      groupvars=NULL,
+                      na.rm=FALSE,
+                      conf.interval=0.95,
+                      .drop=TRUE) {
 
-  data=ToothGrowth
-  measurevar="len"
-  groupvars=c("supp", "dose")
-  na.rm=FALSE
-  conf.interval=0.95
-  .drop=TRUE
+  # data=ToothGrowth
+  # measurevar="len"
+  # groupvars=c("supp", "dose")
+  # na.rm=FALSE
+  # conf.interval=0.95
+  # .drop=TRUE
 
   # New version of length which can handle NA's: if na.rm==T, don't count them
   length2 <- function (x, na.rm=FALSE) {
@@ -556,25 +556,26 @@ run_summarySE <- function(data,
   }
 
   # This is does the summary; it's not easy to understand...
-  # datac <- plyr::ddply(data, groupvars, .drop=.drop,
-  #                .fun= function(xx, col, na.rm) {
-  #                  c( N    = length2(xx[,col], na.rm=na.rm),
-  #                     mean = mean   (xx[,col], na.rm=na.rm),
-  #                     sd   = sd     (xx[,col], na.rm=na.rm)
-  #                  )
-  #                },
-  #                measurevar,
-  #                na.rm
-  # )
+  datac <- plyr::ddply(data, groupvars, .drop=.drop,
+                 .fun= function(xx, col, na.rm) {
+                   c( N    = length2(xx[, col], na.rm=na.rm),
+                      mean = mean   (xx[, col], na.rm=na.rm),
+                      median = median(xx[, col], na.rm=na.rm),
+                      sd   = sd     (xx[, col], na.rm=na.rm)
+                   )
+                 },
+                 measurevar,
+                 na.rm
+  )
 
-  colnames(data)[which(colnames(data) == measurevar)] <- "measure"
+  # colnames(data)[which(colnames(data) == measurevar)] <- "measure"
   #datac <- data %>% dplyr::group_by(.dots = groupvars, .drop=.drop) %>%
-  datac <- data %>% dplyr::group_by(!!as.symbol(groupvars), .drop=.drop) %>%
-    dplyr::summarise(N = length2(measure, na.rm=na.rm),
-                     mean = mean(measure, na.rm=na.rm),
-                     median = median(measure, na.rm=na.rm),
-                     sd = sd(measure, na.rm=na.rm),
-                     .groups = "drop")
+  # datac <- data %>% dplyr::group_by(!!as.symbol(groupvars), .drop=.drop) %>%
+  #   dplyr::summarise(N = length2(measure, na.rm=na.rm),
+  #                    mean = mean(measure, na.rm=na.rm),
+  #                    median = median(measure, na.rm=na.rm),
+  #                    sd = sd(measure, na.rm=na.rm),
+  #                    .groups = "drop")
 
   # Rename the "mean" column
   colnames(datac)[which(colnames(datac) == "mean")] <- measurevar

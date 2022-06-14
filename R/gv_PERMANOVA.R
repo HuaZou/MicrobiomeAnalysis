@@ -135,10 +135,14 @@ run_PERMANOVA <- function(
       set.seed(seedNum)
     }
 
-    # https://github.com/joey711/phyloseq/issues/1457
-    ad <- vegan::adonis(unname(dis) ~ datphe, permutations = 999)
-    tmp <- as.data.frame(ad$aov.tab) %>% dplyr::slice(1)
-    out <- c(length(datphe), as.numeric(tmp[, c(1:6)]))
+    if (length(datphe) == 0 | length(unique(datphe)) == 1) {
+      out <- res
+    } else {
+      # https://github.com/joey711/phyloseq/issues/1457
+      ad <- vegan::adonis(unname(dis) ~ datphe, permutations = 999)
+      tmp <- as.data.frame(ad$aov.tab) %>% dplyr::slice(1)
+      out <- c(length(datphe), as.numeric(tmp[, c(1:6)]))
+    }
     return(out)
   }, disMatrix, prf_tab) %>%
     base::t() %>% data.frame()

@@ -146,10 +146,15 @@ run_betadisper <- function(
       set.seed(seedNum)
     }
 
-    # Checking the homogeneity condition
-    mod <- vegan::betadisper(dis, datphe, type = type)
-    betadisper_res <- vegan::permutest(mod, pairwise = TRUE,
-                                       permutations = permute::how(nperm = 999))
+    if (length(datphe) == 0 | length(unique(datphe)) == 1) {
+      betadisper_res <- res
+    } else {
+      # Checking the homogeneity condition
+      mod <- vegan::betadisper(dis, datphe, type = type)
+      betadisper_res <- vegan::permutest(mod, pairwise = TRUE,
+                permutations = permute::how(nperm = 999))
+    }
+
     return(betadisper_res)
   }
 
