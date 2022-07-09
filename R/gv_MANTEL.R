@@ -124,19 +124,23 @@ run_MANTEL <- function(
       method_dist[1] <- "bray"
     }
     ## sample table & profile table
-    sam_tab <- phyloseq::sample_data(ps) %>% data.frame() %>%
+    sam_tab <- phyloseq::sample_data(ps) %>%
+      data.frame() %>%
       tibble::rownames_to_column("SampleID")
     if (phyloseq::taxa_are_rows(ps)) {
       prf_tab <- phyloseq::otu_table(phyloseq::t(ps)) %>%
         data.frame()
     } else {
-      prf_tab <- phyloseq::otu_table(ps) %>% data.frame()
+      prf_tab <- phyloseq::otu_table(ps) %>%
+        data.frame()
     }
   } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
     # sample table & profile table
-    sam_tab <- Biobase::pData(object) %>% data.frame() %>%
+    sam_tab <- Biobase::pData(object) %>%
+      data.frame() %>%
       tibble::rownames_to_column("SampleID")
-    prf_tab <- Biobase::exprs(object) %>% data.frame()
+    prf_tab <- Biobase::exprs(object) %>%
+      data.frame()
   }
   # x distance
   x_dis <- run_distance(object = object, method = method_dist[1], alpha = alpha)

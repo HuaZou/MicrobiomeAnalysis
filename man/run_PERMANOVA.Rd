@@ -8,7 +8,8 @@ run_PERMANOVA(object,
                      variables,
                      method,
                      seedNum,
-                     alpha)
+                     alpha,
+                     p_adjust)
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
@@ -34,6 +35,9 @@ distance method, if it has the form described in \code{designdist} (default: "br
 
 \item{alpha}{(Optional). numeric. the parameter for "GUniFrac" controlling
 weight on abundant lineages (default: 0.5).}
+
+\item{p_adjust}{method for multiple test correction, default \code{none},
+for more details see \link[stats:p.adjust]{stats::p.adjust}.}
 }
 \value{
 A data.frame of PERMANOVA result.

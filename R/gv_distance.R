@@ -66,14 +66,15 @@ run_distance <- function(
     # distance
     if (method == "GUniFrac") {
       res_temp <- .get_GUniFrac(otu.tab = otu_tab,
-                               tree = tree_tab,
-                               alpha = alpha)
+                                tree = tree_tab,
+                                alpha = alpha)
       disMatrix <- stats::as.dist(res_temp$unifracs[, , paste0("d_", alpha)])
     } else {
       disMatrix <- phyloseq::distance(physeq = ps, method = method)
     }
   } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
-    prf_tab <- Biobase::exprs(object) %>% data.frame()
+    prf_tab <- Biobase::exprs(object) %>%
+      data.frame()
     if (any(prf_tab < 0)) {
       if (method %in% c("bray", "jaccard")) {
         message(method, " is not suitable for Negative values and Replace it by euclidean")

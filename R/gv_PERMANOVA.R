@@ -34,6 +34,8 @@
 #' @param seedNum (Optional). numeric. specify seeds for reproduction (default: 123).
 #' @param alpha (Optional). numeric. the parameter for "GUniFrac" controlling
 #' weight on abundant lineages (default: 0.5).
+#' @param p_adjust method for multiple test correction, default `none`,
+#' for more details see [stats::p.adjust].
 #'
 #' @return
 #'   A data.frame of PERMANOVA result.
@@ -47,7 +49,8 @@
 #'                      variables,
 #'                      method,
 #'                      seedNum,
-#'                      alpha)
+#'                      alpha,
+#'                      p_adjust)
 #'
 #' @export
 #'
@@ -63,7 +66,16 @@ run_PERMANOVA <- function(
               variables = NULL,
               method = "bray",
               seedNum = 123,
-              alpha = 0.5) {
+              alpha = 0.5,
+              p_adjust = "BH") {
+
+  p_adjust <- match.arg(
+    p_adjust,
+    c(
+      "none", "fdr", "bonferroni", "holm",
+      "hochberg", "hommel", "BH", "BY"
+    )
+  )
 
   # phyloseq object
   if (all(!is.null(object), inherits(object, "phyloseq"))) {
@@ -79,19 +91,23 @@ run_PERMANOVA <- function(
       method <- "bray"
     }
     ## sample table & profile table
-    sam_tab <- phyloseq::sample_data(ps) %>% data.frame() %>%
+    sam_tab <- phyloseq::sample_data(ps) %>%
+      data.frame() %>%
       tibble::rownames_to_column("SampleID")
     if (phyloseq::taxa_are_rows(ps)) {
       prf_tab <- phyloseq::otu_table(phyloseq::t(ps)) %>%
         data.frame()
     } else {
-      prf_tab <- phyloseq::otu_table(ps) %>% data.frame()
+      prf_tab <- phyloseq::otu_table(ps) %>%
+        data.frame()
     }
   } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
     # sample table & profile table
-    sam_tab <- Biobase::pData(object) %>% data.frame() %>%
+    sam_tab <- Biobase::pData(object) %>%
+      data.frame() %>%
       tibble::rownames_to_column("SampleID")
-    prf_tab <- Biobase::exprs(object) %>% data.frame()
+    prf_tab <- Biobase::exprs(object) %>%
+      data.frame()
   }
   # distance
   disMatrix <- run_distance(object = object, method = method, alpha = alpha)
@@ -140,16 +156,18 @@ run_PERMANOVA <- function(
     } else {
       # https://github.com/joey711/phyloseq/issues/1457
       ad <- vegan::adonis(unname(dis) ~ datphe, permutations = 999)
-      tmp <- as.data.frame(ad$aov.tab) %>% dplyr::slice(1)
+      tmp <- as.data.frame(ad$aov.tab) %>%
+        dplyr::slice(1)
       out <- c(length(datphe), as.numeric(tmp[, c(1:6)]))
     }
     return(out)
   }, disMatrix, prf_tab) %>%
-    base::t() %>% data.frame()
+    base::t() %>%
+    data.frame()
 
   colnames(res) <- c("SumsOfSample", "Df", "SumsOfSqs",
                      "MeanSqs", "F.Model", "R2", "Pr(>F)")
-  res$AdjustedPvalue <- stats::p.adjust(res$`Pr(>F)`, method = "BH")
+  res$AdjustedPvalue <- stats::p.adjust(res$`Pr(>F)`, method = p_adjust)
 
   return(res)
 }

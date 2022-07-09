@@ -107,6 +107,7 @@ run_ancom <- function(ps,
     ),
     pvalue_cutoff = 0.05,
     W_cutoff = 0.75) {
+
     stopifnot(inherits(ps, "phyloseq"))
     transform <- match.arg(transform, c("identity", "log10", "log10p"))
     p_adjust <- match.arg(
@@ -118,7 +119,7 @@ run_ancom <- function(ps,
     )
 
     ps <- check_rank_names(ps) %>%
-        check_taxa_rank( taxa_rank)
+        check_taxa_rank(taxa_rank)
 
     if (length(confounders)) {
         confounders <- check_confounder(ps, group, confounders)
