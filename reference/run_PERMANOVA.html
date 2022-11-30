@@ -18,7 +18,7 @@ the community and environmental variables."><!-- mathjax --><script src="https:/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MicrobiomeAnalysis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.3</span>
       </span>
     </div>
 
@@ -65,11 +65,14 @@ the community and environmental variables.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">run_PERMANOVA</span><span class="op">(</span><span class="va">object</span>,
-                     <span class="va">variables</span>,
-                     <span class="va">method</span>,
-                     <span class="va">seedNum</span>,
-                     <span class="va">alpha</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">run_PERMANOVA</span><span class="op">(</span>
+   <span class="va">object</span>,
+   level <span class="op">=</span> <span class="cn">NULL</span>,
+   variables <span class="op">=</span> <span class="st">"all"</span>,
+   method <span class="op">=</span> <span class="st">"bray"</span>,
+   mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"one"</span>, <span class="st">"all"</span><span class="op">)</span>,
+   seedNum <span class="op">=</span> <span class="fl">123</span>,
+   alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -77,12 +80,15 @@ the community and environmental variables.</p>
     <dl><dt>object</dt>
 <dd><p>(Required). a <code><a href="https://rdrr.io/pkg/phyloseq/man/phyloseq-class.html" class="external-link">phyloseq::phyloseq</a></code> or
 <code><a href="https://rdrr.io/pkg/Biobase/man/class.ExpressionSet.html" class="external-link">Biobase::ExpressionSet</a></code> object.</p></dd>
+<dt>level</dt>
+<dd><p>(Optional). character. Summarization
+level (from <code>rank_names(pseq)</code>, default: NULL).</p></dd>
 <dt>variables</dt>
-<dd><p>(Optional). vector. variables for test.</p></dd>
+<dd><p>(Optional). vector. variables for test (default: all).</p></dd>
 <dt>method</dt>
 <dd><p>(Optional). character. Provide one of the currently supported
 options. See <code>distanceMethodList</code> for a detailed list of the supported options
-and links to accompanying documentation. Options include:</p><ul><li><p>"unifrac" : unweighted UniFrac distance.</p></li>
+and links to accompanying documentation. Options include:</p><ul><li><p>"unifrac": unweighted UniFrac distance.</p></li>
 <li><p>"wunifrac": weighted-UniFrac distance.</p></li>
 <li><p>"GUniFrac": The variance-adjusted weighted UniFrac distances (default: alpha=0.5).</p></li>
 <li><p>"bray": bray crutis distance.</p></li>
@@ -90,6 +96,12 @@ and links to accompanying documentation. Options include:</p><ul><li><p>"unifrac
 <li><p>"jsd": Jensen-Shannon Divergence.
 Alternatively, you can provide a character string that defines a custom
 distance method, if it has the form described in <code>designdist</code> (default: "bray").</p></li>
+</ul></dd>
+<dt>mode</dt>
+<dd><p>(Optional). character. Since there are missing values
+in some columns, providing two test model:</p><ul><li><p>"one": test on one variable per time.</p></li>
+<li><p>"all": test on all variables once.
+(default: "one").</p></li>
 </ul></dd>
 <dt>seedNum</dt>
 <dd><p>(Optional). numeric. specify seeds for reproduction (default: 123).</p></dd>
@@ -112,7 +124,7 @@ test to determine the significance. It can be applied to both
     <div id="references">
     <h2>References</h2>
     <p>Anderson, Marti J. "Permutational multivariate analysis of
-variance." Department of Statistics, University of Auckland,
+variance."Department of Statistics, University of Auckland,
 Auckland 26 (2005): 32-46.</p>
     </div>
     <div id="author">
@@ -125,7 +137,15 @@ Auckland 26 (2005): 32-46.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"enterotypes_arumugam"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">run_PERMANOVA</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>, method <span class="op">=</span> <span class="st">"bray"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">run_PERMANOVA</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>,</span>
+<span class="r-in">  method <span class="op">=</span> <span class="st">"bray"</span>,</span>
+<span class="r-in">  mode <span class="op">=</span> <span class="st">"one"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"caporaso"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">run_PERMANOVA</span><span class="op">(</span><span class="va">caporaso</span>,</span>
+<span class="r-in">  method <span class="op">=</span> <span class="st">"bray"</span>,</span>
+<span class="r-in">  mode <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span class="r-in">  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Month"</span>, <span class="st">"SampleType"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
 </code></pre></div>

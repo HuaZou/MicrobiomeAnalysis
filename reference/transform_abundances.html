@@ -18,7 +18,7 @@ the counts of each sample will be transformed individually."><!-- mathjax --><sc
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MicrobiomeAnalysis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.3</span>
       </span>
     </div>
 
@@ -55,7 +55,7 @@ the counts of each sample will be transformed individually."><!-- mathjax --><sc
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Transform the taxa abundances in <code>otu_table</code> sample by sample</h1>
-    <small class="dont-index">Source: <a href="https://github.com/HuaZou/MicrobiomeAnalysis/blob/HEAD/R/transform.R" class="external-link"><code>R/transform.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/HuaZou/MicrobiomeAnalysis/blob/HEAD/R/process_transform.R" class="external-link"><code>R/process_transform.R</code></a></small>
     <div class="hidden name"><code>transform_abundances.Rd</code></div>
     </div>
 
@@ -65,7 +65,12 @@ the counts of each sample will be transformed individually.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">transform_abundances</span><span class="op">(</span><span class="va">object</span>, transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">transform_abundances</span><span class="op">(</span>
+   <span class="va">object</span>,
+   transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span><span class="op">)</span>,
+   level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="st">"Kingdom"</span>, <span class="st">"Phylum"</span>, <span class="st">"Class"</span>,
+           <span class="st">"Order"</span>, <span class="st">"Family"</span>, <span class="st">"Genus"</span>,
+           <span class="st">"Species"</span>, <span class="st">"Strain"</span>, <span class="st">"unique"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -79,6 +84,9 @@ the counts of each sample will be transformed individually.</p>
 zeros the transformation is <code>log10(1 + object)</code>.</p></li>
 <li><p>"log10p", the transformation is <code>log10(1 + object)</code>.</p></li>
 </ul></dd>
+<dt>level</dt>
+<dd><p>(Optional). character. Summarization
+level (from <code>rank_names(pseq)</code>, default: NULL).</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -91,234 +99,22 @@ zeros the transformation is <code>log10(1 + object)</code>.</p></li>
     </div>
     <div id="author">
     <h2>Author</h2>
-    <p>Created by Yang Cao</p>
+    <p>Created by Yang Cao; modified by Hua Zou (11/30/2022 Shenzhen China)</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">enterotypes_arumugam</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu">transform_abundances</span><span class="op">(</span><span class="va">enterotypes_arumugam</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">enterotypes_arumugam</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu">transform_abundances</span><span class="op">(</span>object <span class="op">=</span> <span class="va">enterotypes_arumugam</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/otu_table-methods.html" class="external-link">otu_table</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OTU Table:          [10 taxa and 39 samples]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      taxa are rows</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       AM-AD-1   AM-AD-2    AM-F10-T1    AM-F10-T2  DA-AD-1      DA-AD-2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  9.717275  5.248866 14375.293729 23624.536656 12871.91 3.305445e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.000000  0.000000     0.000000     0.000000     0.00 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.000000  0.000000     0.000000     0.000000     0.00 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  0.000000 19.979194     2.387325     0.000000     0.00 4.561633e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.000000  0.000000     0.000000     1.848263     0.00 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.000000  0.000000     0.000000     0.000000     0.00 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.000000  1.122736     0.000000     0.000000     0.00 1.914538e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.000000  0.000000     0.000000     2.053141     0.00 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.000000  0.000000     0.000000     0.000000     0.00 5.325651e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.000000  0.000000     0.000000     0.000000     0.00 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         DA-AD-3    DA-AD-4     ES-AD-1 ES-AD-2  ES-AD-3      ES-AD-4  FR-AD-1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  4685.28454 3663.47750 122318.1614 21428.3 42218.68 28485.162189 12072.42</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2     0.00000    0.00000      0.0000     0.0     0.00     0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3     0.00000    0.00000      0.0000     0.0     0.00     0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4     0.00000   19.84843     10.3751     0.0     0.00    13.860511     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5     0.00000    0.00000      0.0000     0.0     0.00     0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6     0.00000    0.00000      0.0000     0.0     0.00     0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7     0.00000    0.00000      0.0000     0.0     0.00     5.011567     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8    11.87001    0.00000      0.0000     0.0     0.00     0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9     0.00000    0.00000      0.0000     0.0     0.00     0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10    0.00000    0.00000      0.0000     0.0     0.00     0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       FR-AD-2      FR-AD-3      FR-AD-4     FR-AD-5     FR-AD-6  FR-AD-7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  13471.03 38464.200443 12727.525867 5778.105348 4277.891136 11011.24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2      0.00     0.000000     0.000000    0.000000    0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3      0.00     0.000000     0.000000    0.000000    0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4      0.00     4.942673     6.832425    4.301047    4.279807     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5      0.00     0.000000     0.000000    0.000000    0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6      0.00     0.000000     0.000000    0.000000    0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7      0.00     4.242866     5.373574    0.000000    1.836741     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8      0.00     0.000000     0.000000    0.000000    0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9      0.00     0.000000     1.063169    0.000000    0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10     0.00     0.000000     0.000000    0.000000    0.000000     0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           FR-AD-8   IT-AD-1     IT-AD-2      IT-AD-3     IT-AD-4  IT-AD-5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  17095.427713 20098.693 2078.358206 18339.933847 3700.198632 7781.287</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2      0.000000     0.000    0.000000     0.000000    0.000000    0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3      0.000000     0.000    0.000000     0.000000    0.000000    0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4      4.243592   132.066    0.000000     4.621974    0.000000    0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5      0.000000     0.000    0.000000     0.000000    0.000000    0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6      0.000000     0.000    2.339316     0.000000    0.000000    0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7      0.000000     0.000    0.000000     0.000000    5.153724    0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8      0.000000     0.000    0.000000     4.086110    0.000000    0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9      0.000000     0.000    1.105480     0.000000    0.000000    0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10     0.000000     0.000    0.000000     0.000000    0.000000    0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         IT-AD-6      JP-AD-1     JP-AD-2     JP-AD-3      JP-AD-4     JP-AD-5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  3627.15476 27018.481747 3183.284635 4760.172594 19149.522559 8312.770992</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2     0.00000     0.000000    0.000000    2.407357     0.000000    0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3     0.00000     0.000000    0.000000    0.000000     0.000000    0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4    12.90517     0.000000    0.000000    8.964310     0.000000    0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5     0.00000     0.000000    0.000000    0.000000     0.000000    0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6     0.00000     0.000000    0.000000    0.000000     0.000000    0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7     0.00000     0.000000    3.773567    0.000000     4.154563    3.990245</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8     0.00000     2.219474    0.000000    0.000000     0.000000    0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9     0.00000     0.000000    0.000000    0.000000     0.000000    0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10    0.00000     0.000000    0.000000    0.000000     0.000000    0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           JP-AD-6    JP-AD-7     JP-AD-8  JP-AD-9  JP-IN-1   JP-IN-2   JP-IN-3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  29871.236576 29941.5729 27659.90830 17317.28 121.3136 0.5861948 0.9159548</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2      0.000000     0.0000     0.00000     0.00   0.0000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3      0.000000     0.0000     0.00000     0.00   0.0000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4      0.000000     0.0000     0.00000     0.00   0.0000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5      0.000000     0.0000     0.00000     0.00   0.0000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6      0.000000     0.0000     0.00000     0.00   0.0000 2.8262105 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7      9.256994   470.6165     2.02535     0.00   0.0000 0.0000000 4.1505197</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8      0.000000     0.0000     0.00000     0.00   0.0000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9      0.000000     0.0000     0.00000     0.00   0.0000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10     0.000000     0.0000     0.00000     0.00   0.0000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       JP-IN-4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  428.3539</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2    0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3    0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4    0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5    0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6    0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7    0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8    0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9    0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10   0.0000</span>
-<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu">transform_abundances</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>, <span class="st">"log10"</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>OTU table contains zeroes. Using log10(1 + x) instead.</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu">transform_abundances</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>, transform <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/otu_table-methods.html" class="external-link">otu_table</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OTU Table:          [10 taxa and 39 samples]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      taxa are rows</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       AM-AD-1   AM-AD-2 AM-F10-T1 AM-F10-T2  DA-AD-1   DA-AD-2  DA-AD-3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  1.030084 0.7958012 4.1576469 4.3733817 4.109677 4.5192431 3.670829</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.000000 0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.000000 0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  0.000000 1.3217888 0.5298569 0.0000000 0.000000 0.7452024 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.000000 0.0000000 0.0000000 0.4545800 0.000000 0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.000000 0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.000000 0.3268960 0.0000000 0.0000000 0.000000 0.4645697 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.000000 0.0000000 0.0000000 0.4847468 0.000000 0.0000000 1.109579</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.000000 0.0000000 0.0000000 0.0000000 0.000000 0.1854189 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.000000 0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       DA-AD-4  ES-AD-1  ES-AD-2  ES-AD-3   ES-AD-4 FR-AD-1  FR-AD-2   FR-AD-3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  3.564012 5.087494 4.331008 4.625515 4.4546339 4.08183 4.129433 4.5850680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  1.319073 1.055955 0.000000 0.000000 1.1720337 0.00000 0.000000 0.7739818</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.000000 0.000000 0.000000 0.000000 0.7789877 0.00000 0.000000 0.7195688</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        FR-AD-4   FR-AD-5   FR-AD-6  FR-AD-7   FR-AD-8  IT-AD-1   IT-AD-2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  4.1047781 3.7618606 3.6313312 4.041876 4.2329054 4.303189 3.3179293</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  0.8938962 0.7243616 0.7226181 0.000000 0.7196289 2.124067 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.5236576</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.8043830 0.0000000 0.4528196 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.3145348 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.3233512</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        IT-AD-3  IT-AD-4  IT-AD-5  IT-AD-6  JP-AD-1  JP-AD-2   JP-AD-3   JP-AD-4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  4.2634214 3.568342 3.891107 3.559686 4.431677 3.503012 3.6777139 4.2821806</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.5324176 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  0.7498888 0.000000 0.000000 1.143176 0.000000 0.000000 0.9984472 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.0000000 0.789138 0.000000 0.000000 0.000000 0.678843 0.0000000 0.7121918</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.7063857 0.000000 0.000000 0.000000 0.507785 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        JP-AD-5  JP-AD-6  JP-AD-7   JP-AD-8  JP-AD-9  JP-IN-1   JP-IN-2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  3.9197981 4.475268 4.476289 4.4418664 4.238505 2.087475 0.2003565</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.5827689</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.6981219 1.011020 2.673589 0.4807757 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        JP-IN-3  JP-IN-4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  0.2823853 2.632815</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.7118511 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.0000000 0.000000</span>
-<span class="r-in"><span class="va">x3</span> <span class="op">&lt;-</span> <span class="fu">transform_abundances</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>, <span class="st">"log10p"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">x3</span> <span class="op">&lt;-</span> <span class="fu">transform_abundances</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>, transform <span class="op">=</span> <span class="st">"log10p"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/otu_table-methods.html" class="external-link">otu_table</a></span><span class="op">(</span><span class="va">x3</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OTU Table:          [10 taxa and 39 samples]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      taxa are rows</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       AM-AD-1   AM-AD-2 AM-F10-T1 AM-F10-T2  DA-AD-1   DA-AD-2  DA-AD-3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  1.030084 0.7958012 4.1576469 4.3733817 4.109677 4.5192431 3.670829</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.000000 0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.000000 0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  0.000000 1.3217888 0.5298569 0.0000000 0.000000 0.7452024 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.000000 0.0000000 0.0000000 0.4545800 0.000000 0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.000000 0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.000000 0.3268960 0.0000000 0.0000000 0.000000 0.4645697 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.000000 0.0000000 0.0000000 0.4847468 0.000000 0.0000000 1.109579</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.000000 0.0000000 0.0000000 0.0000000 0.000000 0.1854189 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.000000 0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       DA-AD-4  ES-AD-1  ES-AD-2  ES-AD-3   ES-AD-4 FR-AD-1  FR-AD-2   FR-AD-3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  3.564012 5.087494 4.331008 4.625515 4.4546339 4.08183 4.129433 4.5850680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  1.319073 1.055955 0.000000 0.000000 1.1720337 0.00000 0.000000 0.7739818</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.000000 0.000000 0.000000 0.000000 0.7789877 0.00000 0.000000 0.7195688</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.000000 0.000000 0.000000 0.000000 0.0000000 0.00000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        FR-AD-4   FR-AD-5   FR-AD-6  FR-AD-7   FR-AD-8  IT-AD-1   IT-AD-2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  4.1047781 3.7618606 3.6313312 4.041876 4.2329054 4.303189 3.3179293</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  0.8938962 0.7243616 0.7226181 0.000000 0.7196289 2.124067 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.5236576</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.8043830 0.0000000 0.4528196 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.3145348 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.3233512</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.0000000 0.0000000 0.0000000 0.000000 0.0000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        IT-AD-3  IT-AD-4  IT-AD-5  IT-AD-6  JP-AD-1  JP-AD-2   JP-AD-3   JP-AD-4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  4.2634214 3.568342 3.891107 3.559686 4.431677 3.503012 3.6777139 4.2821806</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.5324176 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  0.7498888 0.000000 0.000000 1.143176 0.000000 0.000000 0.9984472 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.0000000 0.789138 0.000000 0.000000 0.000000 0.678843 0.0000000 0.7121918</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.7063857 0.000000 0.000000 0.000000 0.507785 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.0000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        JP-AD-5  JP-AD-6  JP-AD-7   JP-AD-8  JP-AD-9  JP-IN-1   JP-IN-2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  3.9197981 4.475268 4.476289 4.4418664 4.238505 2.087475 0.2003565</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.5827689</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.6981219 1.011020 2.673589 0.4807757 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.0000000 0.000000 0.000000 0.0000000 0.000000 0.000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        JP-IN-3  JP-IN-4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp1  0.2823853 2.632815</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp2  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp3  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp4  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp5  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp6  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp7  0.7118511 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp8  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp9  0.0000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sp10 0.0000000 0.000000</span>
+<span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

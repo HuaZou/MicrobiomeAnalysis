@@ -79,6 +79,9 @@
     <loc>/reference/extract-methods.html</loc>
   </url>
   <url>
+    <loc>/reference/filter_abundance.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_eigValue.html</loc>
   </url>
   <url>
@@ -104,9 +107,6 @@
   </url>
   <url>
     <loc>/reference/microbiomeMarker-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/microbiomeMarker-package.html</loc>
   </url>
   <url>
     <loc>/reference/microbiomeMarker.html</loc>
@@ -218,5 +218,8 @@
   </url>
   <url>
     <loc>/reference/transform_abundances.html</loc>
+  </url>
+  <url>
+    <loc>/reference/trim_prevalence.html</loc>
   </url>
 </urlset>

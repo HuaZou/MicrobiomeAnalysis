@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MicrobiomeAnalysis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.3</span>
       </span>
     </div>
 
@@ -122,8 +122,24 @@
         <td><p>The postHocTest Class, represents the result of post-hoc test result among
 multiple groups</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="normalization">Normalization <a href="#normalization" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
+          <h2 id="miscellaneous">Miscellaneous <a href="#miscellaneous" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Functions to aggregate and collapse taxa</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="aggregate_taxa.html">aggregate_taxa()</a></code> </p>
+        </td>
+        <td><p>Aggregate Taxa</p></td>
+      </tr><tr><td>
+          <p><code><a href="summarize_taxa.html">summarize_taxa()</a></code> </p>
+        </td>
+        <td><p>Summarize taxa into a taxonomic level within each sample</p></td>
+      </tr><tr><td>
+          <p><code><a href="subset_marker.html">subset_marker()</a></code> </p>
+        </td>
+        <td><p>Subset microbiome markers</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="data-processing">Data Processing <a href="#data-processing" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Functions to precess data before test</p>
         </th>
       </tr></tbody><tbody><tr><td>
           <p><code><a href="abundances-methods.html">abundances()</a></code> </p>
@@ -137,6 +153,14 @@ multiple groups</p></td>
           <p><code><a href="normalize-methods.html">normalize(<i>&lt;phyloseq&gt;</i>)</a></code> <code><a href="normalize-methods.html">normalize(<i>&lt;otu_table&gt;</i>)</a></code> <code><a href="normalize-methods.html">normalize(<i>&lt;data.frame&gt;</i>)</a></code> <code><a href="normalize-methods.html">normalize(<i>&lt;matrix&gt;</i>)</a></code> <code><a href="normalize-methods.html">norm_rarefy()</a></code> <code><a href="normalize-methods.html">norm_tss()</a></code> <code><a href="normalize-methods.html">norm_css()</a></code> <code><a href="normalize-methods.html">norm_rle()</a></code> <code><a href="normalize-methods.html">norm_tmm()</a></code> <code><a href="normalize-methods.html">norm_clr()</a></code> <code><a href="normalize-methods.html">norm_cpm()</a></code> </p>
         </td>
         <td><p>Normalize the microbial abundance data</p></td>
+      </tr><tr><td>
+          <p><code><a href="trim_prevalence.html">trim_prevalence()</a></code> </p>
+        </td>
+        <td><p>Trimming samples or taxa whose prevalence is less than threshold</p></td>
+      </tr><tr><td>
+          <p><code><a href="filter_abundance.html">filter_abundance()</a></code> </p>
+        </td>
+        <td><p>Filtering taxa who is low relative abundance or unclassified</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="example-data">Example data <a href="#example-data" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p>
@@ -162,24 +186,8 @@ multiple groups</p></td>
         </td>
         <td><p>Data from a study on colorectal cancer (kostic 2012)</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="miscellaneous">Miscellaneous <a href="#miscellaneous" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="aggregate_taxa.html">aggregate_taxa()</a></code> </p>
-        </td>
-        <td><p>Aggregate Taxa</p></td>
-      </tr><tr><td>
-          <p><code><a href="subset_marker.html">subset_marker()</a></code> </p>
-        </td>
-        <td><p>Subset microbiome markers</p></td>
-      </tr><tr><td>
-          <p><code><a href="summarize_taxa.html">summarize_taxa()</a></code> </p>
-        </td>
-        <td><p>Summarize taxa into a taxonomic level within each sample</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="community-hypothesis-test">Community hypothesis test <a href="#community-hypothesis-test" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"></p><p>Functions to investigate association between variables and community</p>
         </th>
       </tr></tbody><tbody><tr><td>
           <p><code><a href="run_betadisper.html">run_betadisper()</a></code> </p>
@@ -264,7 +272,7 @@ multiple groups</p></td>
         <td><p>Statistical test between two groups</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="statistical-tookits">Statistical tookits <a href="#statistical-tookits" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"></p><p>Functions to do statistical test</p>
         </th>
       </tr></tbody><tbody><tr><td>
           <p><code><a href="calculate_median_abundance.html">calculate_median_abundance()</a></code> </p>

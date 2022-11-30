@@ -18,7 +18,7 @@ the community and environmental variables by average distance."><!-- mathjax -->
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MicrobiomeAnalysis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.3</span>
       </span>
     </div>
 
@@ -65,11 +65,15 @@ the community and environmental variables by average distance.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">run_MRPP</span><span class="op">(</span><span class="va">object</span>,
-                <span class="va">variable</span>,
-                <span class="va">method</span>,
-                <span class="va">seedNum</span>,
-                <span class="va">alpha</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">run_MRPP</span><span class="op">(</span>
+   <span class="va">object</span>,
+   level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="st">"Kingdom"</span>, <span class="st">"Phylum"</span>, <span class="st">"Class"</span>,
+           <span class="st">"Order"</span>, <span class="st">"Family"</span>, <span class="st">"Genus"</span>,
+           <span class="st">"Species"</span>, <span class="st">"Strain"</span>, <span class="st">"unique"</span><span class="op">)</span>,
+   <span class="va">variable</span>,
+   method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unifrac"</span>, <span class="st">"wunifrac"</span>, <span class="st">"GUniFrac"</span>, <span class="st">"bray"</span>, <span class="st">"dpcoa"</span>, <span class="st">"jsd"</span><span class="op">)</span>,
+   seedNum <span class="op">=</span> <span class="fl">123</span>,
+   alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -77,6 +81,9 @@ the community and environmental variables by average distance.</p>
     <dl><dt>object</dt>
 <dd><p>(Required). a <code><a href="https://rdrr.io/pkg/phyloseq/man/phyloseq-class.html" class="external-link">phyloseq::phyloseq</a></code> or
 <code><a href="https://rdrr.io/pkg/Biobase/man/class.ExpressionSet.html" class="external-link">Biobase::ExpressionSet</a></code> object.</p></dd>
+<dt>level</dt>
+<dd><p>(Optional). character. Summarization
+level (from <code>rank_names(pseq)</code>, default: NULL).</p></dd>
 <dt>variable</dt>
 <dd><p>(Required). character. grouping variable for test.</p></dd>
 <dt>method</dt>
