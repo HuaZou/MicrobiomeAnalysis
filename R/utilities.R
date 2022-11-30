@@ -639,7 +639,7 @@ check_sample_names <- function(object) {
 
   # ExpressionSet
   if (inherits(object, "ExpressionSet")) {
-    if(length(grep("^\\d+", Biobase::sampleNames(object))) > 0) {
+    if (length(grep("^\\d+", Biobase::sampleNames(object))) > 0) {
       message("samples' names are start with numeric")
       Names_index <- grep("^\\d+", Biobase::sampleNames(object))
       Biobase::sampleNames(object)[Names_index] <-
@@ -706,7 +706,7 @@ default_color <- function(number = 74) {
 #'
 #' @param X (Required). Ordination result.
 #'
-get_eigValue <- function (X) {
+get_eigValue <- function(X) {
 
   if (inherits(X, c("PCA", "CA", "MCA", "FAMD", "MFA", "HMFA",
                     "sPCA", "sCA", "sMCA", "sMFA", "sHMFA"))) {

@@ -86,7 +86,7 @@ run_distance <- function(
     }
     # distance
     if (method == "GUniFrac") {
-      res_temp <- .get_GUniFrac(otu.tab = otu_tab,
+      res_temp <- get_GUniFrac(otu.tab = otu_tab,
                                tree = tree_tab,
                                alpha = alpha)
       disMatrix <- stats::as.dist(res_temp$unifracs[, , paste0("d_", alpha)])
@@ -128,9 +128,10 @@ run_distance <- function(
 #'           UniFrac distances, unweighted UniFrac distance and
 #'           variance adjusted UniFrac distances.
 #'
-#' @usage .get_GUniFrac(otu.tab,
-#'                  tree,
-#'                  alpha)
+#' @usage get_GUniFrac(
+#'    otu.tab,
+#'    tree,
+#'    alpha = c(0, 0.5, 1))
 #'
 #' @export
 #'
@@ -141,7 +142,7 @@ run_distance <- function(
 #' otu.tab <- phyloseq::otu_table(cid_ying)
 #' tree <- phyloseq::phy_tree(cid_ying)
 #'
-#' unifracs <- .get_GUniFrac(otu.tab, tree, alpha=c(0, 0.5, 1))$unifracs
+#' unifracs <- get_GUniFrac(otu.tab, tree, alpha=c(0, 0.5, 1))$unifracs
 #'
 #' dw <- unifracs[, , "d_1"]    # Weighted UniFrac
 #' du <- unifracs[, , "d_UW"]   # Unweighted UniFrac
@@ -151,7 +152,7 @@ run_distance <- function(
 #'
 #' }
 #'
-.get_GUniFrac <- function(
+get_GUniFrac <- function(
       otu.tab,
       tree,
       alpha = c(0, 0.5, 1)) {
