@@ -6,7 +6,9 @@
 + Update codes for selecting taxa level and test model in `run_PERMANOVA`. (2022-11-30)
 + Update codes for selecting taxa level in `run_betadisper`. (2022-11-30)
 + Update codes for selecting taxa level in `run_distance`. (2022-11-30)
-
++ Update codes for selecting taxa level and log formula in `transform_abundances`. (2022-11-30)
++ Add `trim_prevalence`. (2022-11-30)
++ Add `filter_abundance`. (2022-11-30)
 
 # MicrobiomeAnalysis v1.0.2
 
