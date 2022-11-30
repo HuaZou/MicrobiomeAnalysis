@@ -52,9 +52,11 @@
 #'
 #' @usage run_PERMANOVA(
 #'    object,
-#'    level = NULL,
+#'    level = c(NULL, "Kingdom", "Phylum", "Class",
+#'            "Order", "Family", "Genus",
+#'            "Species", "Strain", "unique"),
 #'    variables = "all",
-#'    method = "bray",
+#'    method = c("unifrac", "wunifrac", "GUniFrac", "bray", "dpcoa", "jsd"),
 #'    mode = c("one", "all"),
 #'    seedNum = 123,
 #'    alpha = 0.5)

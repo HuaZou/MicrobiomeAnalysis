@@ -6,7 +6,9 @@
 \usage{
 trim_prevalence(
     object,
-    level = NULL,
+    level = c(NULL, "Kingdom", "Phylum", "Class",
+           "Order", "Family", "Genus",
+           "Species", "Strain", "unique"),
     cutoff = 0.1,
     trim = c("none", "both", "feature", "sample"))
 }

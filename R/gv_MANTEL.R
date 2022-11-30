@@ -64,7 +64,7 @@
 #'            "Species", "Strain", "unique"),
 #'    y_variables,
 #'    z_variables = NULL,
-#'    norm = TRUE,
+#'    norm = c(TRUE, FALSE),
 #'    method = c("mantel", "mantel.partial", "mantel.randtest", "mantel.rtest"),
 #'    method_cor = c("pearson", "spearman", "kendall"),
 #'    method_dist = c("bray", "euclidean", "jaccard"),

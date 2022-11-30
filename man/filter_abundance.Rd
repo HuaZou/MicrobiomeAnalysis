@@ -5,11 +5,13 @@
 \title{Filtering taxa who is low relative abundance or unclassified}
 \usage{
 filter_abundance(
-    object,
-    level = NULL,
-    cutoff_mean = c(100, 1e-04),
-    cutoff_one = c(1000, 1e-03),
-    unclass = TRUE)
+   object,
+   level = c(NULL, "Kingdom", "Phylum", "Class",
+           "Order", "Family", "Genus",
+           "Species", "Strain", "unique"),
+   cutoff_mean = c(100, 1e-04),
+   cutoff_one = c(1000, 1e-03),
+   unclass = TRUE)
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq]{phyloseq-class}} object.}

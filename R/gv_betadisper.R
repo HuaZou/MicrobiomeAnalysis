@@ -58,7 +58,7 @@
 #'            "Order", "Family", "Genus",
 #'            "Species", "Strain", "unique"),
 #'    variable,
-#'    type = "median",
+#'    type = c("median","centroid"),
 #'    method = c("unifrac", "wunifrac", "GUniFrac", "bray", "dpcoa", "jsd"),
 #'    seedNum = 123,
 #'    alpha = 0.5)

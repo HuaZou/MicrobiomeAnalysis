@@ -12,7 +12,9 @@
 #'
 #' @export
 #'
-calculate_median_abundance <- function(profile, metadata, groups){
+calculate_median_abundance <- function(profile,
+                                       metadata,
+                                       groups){
 
   if (!all(rownames(metadata) == colnames(profile))) {
     stop("Order of sampleID between colData and proData is wrong please check your inputdata")
@@ -62,7 +64,9 @@ calculate_median_abundance <- function(profile, metadata, groups){
 #'
 #' @export
 #'
-calculate_mean_abundance <- function(profile, metadata, groups){
+calculate_mean_abundance <- function(profile,
+                                     metadata,
+                                     groups){
 
   if (!all(rownames(metadata) == colnames(profile))) {
     stop("Order of sampleID between colData and proData is wrong please check your inputdata")
@@ -112,7 +116,9 @@ calculate_mean_abundance <- function(profile, metadata, groups){
 #'
 #' @export
 #'
-calculate_MeanRank_abundance <- function(profile, metadata, groups) {
+calculate_MeanRank_abundance <- function(profile,
+                                         metadata,
+                                         groups) {
 
   if (!all(rownames(metadata) == colnames(profile))) {
     stop("Order of sampleID between colData and proData is wrong please check your inputdata")
@@ -156,7 +162,9 @@ calculate_MeanRank_abundance <- function(profile, metadata, groups) {
 #'
 #' @export
 #'
-calculate_geometricmean_abundance <- function(profile, metadata, groups) {
+calculate_geometricmean_abundance <- function(profile,
+                                              metadata,
+                                              groups) {
 
   if (!all(rownames(metadata) == colnames(profile))) {
     stop("Order of sampleID between colData and proData is wrong please check your inputdata")
@@ -207,7 +215,9 @@ calculate_geometricmean_abundance <- function(profile, metadata, groups) {
 #'
 #' @export
 #'
-calculate_occurrence_taxa <- function(profile, metadata, groups) {
+calculate_occurrence_taxa <- function(profile,
+                                      metadata,
+                                      groups) {
 
   if (!all(rownames(metadata) == colnames(profile))) {
     stop("Order of sampleID between colData and proData is wrong please check your inputdata")
@@ -273,7 +283,9 @@ calculate_occurrence_taxa <- function(profile, metadata, groups) {
 #'
 #' @export
 #'
-run_OddRatio <- function(datx, daty, GroupName){
+run_OddRatio <- function(datx,
+                         daty,
+                         GroupName){
 
   if (length(GroupName) != 2) {
     stop("Levels of Group don't equal 2")

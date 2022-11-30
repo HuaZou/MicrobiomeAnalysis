@@ -32,11 +32,13 @@
 #' @export
 #'
 #' @usage filter_abundance(
-#'     object,
-#'     level = NULL,
-#'     cutoff_mean = c(100, 1e-04),
-#'     cutoff_one = c(1000, 1e-03),
-#'     unclass = TRUE)
+#'    object,
+#'    level = c(NULL, "Kingdom", "Phylum", "Class",
+#'            "Order", "Family", "Genus",
+#'            "Species", "Strain", "unique"),
+#'    cutoff_mean = c(100, 1e-04),
+#'    cutoff_one = c(1000, 1e-03),
+#'    unclass = TRUE)
 #'
 #' @examples
 #'
@@ -65,8 +67,8 @@
 filter_abundance <- function(
     object,
     level = NULL,
-    cutoff_mean = c(100, 1e-04),
-    cutoff_one = c(1000, 1e-03),
+    cutoff_mean = 100,
+    cutoff_one = 1000,
     unclass = TRUE) {
 
   # data("enterotypes_arumugam")
