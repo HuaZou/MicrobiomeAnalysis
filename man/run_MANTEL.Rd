@@ -4,19 +4,26 @@
 \alias{run_MANTEL}
 \title{Mantel Test (MANTEL)}
 \usage{
-run_MANTEL(object,
-                  y_variables,
-                  z_variables,
-                  norm,
-                  method,
-                  method_cor,
-                  method_dist,
-                  seedNum,
-                  alpha)
+run_MANTEL(
+   object,
+   level = c(NULL, "Kingdom", "Phylum", "Class",
+           "Order", "Family", "Genus",
+           "Species", "Strain", "unique"),
+   y_variables,
+   z_variables = NULL,
+   norm = TRUE,
+   method = c("mantel", "mantel.partial", "mantel.randtest", "mantel.rtest"),
+   method_cor = c("pearson", "spearman", "kendall"),
+   method_dist = c("bray", "euclidean", "jaccard"),
+   seedNum = 123,
+   alpha = 0.5)
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
 \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+
+\item{level}{(Optional). character. Summarization
+level (from \code{rank_names(pseq)}, default: NULL).}
 
 \item{y_variables}{(Required). vector. variables for a control matrix Y.}
 

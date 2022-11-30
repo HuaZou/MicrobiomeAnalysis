@@ -5,13 +5,19 @@
 \title{Calculate the distance among samples}
 \usage{
 run_distance(
-                 object,
-                 method,
-                 alpha)
+   object,
+   level = c(NULL, "Kingdom", "Phylum", "Class",
+           "Order", "Family", "Genus",
+           "Species", "Strain", "unique"),
+   method = c("unifrac", "wunifrac", "GUniFrac", "bray", "dpcoa", "jsd"),
+   alpha = 0.5)
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
 \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+
+\item{level}{(Optional). character. Summarization
+level (from \code{rank_names(pseq)}, default: NULL).}
 
 \item{method}{(Required). character. Provide one of the currently supported
 options. See \code{distanceMethodList} for a detailed list of the supported options

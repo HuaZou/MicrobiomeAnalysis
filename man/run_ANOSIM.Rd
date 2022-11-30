@@ -4,15 +4,22 @@
 \alias{run_ANOSIM}
 \title{Analysis of Similarity (ANOSIM)}
 \usage{
-run_ANOSIM(object,
-                  variable,
-                  method,
-                  seedNum,
-                  alpha)
+run_ANOSIM(
+   object,
+   level = c(NULL, "Kingdom", "Phylum", "Class",
+           "Order", "Family", "Genus",
+           "Species", "Strain", "unique"),
+   variable,
+   method = c("unifrac", "wunifrac", "GUniFrac", "bray", "dpcoa", "jsd"),
+   seedNum = 123,
+   alpha = 0.5)
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
 \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+
+\item{level}{(Optional). character. Summarization
+level (from \code{rank_names(pseq)}, default: NULL).}
 
 \item{variable}{(Required). character. grouping variable for test.}
 
@@ -53,7 +60,15 @@ by permutation test to determine the significance. It can be applied to both
 
 \dontrun{
 data("enterotypes_arumugam")
-run_ANOSIM(enterotypes_arumugam, variable = "Enterotype", method = "bray")
+
+run_ANOSIM(enterotypes_arumugam,
+   variable = "Enterotype",
+   method = "bray")
+
+run_ANOSIM(enterotypes_arumugam,
+   level = "Phylum",
+   variable = "Enterotype",
+   method = "bray")
 }
 
 }

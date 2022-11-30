@@ -19,6 +19,8 @@
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
 #' [`Biobase::ExpressionSet`] object.
+#' @param level (Optional). character. Summarization
+#' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param variable (Required). character. grouping variable for test.
 #' @param method (Optional). character. Provide one of the currently supported
 #' options. See `distanceMethodList` for a detailed list of the supported options
@@ -43,11 +45,15 @@
 #' @importFrom Biobase pData exprs
 #' @importFrom stats setNames p.adjust
 #'
-#' @usage run_ANOSIM(object,
-#'                   variable,
-#'                   method,
-#'                   seedNum,
-#'                   alpha)
+#' @usage run_ANOSIM(
+#'    object,
+#'    level = c(NULL, "Kingdom", "Phylum", "Class",
+#'            "Order", "Family", "Genus",
+#'            "Species", "Strain", "unique"),
+#'    variable,
+#'    method = c("unifrac", "wunifrac", "GUniFrac", "bray", "dpcoa", "jsd"),
+#'    seedNum = 123,
+#'    alpha = 0.5)
 #'
 #' @export
 #'
@@ -55,19 +61,44 @@
 #'
 #' \dontrun{
 #' data("enterotypes_arumugam")
-#' run_ANOSIM(enterotypes_arumugam, variable = "Enterotype", method = "bray")
+#'
+#' run_ANOSIM(enterotypes_arumugam,
+#'    variable = "Enterotype",
+#'    method = "bray")
+#'
+#' run_ANOSIM(enterotypes_arumugam,
+#'    level = "Phylum",
+#'    variable = "Enterotype",
+#'    method = "bray")
 #' }
 #'
 run_ANOSIM <- function(
-              object,
-              variable,
-              method = "bray",
-              seedNum = 123,
-              alpha = 0.5) {
+    object,
+    level = NULL,
+    variable,
+    method = "bray",
+    seedNum = 123,
+    alpha = 0.5) {
+
+  # data("enterotypes_arumugam")
+  # object = enterotypes_arumugam
+  # level = "Phylum"
+  # variable = "Enterotype"
+  # method = "bray"
+  # seedNum = 123
+  # alpha = 0.5
 
   # phyloseq object
   if (all(!is.null(object), inherits(object, "phyloseq"))) {
     ps <- check_sample_names(object = object)
+
+    # taxa level
+    if (!is.null(level)) {
+      ps <- aggregate_taxa(x = ps, level = level)
+    } else {
+      ps <- ps
+    }
+
     if (!is.null(ps@phy_tree) & (method %in%
                                  c("unifrac", "wunifrac", "GUniFrac"))) {
       method <- match.arg(
@@ -79,27 +110,35 @@ run_ANOSIM <- function(
       method <- "bray"
     }
     ## sample table & profile table
-    sam_tab <- phyloseq::sample_data(ps) %>% data.frame() %>%
-      tibble::rownames_to_column("SampleID")
+    sam_tab <- phyloseq::sample_data(ps) %>%
+      data.frame() %>%
+      tibble::rownames_to_column("TempRowNames")
     if (phyloseq::taxa_are_rows(ps)) {
       prf_tab <- phyloseq::otu_table(phyloseq::t(ps)) %>%
         data.frame()
     } else {
-      prf_tab <- phyloseq::otu_table(ps) %>% data.frame()
+      prf_tab <- phyloseq::otu_table(ps) %>%
+        data.frame()
     }
   } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
     # sample table & profile table
-    sam_tab <- Biobase::pData(object) %>% data.frame() %>%
-      tibble::rownames_to_column("SampleID")
-    prf_tab <- Biobase::exprs(object) %>% data.frame()
+    sam_tab <- Biobase::pData(object) %>%
+      data.frame() %>%
+      tibble::rownames_to_column("TempRowNames")
+    prf_tab <- Biobase::exprs(object) %>%
+      data.frame()
   }
+
   # distance
-  disMatrix <- run_distance(object = object, method = method, alpha = alpha)
+  disMatrix <- run_distance(object = object,
+                            method = method,
+                            alpha = alpha)
+
   # grouping variable for test
   if (variable %in% colnames(sam_tab)) {
     colnames(sam_tab)[which(colnames(sam_tab) == variable)] <- "GroupVar"
   } else {
-    stop(variable, " no exists in columns of Metadata please check your input")
+    stop(variable, " no exist in columns of metadata Please check your input")
   }
 
   ANOSIM_core <- function(x, data_distance, profile){
@@ -141,9 +180,9 @@ run_ANOSIM <- function(
     return(ANOSIM_res)
   }
 
-  res <- ANOSIM_core(x=sam_tab$GroupVar,
-                     data_distance=disMatrix,
-                     profile=prf_tab)
+  res <- ANOSIM_core(x = sam_tab$GroupVar,
+                     data_distance = disMatrix,
+                     profile = prf_tab)
 
   return(res)
 }

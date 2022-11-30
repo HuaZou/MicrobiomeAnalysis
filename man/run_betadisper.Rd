@@ -4,16 +4,23 @@
 \alias{run_betadisper}
 \title{Multivariate homogeneity of groups dispersions (variances)}
 \usage{
-run_betadisper(object,
-                  variable,
-                  type,
-                  method,
-                  seedNum,
-                  alpha)
+run_betadisper(
+   object,
+   level = c(NULL, "Kingdom", "Phylum", "Class",
+           "Order", "Family", "Genus",
+           "Species", "Strain", "unique"),
+   variable,
+   type = "median",
+   method = c("unifrac", "wunifrac", "GUniFrac", "bray", "dpcoa", "jsd"),
+   seedNum = 123,
+   alpha = 0.5)
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
 \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+
+\item{level}{(Optional). character. Summarization
+level (from \code{rank_names(pseq)}, default: NULL).}
 
 \item{variable}{(Required). character. grouping variable for test.}
 
@@ -62,7 +69,9 @@ See \code{?vegan::betadisper} for more details. It can be applied to both
 
 \dontrun{
 data("enterotypes_arumugam")
-run_betadisper(enterotypes_arumugam, variable = "Enterotype", method = "bray")
+run_betadisper(enterotypes_arumugam,
+  variable = "Enterotype",
+  method = "bray")
 }
 
 }

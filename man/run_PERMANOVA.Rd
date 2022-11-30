@@ -4,23 +4,29 @@
 \alias{run_PERMANOVA}
 \title{Permutational multivariate analysis of variance (PERMANOVA)}
 \usage{
-run_PERMANOVA(object,
-                     variables,
-                     method,
-                     seedNum,
-                     alpha)
+run_PERMANOVA(
+   object,
+   level = NULL,
+   variables = "all',
+   method = "bray",
+   mode = c("one", "all"),
+   seedNum = 123,
+   alpha = 0.5)
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
 \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
 
-\item{variables}{(Optional). vector. variables for test.}
+\item{level}{(Optional). character. Summarization
+level (from \code{rank_names(pseq)}, default: NULL).}
+
+\item{variables}{(Optional). vector. variables for test (default: all).}
 
 \item{method}{(Optional). character. Provide one of the currently supported
 options. See \code{distanceMethodList} for a detailed list of the supported options
 and links to accompanying documentation. Options include:
 \itemize{
-\item "unifrac" : unweighted UniFrac distance.
+\item "unifrac": unweighted UniFrac distance.
 \item "wunifrac": weighted-UniFrac distance.
 \item "GUniFrac": The variance-adjusted weighted UniFrac distances (default: alpha=0.5).
 \item "bray": bray crutis distance.
@@ -28,6 +34,14 @@ and links to accompanying documentation. Options include:
 \item "jsd": Jensen-Shannon Divergence.
 Alternatively, you can provide a character string that defines a custom
 distance method, if it has the form described in \code{designdist} (default: "bray").
+}}
+
+\item{mode}{(Optional). character. Since there are missing values
+in some columns, providing two test model:
+\itemize{
+\item "one": test on one variable per time.
+\item "all": test on all variables once.
+(default: "one").
 }}
 
 \item{seedNum}{(Optional). numeric. specify seeds for reproduction (default: 123).}
@@ -53,7 +67,15 @@ test to determine the significance. It can be applied to both
 
 \dontrun{
 data("enterotypes_arumugam")
-run_PERMANOVA(enterotypes_arumugam, method = "bray")
+run_PERMANOVA(enterotypes_arumugam,
+  method = "bray",
+  mode = "one")
+
+data("caporaso")
+run_PERMANOVA(caporaso,
+  method = "bray",
+  mode = "all",
+  variables = c("Month", "SampleType"))
 }
 
 }

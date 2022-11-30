@@ -4,15 +4,22 @@
 \alias{run_MRPP}
 \title{Multi-response Permutation Procedures (MRPP)}
 \usage{
-run_MRPP(object,
-                variable,
-                method,
-                seedNum,
-                alpha)
+run_MRPP(
+   object,
+   level = c(NULL, "Kingdom", "Phylum", "Class",
+           "Order", "Family", "Genus",
+           "Species", "Strain", "unique"),
+   variable,
+   method = c("unifrac", "wunifrac", "GUniFrac", "bray", "dpcoa", "jsd"),
+   seedNum = 123,
+   alpha = 0.5)
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
 \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+
+\item{level}{(Optional). character. Summarization
+level (from \code{rank_names(pseq)}, default: NULL).}
 
 \item{variable}{(Required). character. grouping variable for test.}
 

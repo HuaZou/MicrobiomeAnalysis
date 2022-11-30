@@ -22,6 +22,8 @@
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
 #' [`Biobase::ExpressionSet`] object.
+#' @param level (Optional). character. Summarization
+#' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param y_variables (Required). vector. variables for a control matrix Y.
 #' @param z_variables (Optional). vector. variables for a control matrix Z (default: NULL).
 #' @param norm (Optional). logical. whether to norm y and z matrix into unit by
@@ -55,15 +57,19 @@
 #' @importFrom Biobase pData exprs
 #' @importFrom stats setNames p.adjust
 #'
-#' @usage run_MANTEL(object,
-#'                   y_variables,
-#'                   z_variables,
-#'                   norm,
-#'                   method,
-#'                   method_cor,
-#'                   method_dist,
-#'                   seedNum,
-#'                   alpha)
+#' @usage run_MANTEL(
+#'    object,
+#'    level = c(NULL, "Kingdom", "Phylum", "Class",
+#'            "Order", "Family", "Genus",
+#'            "Species", "Strain", "unique"),
+#'    y_variables,
+#'    z_variables = NULL,
+#'    norm = TRUE,
+#'    method = c("mantel", "mantel.partial", "mantel.randtest", "mantel.rtest"),
+#'    method_cor = c("pearson", "spearman", "kendall"),
+#'    method_dist = c("bray", "euclidean", "jaccard"),
+#'    seedNum = 123,
+#'    alpha = 0.5)
 #'
 #' @export
 #'
@@ -80,15 +86,28 @@
 #' }
 #'
 run_MANTEL <- function(
-              object,
-              y_variables,
-              z_variables = NULL,
-              norm = TRUE,
-              method = c("mantel", "mantel.partial", "mantel.randtest", "mantel.rtest"),
-              method_cor = "spearman",
-              method_dist = c("bray", "euclidean", "jaccard"),
-              seedNum = 123,
-              alpha = 0.5) {
+    object,
+    level = NULL,
+    y_variables,
+    z_variables = NULL,
+    norm = TRUE,
+    method = c("mantel", "mantel.partial", "mantel.randtest", "mantel.rtest"),
+    method_cor = "spearman",
+    method_dist = c("bray", "euclidean", "jaccard"),
+    seedNum = 123,
+    alpha = 0.5) {
+
+  # data("enterotypes_arumugam")
+  # object = enterotypes_arumugam
+  # level = "Phylum"
+  # y_variables = c("Enterotype", "Clinical.Status")
+  # z_variables = c("Nationality", "Gender")
+  # norm = FALSE
+  # method = "mantel.partial"
+  # method_cor = "spearman"
+  # method_dist = c("bray", "euclidean", "jaccard")
+  # seedNum = 123
+  # alpha = 0.5
 
   # Mantel test method
   method <- match.arg(
@@ -102,7 +121,7 @@ run_MANTEL <- function(
     method <- "mantel.partial"
   }
   # Correlation method
-  method_cor <- match.arg(method_cor, c("pearson", "spearman","kendall"))
+  method_cor <- match.arg(method_cor, c("pearson", "spearman", "kendall"))
   # distance method
   if (!is.null(z_variables)) {
     if (is.na(method_dist[3])) {
@@ -113,6 +132,14 @@ run_MANTEL <- function(
   # phyloseq object
   if (all(!is.null(object), inherits(object, "phyloseq"))) {
     ps <- check_sample_names(object = object)
+
+    # taxa level
+    if (!is.null(level)) {
+      ps <- aggregate_taxa(x = ps, level = level)
+    } else {
+      ps <- ps
+    }
+
     if (!is.null(ps@phy_tree) & (method_dist[1] %in%
                                  c("unifrac", "wunifrac", "GUniFrac"))) {
       method_dist[1] <- match.arg(
@@ -125,7 +152,7 @@ run_MANTEL <- function(
     }
     ## sample table & profile table
     sam_tab <- phyloseq::sample_data(ps) %>% data.frame() %>%
-      tibble::rownames_to_column("SampleID")
+      tibble::rownames_to_column("TempRowNames")
     if (phyloseq::taxa_are_rows(ps)) {
       prf_tab <- phyloseq::otu_table(phyloseq::t(ps)) %>%
         data.frame()
@@ -135,7 +162,7 @@ run_MANTEL <- function(
   } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
     # sample table & profile table
     sam_tab <- Biobase::pData(object) %>% data.frame() %>%
-      tibble::rownames_to_column("SampleID")
+      tibble::rownames_to_column("TempRowNames")
     prf_tab <- Biobase::exprs(object) %>% data.frame()
   }
   # x distance

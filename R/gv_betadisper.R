@@ -24,6 +24,8 @@
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
 #' [`Biobase::ExpressionSet`] object.
+#' @param level (Optional). character. Summarization
+#' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param variable (Required). character. grouping variable for test.
 #' @param type (Optional). character. the type of analysis to perform. Use the
 #' spatial "median" or the group "centroid" (default: "median").
@@ -50,12 +52,16 @@
 #' @importFrom Biobase pData exprs
 #' @importFrom stats setNames p.adjust
 #'
-#' @usage run_betadisper(object,
-#'                   variable,
-#'                   type,
-#'                   method,
-#'                   seedNum,
-#'                   alpha)
+#' @usage run_betadisper(
+#'    object,
+#'    level = c(NULL, "Kingdom", "Phylum", "Class",
+#'            "Order", "Family", "Genus",
+#'            "Species", "Strain", "unique"),
+#'    variable,
+#'    type = "median",
+#'    method = c("unifrac", "wunifrac", "GUniFrac", "bray", "dpcoa", "jsd"),
+#'    seedNum = 123,
+#'    alpha = 0.5)
 #'
 #' @export
 #'
@@ -63,20 +69,41 @@
 #'
 #' \dontrun{
 #' data("enterotypes_arumugam")
-#' run_betadisper(enterotypes_arumugam, variable = "Enterotype", method = "bray")
+#' run_betadisper(enterotypes_arumugam,
+#'   variable = "Enterotype",
+#'   method = "bray")
 #' }
 #'
 run_betadisper <- function(
-              object,
-              variable,
-              type = "median",
-              method = "bray",
-              seedNum = 123,
-              alpha = 0.5) {
+    object,
+    level = NULL,
+    variable,
+    type = "median",
+    method = "bray",
+    seedNum = 123,
+    alpha = 0.5) {
+
+  # data("enterotypes_arumugam")
+  # object = enterotypes_arumugam
+  # level = "Phylum"
+  # variable = "Enterotype"
+  # type = "median"
+  # method = "bray"
+  # seedNum = 123
+  # alpha = 0.5
 
   # phyloseq object
   if (all(!is.null(object), inherits(object, "phyloseq"))) {
+
     ps <- check_sample_names(object = object)
+
+    # taxa level
+    if (!is.null(level)) {
+      ps <- aggregate_taxa(x = ps, level = level)
+    } else {
+      ps <- ps
+    }
+
     if (!is.null(ps@phy_tree) & (method %in%
                                  c("unifrac", "wunifrac", "GUniFrac"))) {
       method <- match.arg(
@@ -89,7 +116,7 @@ run_betadisper <- function(
     }
     ## sample table & profile table
     sam_tab <- phyloseq::sample_data(ps) %>% data.frame() %>%
-      tibble::rownames_to_column("SampleID")
+      tibble::rownames_to_column("TempRowNames")
     if (phyloseq::taxa_are_rows(ps)) {
       prf_tab <- phyloseq::otu_table(phyloseq::t(ps)) %>%
         data.frame()
@@ -99,11 +126,13 @@ run_betadisper <- function(
   } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
     # sample table & profile table
     sam_tab <- Biobase::pData(object) %>% data.frame() %>%
-      tibble::rownames_to_column("SampleID")
+      tibble::rownames_to_column("TempRowNames")
     prf_tab <- Biobase::exprs(object) %>% data.frame()
   }
+
   # distance
   disMatrix <- run_distance(object = object, method = method, alpha = alpha)
+
   # grouping variable for test
   if (variable %in% colnames(sam_tab)) {
     colnames(sam_tab)[which(colnames(sam_tab) == variable)] <- "GroupVar"
@@ -153,9 +182,9 @@ run_betadisper <- function(
     return(betadisper_res)
   }
 
-  res <- betadisper_core(x=sam_tab$GroupVar,
-                         data_distance=disMatrix,
-                         profile=prf_tab)
+  res <- betadisper_core(x = sam_tab$GroupVar,
+                         data_distance = disMatrix,
+                         profile = prf_tab)
 
   return(res)
 }

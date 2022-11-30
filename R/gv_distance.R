@@ -7,6 +7,8 @@
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
 #' [`Biobase::ExpressionSet`] object.
+#' @param level (Optional). character. Summarization
+#' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param method (Required). character. Provide one of the currently supported
 #' options. See `distanceMethodList` for a detailed list of the supported options
 #' and links to accompanying documentation. Options include:
@@ -30,9 +32,12 @@
 #' @importFrom stats setNames as.dist
 #'
 #' @usage run_distance(
-#'                  object,
-#'                  method,
-#'                  alpha)
+#'    object,
+#'    level = c(NULL, "Kingdom", "Phylum", "Class",
+#'            "Order", "Family", "Genus",
+#'            "Species", "Strain", "unique"),
+#'    method = c("unifrac", "wunifrac", "GUniFrac", "bray", "dpcoa", "jsd"),
+#'    alpha = 0.5)
 #'
 #' @export
 #'
@@ -46,12 +51,28 @@
 #'
 run_distance <- function(
       object,
+      level = NULL,
       method = "bray",
-      alpha = 0.5){
+      alpha = 0.5) {
+
+
+  # data("enterotypes_arumugam")
+  # object = enterotypes_arumugam
+  # level = "Phylum"
+  # method = "bray"
+  # alpha = 0.5
 
   # phyloseq object
   if (all(!is.null(object), inherits(object, "phyloseq"))) {
     ps <- check_sample_names(object = object)
+
+    # taxa level
+    if (!is.null(level)) {
+      ps <- aggregate_taxa(x = ps, level = level)
+    } else {
+      ps <- ps
+    }
+
     if (!is.null(ps@phy_tree) &
         (method %in% c("unifrac", "wunifrac", "GUniFrac"))) {
       method <- match.arg(
@@ -130,9 +151,10 @@ run_distance <- function(
 #'
 #' }
 #'
-.get_GUniFrac <- function (otu.tab,
-                          tree,
-                          alpha = c(0, 0.5, 1)) {
+.get_GUniFrac <- function(
+      otu.tab,
+      tree,
+      alpha = c(0, 0.5, 1)) {
 
   if (!ape::is.rooted(tree)) {
     stop("Rooted phylogenetic tree required!")
@@ -234,4 +256,3 @@ run_distance <- function(
   }
   return(list(unifracs=unifracs))
 }
-

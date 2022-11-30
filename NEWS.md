@@ -1,3 +1,13 @@
+# MicrobiomeAnalysis v1.0.3
+
++ Update codes for selecting taxa level in `run_ANOSIM`. (2022-11-30)
++ Update codes for selecting taxa level in `run_MANTE`. (2022-11-30)
++ Update codes for selecting taxa level in `run_MRPP`. (2022-11-30)
++ Update codes for selecting taxa level and test model in `run_PERMANOVA`. (2022-11-30)
++ Update codes for selecting taxa level in `run_betadisper`. (2022-11-30)
++ Update codes for selecting taxa level in `run_distance`. (2022-11-30)
+
+
 # MicrobiomeAnalysis v1.0.2
 
 + Add differential analysis scripts from [microbiomeMarker](https://github.com/yiluheihei/microbiomeMarker). (2022-05-18)
