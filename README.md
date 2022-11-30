@@ -6,7 +6,7 @@ This package has many unique features:
 
 ## The Overview of **MicrobiomeAnalysis**
 
-<img src="./man/figures/Schematic.png" alt="The Overview of MicrobiomeAnalysis" style="display: block; margin: auto;" />
+<img src="./inst/figures/Schematic.png" alt="The Overview of MicrobiomeAnalysis" style="display: block; margin: auto;" />
 
 ## :writing_hand: Authors
 
