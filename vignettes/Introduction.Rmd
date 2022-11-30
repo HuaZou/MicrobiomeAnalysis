@@ -47,7 +47,7 @@ conflict_prefer("select", "dplyr")
 
 # Overview of **MicrobiomeAnalysis**
 ```{r, echo=FALSE, out.width="80%", out.width="80%", dpi=400, fig.align="center", fig.cap="The Overview of MicrobiomeAnalysis"}
-knitr::include_graphics("../inst/figures/Schematic.png")
+knitr::include_graphics("../man/figures/Schematic.png")
 ```
 
 # Convert inputs into phyloseq-class object

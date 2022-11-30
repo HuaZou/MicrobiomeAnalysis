@@ -21,20 +21,28 @@ reference:
       - abundances
       - nmarker
       - starts_with("postHocTest-class")
-  - title: "Normalization"
+  - title: Miscellaneous
+    desc: >
+      Functions to aggregate and collapse taxa
+    contents:
+      - aggregate_taxa
+      - summarize_taxa
+      - subset_marker
+  - title: "Data Processing"
+    desc: >
+      Functions to precess data before test
     contents:
       - abundances
       - transform_abundances
       - starts_with("norm")
+      - trim_prevalence
+      - filter_abundance
   - title: "Example data"
     contents:
       starts_with("data")
-  - title: Miscellaneous
-    contents:
-      - aggregate_taxa
-      - subset_marker
-      - summarize_taxa
   - title: "Community hypothesis test"
+    desc: >
+      Functions to investigate association between variables and community
     contents:
       - run_betadisper
       - run_ANOSIM
@@ -60,6 +68,8 @@ reference:
       - run_test_two_groups
       - run_simple_stat
   - title: "Statistical tookits"
+    desc: >
+      Functions to do statistical test
     contents:
       - calculate_median_abundance
       - calculate_mean_abundance
