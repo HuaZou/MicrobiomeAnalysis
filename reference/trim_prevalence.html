@@ -67,7 +67,9 @@ which means the samples or taxa will be discarded if they could not pass the cut
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">trim_prevalence</span><span class="op">(</span>
     <span class="va">object</span>,
-    level <span class="op">=</span> <span class="cn">NULL</span>,
+    level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="st">"Kingdom"</span>, <span class="st">"Phylum"</span>, <span class="st">"Class"</span>,
+           <span class="st">"Order"</span>, <span class="st">"Family"</span>, <span class="st">"Genus"</span>,
+           <span class="st">"Species"</span>, <span class="st">"Strain"</span>, <span class="st">"unique"</span><span class="op">)</span>,
     cutoff <span class="op">=</span> <span class="fl">0.1</span>,
     trim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"both"</span>, <span class="st">"feature"</span>, <span class="st">"sample"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
     </div>

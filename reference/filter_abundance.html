@@ -71,11 +71,13 @@ taxa by the threshold. Here, we choose the following criterion:</p><ol><li><p>Ta
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">filter_abundance</span><span class="op">(</span>
-    <span class="va">object</span>,
-    level <span class="op">=</span> <span class="cn">NULL</span>,
-    cutoff_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1e-04</span><span class="op">)</span>,
-    cutoff_one <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1e-03</span><span class="op">)</span>,
-    unclass <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+   <span class="va">object</span>,
+   level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="st">"Kingdom"</span>, <span class="st">"Phylum"</span>, <span class="st">"Class"</span>,
+           <span class="st">"Order"</span>, <span class="st">"Family"</span>, <span class="st">"Genus"</span>,
+           <span class="st">"Species"</span>, <span class="st">"Strain"</span>, <span class="st">"unique"</span><span class="op">)</span>,
+   cutoff_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1e-04</span><span class="op">)</span>,
+   cutoff_one <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1e-03</span><span class="op">)</span>,
+   unclass <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">

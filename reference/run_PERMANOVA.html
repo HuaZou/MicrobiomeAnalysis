@@ -67,9 +67,11 @@ the community and environmental variables.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">run_PERMANOVA</span><span class="op">(</span>
    <span class="va">object</span>,
-   level <span class="op">=</span> <span class="cn">NULL</span>,
+   level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="st">"Kingdom"</span>, <span class="st">"Phylum"</span>, <span class="st">"Class"</span>,
+           <span class="st">"Order"</span>, <span class="st">"Family"</span>, <span class="st">"Genus"</span>,
+           <span class="st">"Species"</span>, <span class="st">"Strain"</span>, <span class="st">"unique"</span><span class="op">)</span>,
    variables <span class="op">=</span> <span class="st">"all"</span>,
-   method <span class="op">=</span> <span class="st">"bray"</span>,
+   method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unifrac"</span>, <span class="st">"wunifrac"</span>, <span class="st">"GUniFrac"</span>, <span class="st">"bray"</span>, <span class="st">"dpcoa"</span>, <span class="st">"jsd"</span><span class="op">)</span>,
    mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"one"</span>, <span class="st">"all"</span><span class="op">)</span>,
    seedNum <span class="op">=</span> <span class="fl">123</span>,
    alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>

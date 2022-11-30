@@ -73,13 +73,13 @@
     <loc>/reference/default_color.html</loc>
   </url>
   <url>
-    <loc>/reference/dot-get_GUniFrac.html</loc>
-  </url>
-  <url>
     <loc>/reference/extract-methods.html</loc>
   </url>
   <url>
     <loc>/reference/filter_abundance.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_GUniFrac.html</loc>
   </url>
   <url>
     <loc>/reference/get_eigValue.html</loc>
