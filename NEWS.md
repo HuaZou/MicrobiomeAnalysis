@@ -9,6 +9,7 @@
 + Update codes for selecting taxa level and log formula in `transform_abundances`. (2022-11-30)
 + Add `trim_prevalence`. (2022-11-30)
 + Add `filter_abundance`. (2022-11-30)
++ Add **Data Processing** in *Introduction.Rmd*. (2022-11-30)
 
 # MicrobiomeAnalysis v1.0.2
 

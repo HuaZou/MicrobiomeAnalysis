@@ -4,7 +4,7 @@
 #' Transform the taxa abundances in `otu_table` sample by sample, which means
 #' the counts of each sample will be transformed individually.
 #'
-#' @author Created by Yang Cao
+#' @author Created by Yang Cao; modified by Hua Zou (11/30/2022 Shenzhen China)
 #'
 #' @param object  [`otu_table-class`], [`phyloseq-class`], or
 #'   [`microbiomeMarker-class`].

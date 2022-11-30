@@ -52,5 +52,5 @@ head(otu_table(x3), 10)
 \code{\link[=abundances]{abundances()}}
 }
 \author{
-Created by Yang Cao
+Created by Yang Cao; modified by Hua Zou (11/30/2022 Shenzhen China)
 }

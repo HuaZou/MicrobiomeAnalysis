@@ -9,6 +9,8 @@
 #' type 2 diabetes show different gut microbial functional capacity and
 #' composition." Cell host & microbe 26.2 (2019): 252-264.
 #'
+#' @author Created by Hua Zou (11/30/2021 Shenzhen China)
+#'
 #' @param object (Required). a \code{\link[phyloseq]{phyloseq-class}} object.
 #' @param level (Optional). character. taxonomic level to summarize,
 #' default the top level rank of the `ps`. taxonomic level(Kingdom, Phylum,
@@ -63,8 +65,8 @@
 filter_abundance <- function(
     object,
     level = NULL,
-    cutoff_mean,
-    cutoff_one,
+    cutoff_mean = c(100, 1e-04),
+    cutoff_one = c(1000, 1e-03),
     unclass = TRUE) {
 
   # data("enterotypes_arumugam")

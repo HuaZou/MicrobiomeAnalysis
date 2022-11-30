@@ -75,6 +75,7 @@ run_test_multiple_groups <- function(ps,
     ),
     pvalue_cutoff = 0.05,
     effect_size_cutoff = NULL) {
+    
     stopifnot(inherits(ps, "phyloseq"))
     ps <- check_rank_names(ps)
     ps <- check_taxa_rank(ps, taxa_rank)

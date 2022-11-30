@@ -47,7 +47,7 @@ conflict_prefer("select", "dplyr")
 
 # Overview of **MicrobiomeAnalysis**
 ```{r, echo=FALSE, out.width="80%", out.width="80%", dpi=400, fig.align="center", fig.cap="The Overview of MicrobiomeAnalysis"}
-knitr::include_graphics("../man/figures/Schematic.png")
+knitr::include_graphics("../inst/figures/Schematic.png")
 ```
 
 # Convert inputs into phyloseq-class object
@@ -67,7 +67,9 @@ sam_tab <- read.table(
      package = "MicrobiomeAnalysis"), 
   sep = "\t", header = TRUE, row.names = 1)
 
-ps <- import_dada2(seq_tab = seq_tab, tax_tab = tax_tab, sam_tab = sam_tab)
+ps <- import_dada2(seq_tab = seq_tab, 
+                   tax_tab = tax_tab, 
+                   sam_tab = sam_tab)
 
 ps
 ```
@@ -91,27 +93,94 @@ treeqza_file <- system.file(
      package = "MicrobiomeAnalysis")
  
 ps_object <- import_qiime2(
-     otu_qza = otuqza_file, taxa_qza = taxaqza_file,
-     sam_tab = sample_file, tree_qza = treeqza_file)
+     otu_qza = otuqza_file, 
+     taxa_qza = taxaqza_file,
+     sam_tab = sample_file, 
+     tree_qza = treeqza_file)
 ps_object
 ```
 
 # Data Processing
 
 ## Extract specific levels phyloseq-class object
+
++ Extracting "Genus" levels phyloseq object 
 ```{r}
-ps_genus <- aggregate_taxa(ps_object, level = "Genus")
+ps_genus <- aggregate_taxa(ps_object, 
+                           level = "Genus")
 ps_genus
+
+head(ps_genus@otu_table@.Data, 3)
 ```
+
 
 ## Summarize the specific taxonomic levels 
 
-* Kingdom to the the specific taxonomic levels (Phylum)
++ Phyloseq object contains from Kingdom to the the specific taxonomic levels (Phylum)
 ```{r}
-ps_summarize_genus <- summarize_taxa(ps_object, level = "Genus")
+ps_summarize_genus <- summarize_taxa(
+    ps_object, 
+    level = "Genus")
 ps_summarize_genus
 ```
 
+## Transformation
+
++ Transform the taxa abundances in `otu_table` sample by sample
+
+```{r}
+ps_genus_transform <- transform_abundances(
+    object = ps_genus,
+    transform = "log10p")
+
+head(ps_genus_transform@otu_table@.Data, 3)
+```
+
+## Normalization
+
++ Normalizing the OTU_table in phyloseq-class object
+
+```{r}
+ps_genus_transform_norm <- normalize(
+    object = ps_genus_transform,
+    method = "TSS")
+
+head(ps_genus_transform_norm@otu_table@.Data, 3)
+```
+
+## Trimming
+
++ Trimming samples or taxa whose prevalence is less than threshold
+
+```{r}
+ps_genus_transform_norm_trim <- trim_prevalence(
+    object = ps_genus_transform,
+    level = NULL,
+    cutoff = 0.1,
+    trim = "feature")
+
+head(ps_genus_transform_norm_trim@otu_table@.Data, 3)
+```
+
+
+## Filtering
+
++ Filtering taxa who is low relative abundance or unclassified (Ref: [@thingholm2019obese])
+
+  - 1. Taxa more than Mean relative abundance across all samples: 0.0001 (1e-04);
+
+  - 2. Taxa more than Minimum relative abundance at least one sample: 0.001 (1e-03).
+
+```{r}
+ps_genus_transform_norm_trim_filter <- filter_abundance(
+    object = ps_genus_transform_norm_trim,
+    level = NULL,
+    cutoff_mean = 1e-04,
+    cutoff_one = 1e-03,
+    unclass = TRUE)
+
+head(ps_genus_transform_norm_trim_filter@otu_table@.Data, 3)
+```
 
 
 # Multivariate Community Analysis
@@ -123,22 +192,26 @@ Know more details of the aftermentioned statistical methods to see [@xia2018stat
 [@anderson2006multivariate]
 
 ```{r, warning=FALSE, message=FALSE}
-run_betadisper(ps_object, variable = "body.site", method = "bray")
+run_betadisper(object = ps_object,
+               level = "Genus",
+               variable = "body.site", 
+               method = "bray")
 ```
-
 
 ## Permutational Multivariate Analysis of Variance (PERMANOVA)
 
 [@anderson2014permutational]
 ```{r, warning=FALSE, message=FALSE}
-run_PERMANOVA(ps_object, method = "bray")
+run_PERMANOVA(object = ps_object,
+              level = NULL,
+              method = "bray")
 ```
 
 ## Mantel Test (MANTEL)
 
 [@mantel1967detection]
 ```{r, warning=FALSE, message=FALSE}
-run_MANTEL(ps_object,
+run_MANTEL(object = ps_object,
            y_variables = "body.site",
            z_variables = c("subject", "reported.antibiotic.usage"),
            norm = FALSE,
@@ -151,14 +224,20 @@ run_MANTEL(ps_object,
 
 [@clarke1993non]
 ```{r, warning=FALSE, message=FALSE}
-run_ANOSIM(ps_object, variable = "body.site", method = "bray")
+run_ANOSIM(object = ps_object,
+           level = "Genus",
+           variable = "body.site", 
+           method = "bray")
 ```
 
 ## Multi-response Permutation Procedures (MRPP)
 
 [@mielke1991application]
 ```{r, warning=FALSE, message=FALSE}
-run_MRPP(ps_object, variable = "body.site", method = "bray")
+run_MRPP(object = ps_object,
+         level = "Genus",
+         variable = "body.site", 
+         method = "bray")
 ```
 
 
@@ -170,12 +249,16 @@ ps_genus_group <- phyloseq::subset_samples(
      ps_genus,
      body.site %in% c("gut", "tongue"))
 
-run_aldex(ps_genus_group, group = "body.site", taxa_rank = "Phylum")
+run_aldex(ps = ps_genus_group, 
+          group = "body.site", 
+          taxa_rank = "Phylum")
 ```
 
 ## limma-voom
 ```{r, warning=FALSE, message=FALSE}
-run_limma_voom(ps_genus_group, group = "body.site", taxa_rank = "Phylum")
+run_limma_voom(ps = ps_genus_group, 
+               group = "body.site", 
+               taxa_rank = "Phylum")
 ```
 
 ## ANCOM
@@ -184,17 +267,22 @@ data("enterotypes_arumugam")
 ps_enterotypes <- phyloseq::subset_samples(
      enterotypes_arumugam,
      Enterotype %in% c("Enterotype 3", "Enterotype 2"))
-run_ancom(ps_enterotypes, group = "Enterotype")
+
+run_ancom(ps = ps_enterotypes, 
+          group = "Enterotype")
 ```
 
 ## ANCOMBC
 ```{r, warning=FALSE, message=FALSE}
-run_ancombc(ps_enterotypes, group = "Enterotype", confounders = "Gender")
+run_ancombc(ps = ps_enterotypes, 
+            group = "Enterotype", 
+            confounders = "Gender")
 ```
 
 ## DESeq2
 ```{r, warning=FALSE, message=FALSE}
-run_deseq2(ps_enterotypes, group = "Enterotype")
+run_deseq2(ps = ps_enterotypes, 
+           group = "Enterotype")
 ```
 
 ## edgeR
@@ -204,12 +292,14 @@ run_edger(ps_enterotypes, group = "Enterotype")
 
 ## lefse
 ```{r, warning=FALSE, message=FALSE}
-run_lefse(ps_enterotypes, group = "Enterotype")
+run_lefse(ps = ps_enterotypes, 
+          group = "Enterotype")
 ```
 
 ## metagenomeSeq
 ```{r, warning=FALSE, message=FALSE}
-run_metagenomeseq(ps_enterotypes, group = "Enterotype")
+run_metagenomeseq(ps = ps_enterotypes, 
+                  group = "Enterotype")
 ```
 
 ## test_multiple_groups
@@ -222,7 +312,9 @@ ps <- phyloseq::subset_samples(
     enterotypes_arumugam,
     Enterotype %in% c("Enterotype 3", "Enterotype 2", "Enterotype 1"))
 
-run_test_multiple_groups(ps, group = "Enterotype", method = "anova")
+run_test_multiple_groups(ps = ps, 
+                         group = "Enterotype", 
+                         method = "anova")
 ```
 
 ## supervised leaning (SL) methods
@@ -236,7 +328,7 @@ ps_small <- phyloseq::subset_taxa(
 )
 
 mm <- run_sl(
-    ps_small,
+    ps = ps_small,
     group = "Gender",
     taxa_rank = "Genus",
     nfolds = 2,
@@ -247,7 +339,6 @@ mm <- run_sl(
 
 mm
 ```
-
 
 
 # Session information {-}

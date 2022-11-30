@@ -7,7 +7,7 @@
 run_PERMANOVA(
    object,
    level = NULL,
-   variables = "all',
+   variables = "all",
    method = "bray",
    mode = c("one", "all"),
    seedNum = 123,
@@ -81,7 +81,7 @@ run_PERMANOVA(caporaso,
 }
 \references{
 Anderson, Marti J. "Permutational multivariate analysis of
-variance." Department of Statistics, University of Auckland,
+variance."Department of Statistics, University of Auckland,
 Auckland 26 (2005): 32-46.
 }
 \author{
