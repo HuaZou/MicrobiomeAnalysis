@@ -11,6 +11,7 @@
 + Add `filter_abundance`. (2022-11-30)
 + Add **Data Processing** in *Introduction.Rmd*. (2022-11-30)
 + Add `.import_dada2_taxa` for managing taxa levels. (2022-12-01)
++ Add `.get_alphaindex` for alpha diversity. (2022-12-01)
 
 
 # MicrobiomeAnalysis v1.0.2

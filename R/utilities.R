@@ -121,6 +121,7 @@ check_var_in_meta <- function(var, sample_meta) {
 # filter taxa whose abundance is zero, fix duplicated tax
 # filter samples whose library size is zero
 #' @importFrom phyloseq prune_samples
+#'
 preprocess_ps <- function(ps) {
     zero_sample <- check_samples(ps)
     if (!is.null(zero_sample)) {
@@ -141,7 +142,7 @@ preprocess_ps <- function(ps) {
     # fix duplicated tax
     ps <- fix_duplicate_tax(ps)
 
-    ps
+    return(ps)
 }
 
 #' phyloseq quality control, remove otu/asv of which abundance is zero
@@ -156,11 +157,11 @@ phyloseq_qc <- function(ps) {
 #' @keywords internal
 #' @noRd
 keep_taxa_in_rows <- function(ps) {
-    if (!taxa_are_rows(ps)) {
-        ps <- t(ps)
-    }
+  if (!taxa_are_rows(ps)) {
+    ps <- t(ps)
+  }
 
-    ps
+  return(ps)
 }
 
 # https://github.com/lch14forever/microbiomeVizb
@@ -175,54 +176,57 @@ keep_taxa_in_rows <- function(ps) {
 #' @keywords internal
 #' @noRd
 fix_duplicate_tax <- function(ps) {
-    # convert na to Unknown first
-    ps <- fix_na_tax(ps)
 
-    tax <- tax_table(ps)
-    if (ncol(tax) == 1) {
-        return(ps)
-    }
+  # convert na to Unknown first
+  ps <- fix_na_tax(ps)
 
-    for (i in 2:ncol(tax)) {
-        tax_uniq <- unique(tax[, i])
-        for (j in seq_along(tax_uniq)) {
-            if (is.na(tax_uniq[j])) next
-            ind <- which(tax[, i] == as.character(tax_uniq[j]))
-            if (length(unique(tax[ind, i - 1])) > 1) {
-                tax[ind, i] <- paste(tax[ind, i - 1], tax[ind, i], sep = "_")
-            }
+  tax <- tax_table(ps)
+  if (ncol(tax) == 1) {
+      return(ps)
+  }
+
+  for (i in 2:ncol(tax)) {
+    tax_uniq <- unique(tax[, i])
+      for (j in seq_along(tax_uniq)) {
+        if (is.na(tax_uniq[j])) next
+        ind <- which(tax[, i] == as.character(tax_uniq[j]))
+        if (length(unique(tax[ind, i - 1])) > 1) {
+          tax[ind, i] <- paste(tax[ind, i - 1], tax[ind, i], sep = "_")
         }
-    }
+      }
+  }
 
-    tax_table(ps) <- tax
+  tax_table(ps) <- tax
 
-    ps
+  return(ps)
 }
 
 #' set NA (missing) tax to its prefix, e.g. s__ (or s__unknown?)
 #' @keywords internal
 #' @noRd
 fix_na_tax <- function(ps) {
-    tax <- as.data.frame(tax_table(ps))
 
-    tax_fixed <- purrr::imap_dfc(
+  tax <- as.data.frame(tax_table(ps))
+
+  tax_fixed <- purrr::imap_dfc(
         tax,
         ~ ifelse(is.na(.x), get_prefix(.y), .x)
-    ) %>%
-        as.matrix()
-    row.names(tax_fixed) <- taxa_names(ps)
-    tax_table(ps) <- tax_fixed
+  ) %>%
+      as.matrix()
+  row.names(tax_fixed) <- taxa_names(ps)
+  tax_table(ps) <- tax_fixed
 
-    ps
+  return(ps)
 }
 
 # extract the prefix of taxonomic ranks
 get_prefix <- function(ranks) {
-    prefix <- substr(ranks, 1, 1) %>%
-        tolower() %>%
-        paste("__", sep = "")
 
-    prefix
+  prefix <- substr(ranks, 1, 1) %>%
+    tolower() %>%
+    paste("__", sep = "")
+
+  prefix
 }
 
 
