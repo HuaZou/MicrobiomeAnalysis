@@ -5,11 +5,12 @@
 \title{Convert the output of dada2 into phyloseq object}
 \usage{
 import_dada2(
-    seq_tab,
-    tax_tab = NULL,
-    sam_tab = NULL,
-    phy_tree = NULL,
-    keep_taxa_rows = TRUE)
+  seq_tab,
+  tax_tab = NULL,
+  sam_tab = NULL,
+  phy_tree = NULL,
+  keep_taxa_rows = TRUE
+)
 }
 \arguments{
 \item{seq_tab}{(Required). matrix-like, ASV table, the output of
@@ -54,7 +55,10 @@ sam_tab <- read.table(
   system.file("extdata", "dada2_samdata.txt",
               package = "MicrobiomeAnalysis"),
   sep = "\t", header = TRUE, row.names = 1)
-ps <- import_dada2(seq_tab = seq_tab, tax_tab = tax_tab, sam_tab = sam_tab)
+ps <- import_dada2(
+   seq_tab = seq_tab,
+   tax_tab = tax_tab,
+   sam_tab = sam_tab)
 ps
 }
 

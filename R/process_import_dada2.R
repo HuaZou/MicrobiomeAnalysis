@@ -33,14 +33,6 @@
 #' @importFrom phyloseq sample_data read_tree
 #' @importMethodsFrom phyloseq t
 #'
-#' @usage
-#' import_dada2(
-#'     seq_tab,
-#'     tax_tab = NULL,
-#'     sam_tab = NULL,
-#'     phy_tree = NULL,
-#'     keep_taxa_rows = TRUE)
-#'
 #' @export
 #'
 #' @examples
@@ -55,7 +47,10 @@
 #'   system.file("extdata", "dada2_samdata.txt",
 #'               package = "MicrobiomeAnalysis"),
 #'   sep = "\t", header = TRUE, row.names = 1)
-#' ps <- import_dada2(seq_tab = seq_tab, tax_tab = tax_tab, sam_tab = sam_tab)
+#' ps <- import_dada2(
+#'    seq_tab = seq_tab,
+#'    tax_tab = tax_tab,
+#'    sam_tab = sam_tab)
 #' ps
 #' }
 #'
@@ -66,41 +61,119 @@ import_dada2 <- function(
     phy_tree = NULL,
     keep_taxa_rows = TRUE) {
 
-    # refseq
-    refseq <- colnames(seq_tab)
-    # set refseq and taxa names to ASV_1, ASV_2,...
-    refseq_nm <- paste0("ASV", seq_along(refseq))
-    colnames(seq_tab) <- refseq_nm
-    names(refseq) <- refseq_nm
+  # seq_tab <- readRDS(
+  #   system.file("extdata", "dada2_seqtab.rds",
+  #               package = "MicrobiomeAnalysis"))
+  # tax_tab <- readRDS(
+  #   system.file("extdata", "dada2_taxtab.rds",
+  #               package = "MicrobiomeAnalysis"))
+  # sam_tab <- read.table(
+  #   system.file("extdata", "dada2_samdata.txt",
+  #               package = "MicrobiomeAnalysis"),
+  #   sep = "\t", header = TRUE, row.names = 1)
+  #
+  # phy_tree = NULL
+  # keep_taxa_rows = TRUE
 
-    if (!is.null(tax_tab)) {
-        if (!identical(refseq_nm, row.names(tax_tab))) {
-            tax_tab <- tax_tab[match(refseq, row.names(tax_tab)), ,
+  # refseq
+  refseq <- colnames(seq_tab)
+
+  # set refseq and taxa names to ASV_1, ASV_2,...
+  refseq_nm <- paste0("ASV", seq_along(refseq))
+  colnames(seq_tab) <- refseq_nm
+  names(refseq) <- refseq_nm
+
+  if (!is.null(tax_tab)) {
+    if (!identical(refseq_nm, row.names(tax_tab))) {
+      tax_tab_temp <- .import_dada2_taxa(dada2_taxa = tax_tab)
+      tax_tab <- tax_tab_temp[match(refseq,
+                                    row.names(tax_tab_temp)), ,
                 drop = FALSE]
-        }
-        row.names(tax_tab) <- refseq_nm
-        tax_tab <- tax_table(as.matrix(tax_tab))
     }
+    row.names(tax_tab) <- refseq_nm
+    tax_tab <- phyloseq::tax_table(as.matrix(tax_tab))
+  }
 
-    # refseq to XStringSet
-    refseq <- Biostrings::DNAStringSet(refseq)
+  # refseq to XStringSet
+  refseq <- Biostrings::DNAStringSet(refseq)
 
-    if (!is.null(sam_tab)) {
-        sam_tab <- sample_data(sam_tab)
-    }
+  if (!is.null(sam_tab)) {
+    sam_tab <- phyloseq::sample_data(sam_tab)
+  }
 
-    if (!is.null(phy_tree) && inherits(phy_tree, "character")) {
-        phy_tree <- read_tree(phy_tree)
-    }
+  if (!is.null(phy_tree) && inherits(phy_tree, "character")) {
+    phy_tree <- phyloseq::read_tree(phy_tree)
+  }
 
-    asv_tab <- otu_table(seq_tab, taxa_are_rows = FALSE)
-    ps <- phyloseq(asv_tab, tax_tab, sam_tab, phy_tree, refseq)
+  asv_tab <- phyloseq::otu_table(seq_tab, taxa_are_rows = FALSE)
 
-    if (keep_taxa_rows) {
-        ps <- phyloseq::t(ps)
-    }
+  ps <- phyloseq::phyloseq(
+          otu_tab = asv_tab,
+          tax_tab = tax_tab,
+          sam_tab = sam_tab,
+          phy_tree = phy_tree,
+          refseq = refseq)
 
-    return(ps)
+  if (keep_taxa_rows) {
+    ps <- phyloseq::t(ps)
+  }
+
+  return(ps)
 }
 
+#' @title replace the NA with unclassified and give taxa the prefix
+#' @keywords internal
+#' @noRd
+#'
+.import_dada2_taxa <- function(dada2_taxa) {
+
+  # tax_tab <- readRDS(
+  #   system.file("extdata", "dada2_taxtab.rds",
+  #               package = "MicrobiomeAnalysis"))
+  #
+  # dada2_taxa = tax_tab
+
+  if (is.data.frame(dada2_taxa)) {
+    taxa_tab <- dada2_taxa %>%
+      as.matrix()
+  } else {
+    taxa_tab <- dada2_taxa
+  }
+
+  tax_prefix <- c("k__", "p__", "c__", "o__", "f__", "g__", "s__")
+
+  # i-> taxa; j->OTU
+  res <- taxa_tab
+  for (i in 1:nrow(res)) {
+    for (j in 1:ncol(res)) {
+      tax_name <- as.character(make.names(res[i, j]))
+      if (length(which(tax_name == "NA.")) == 0) {
+        if (j == 7) {
+          upper_tax_name <- as.character(make.names(res[i, j-1]))
+          res[i, j] <- paste0(upper_tax_name, "_", tax_name)
+        } else {
+          res[i, j] <- tax_name
+        }
+      } else if (length(which(tax_name == "NA.")) != 0) {
+        upper_tax_name <- as.character(make.names(res[i, j-1]))
+
+        if (length(grep("_unclassified", upper_tax_name)) != 0) {
+          res[i, j] <- upper_tax_name
+        } else {
+          res[i, j] <- paste0(upper_tax_name, "_unclassified")
+        }
+      }
+
+      # replace dot with "_"
+      res[i, j] <- gsub("\\.", "_", res[i, j])
+
+    }
+  }
+
+  for (K in 1:ncol(res)) {
+    res[, K] <- paste0(tax_prefix[K], res[, K])
+  }
+
+  return(res)
+}
 

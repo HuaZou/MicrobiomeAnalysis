@@ -5,11 +5,13 @@
 \title{Convert the qiime2 output of dada2 into phyloseq object}
 \usage{
 import_qiime2(
-        otu_qza,
-        taxa_qza,
-        sam_tab,
-        refseq_qza,
-        tree_qza)
+  otu_qza,
+  taxa_qza = NULL,
+  sam_tab = NULL,
+  refseq_qza = NULL,
+  tree_qza = NULL,
+  keep_taxa_rows = TRUE
+)
 }
 \arguments{
 \item{otu_qza}{(Required). character, file path of the feature table from qiime2.}
@@ -25,6 +27,9 @@ qiime2, default \code{NULL}.}
 
 \item{tree_qza}{(Optional). character, file path of the phylogenetic tree from
 qiime2, default \code{NULL}.}
+
+\item{keep_taxa_rows}{(Optional). logical. whether keep taxa in rows or not
+in the \code{otu_table} of the returned \code{phyloseq} object, default \code{TRUE}.}
 }
 \value{
 \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} object.

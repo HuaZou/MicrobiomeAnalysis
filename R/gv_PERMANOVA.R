@@ -169,6 +169,7 @@ run_PERMANOVA <- function(
 }
 
 #' @keywords internal
+#' @noRd
 .one_permanova <- function(x, y, z, m) {
 
   # x = sam_tab
@@ -234,6 +235,7 @@ run_PERMANOVA <- function(
 }
 
 #' @keywords internal
+#' @noRd
 .all_permanova <- function(x, y, m) {
 
   # x = sam_tab
