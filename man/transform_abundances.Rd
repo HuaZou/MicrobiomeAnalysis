@@ -6,7 +6,8 @@
 \usage{
 transform_abundances(
    object,
-   transform = c("identity", "log10", "log10p"),
+   transform = c("identity", "log10", "log10p",
+           "SquareRoot", "CubicRoot", "logit"),
    level = c(NULL, "Kingdom", "Phylum", "Class",
            "Order", "Family", "Genus",
            "Species", "Strain", "unique"))
@@ -21,6 +22,10 @@ transform_abundances(
 \item "log10", the transformation is \code{log10(object)}, and if the data contains
 zeros the transformation is \code{log10(1 + object)}.
 \item "log10p", the transformation is \code{log10(1 + object)}.
+\item "SquareRoot", the transformation is \verb{Square Root}.
+\item "CubicRoot", the transformation is \verb{Cubic Root}.
+\item "logit", the transformation is \verb{Zero-inflated Logit Transformation}
+(Does not work well for microbiome data).
 }}
 
 \item{level}{(Optional). character. Summarization
@@ -37,14 +42,13 @@ the counts of each sample will be transformed individually.
 \examples{
 \dontrun{
 data(enterotypes_arumugam)
-x1 <- transform_abundances(object = enterotypes_arumugam)
+x1 <- transform_abundances(object = enterotypes_arumugam,
+    transform = "identity")
 head(otu_table(x1), 10)
 
-x2 <- transform_abundances(enterotypes_arumugam, transform = "log10")
+x2 <- transform_abundances(enterotypes_arumugam,
+    transform = "log10p")
 head(otu_table(x2), 10)
-
-x3 <- transform_abundances(enterotypes_arumugam, transform = "log10p")
-head(otu_table(x3), 10)
 }
 
 }

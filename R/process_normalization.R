@@ -533,3 +533,142 @@ normalize_feature <- function(feature, normalization) {
 
   otu_table(normed_feature, taxa_are_rows = TRUE)
 }
+
+
+#' @title Data scaling adjusts each variable/feature
+#'
+#' @description
+#' Data Normalization not only normalizes data by samples, but also
+#' scales data by variable/feature.Data scaling adjusts each variable/feature
+#' by a scaling factor computed based on the dispersion of the variable. The
+#' former is to change data distribution per sample and the latter is to put
+#' variable/feature into same distribution.
+#'
+#' @author Created by Hua Zou (12/02/2022 Shenzhen China)
+#'
+#' @param object (Required). a [`phyloseq::phyloseq-class`] or
+#' [`Biobase::ExpressionSet`] object.
+#' @param level (Optional). character. Summarization
+#' level (from \code{rank_names(pseq)}, default: NULL).
+#' @param method (Optional). character. scaling method. Options are:
+#'  * "none", return the original data
+#'  * "mean_center": values minus mean statistic.
+#'  * "zscore": mean-centered and divided by the
+#'  standard deviation of each variable.
+#'  * "pareto": mean-centered and divided by the square root of
+#'  the standard deviation of each variable.
+#'  * "range": mean-centered and divided by the range of each variable.
+#'  (default: "none").
+#'
+#' @usage scale_variables(
+#'    object,
+#'    level = c(NULL, "Kingdom", "Phylum", "Class",
+#'            "Order", "Family", "Genus",
+#'            "Species", "Strain", "unique"),
+#'    method = c("none", "mean_center", "zscore",
+#'             "pareto", "range")
+#'    )
+#'
+#' @export
+#'
+#' @return A [`phyloseq::phyloseq-class`] or
+#' [`Biobase::ExpressionSet`] object with cleaned data.
+#'
+#' @importFrom dplyr %>%
+#'
+#' @examples
+#'
+#' \dontrun{
+#' data("enterotypes_arumugam")
+#' scale_variables(
+#'   object = enterotypes_arumugam,
+#'   level = "Phylum",
+#'   method = "pareto")
+#' }
+#'
+scale_variables <- function(
+    object,
+    level = NULL,
+    method = "none") {
+
+  # object = enterotypes_arumugam
+  # level = "Genus"
+  # method = "zscore"
+
+  method <- match.arg(
+    method, c("none", "mean_center", "zscore",
+                 "pareto", "range")
+  )
+
+  if (any(inherits(object, "environment"), inherits(object, "phyloseq"))) {
+
+    # taxa level
+    if (!is.null(level)) {
+      object <- aggregate_taxa(x = object, level = level)
+    } else {
+      object <- object
+    }
+
+    otu <- as(otu_table(object), "matrix")
+  } else {
+    otu <- as.matrix(object)
+  }
+
+  if (method == "none") {
+    abd <- otu
+  } else if (method == "mean_center") {
+    abd <- apply(otu, 1, scale_MeanCenter) %>%
+      t()
+  } else if (method == "zscore") {
+    abd <- apply(otu, 1, scale_Zscore) %>%
+      t()
+  } else if (method == "pareto") {
+    abd <- apply(otu, 1, scale_Pareto) %>%
+      t()
+  } else if (method == "range") {
+    abd <- apply(otu, 1, scale_Range) %>%
+      t()
+  }
+
+  if (any(inherits(object, "environment"), inherits(object, "phyloseq"))) {
+    otu_table(object) <- otu_table(abd, taxa_are_rows = taxa_are_rows(object))
+  } else {
+    object <- abd
+  }
+
+  return(object)
+
+}
+
+#' values minus mean statistic
+#' @keywords internal
+#' @noRd
+scale_MeanCenter <- function(x) {
+  return(x - mean(x)) # mean(x, na.rm = TRUE)
+}
+
+#' mean-centered and divided by the standard deviation of each variable
+#' @keywords internal
+#' @noRd
+scale_Zscore <- function(x) {
+  return((x - mean(x))/sd(x, na.rm = TRUE))
+}
+
+#' mean-centered and divided by the square root of the standard deviation
+#' of each variable.
+#' @keywords internal
+#' @noRd
+scale_Pareto <- function(x) {
+  return((x - mean(x))/sqrt(sd(x, na.rm = T)))
+}
+
+#' mean-centered and divided by the range of each variable.
+#' @keywords internal
+#' @noRd
+scale_Range <- function(x) {
+  if (max(x) == min(x)) {
+    return(x)
+  } else {
+    return((x - mean(x))/(max(x) - min(x)))
+  }
+}

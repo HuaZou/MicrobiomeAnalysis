@@ -124,9 +124,9 @@ ps_summarize_genus <- summarize_taxa(
 ps_summarize_genus
 ```
 
-## Transformation
+## Data Transformation
 
-+ Transform the taxa abundances in `otu_table` sample by sample
++ Transform the taxa abundances in `otu_table`, which applying a mathematical transformation on individual values themselves.
 
 ```{r}
 ps_genus_transform <- transform_abundances(
@@ -136,7 +136,7 @@ ps_genus_transform <- transform_abundances(
 head(ps_genus_transform@otu_table@.Data, 3)
 ```
 
-## Imputation
+## Data Imputation
 
 + Imputing missing value of OTU_table in phyloseq-class object
 
@@ -153,9 +153,9 @@ head(ps_genus_impute@otu_table@.Data, 3)
 ```
 
 
-## Normalization
+## Data Normalization
 
-+ Normalizing the OTU_table in phyloseq-class object
++ Normalizing the OTU_table in phyloseq-class object sample by sample to reduce the effects of systematic differences such as library size.
 
 ```{r}
 ps_genus_norm <- normalize(
@@ -165,7 +165,20 @@ ps_genus_norm <- normalize(
 head(ps_genus_norm@otu_table@.Data, 3)
 ```
 
-## Trimming
+## Data Scaling
+
++ Data scaling adjusts each variable/feature by a scaling factor computed based on the dispersion of the variable.
+
+```{r}
+ps_genus_scale <- scale_variables(
+    object = ps_genus,
+    method = "zscore")
+
+head(ps_genus_scale@otu_table@.Data, 3)
+```
+
+
+## Data Trimming
 
 + Trimming samples or taxa whose prevalence is less than threshold
 
@@ -180,7 +193,7 @@ head(ps_genus_trim@otu_table@.Data, 3)
 ```
 
 
-## Filtering
+## Data Filtering
 
 + Filtering taxa who is low relative abundance or unclassified (Ref: [@thingholm2019obese])
 
