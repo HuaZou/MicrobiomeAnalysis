@@ -27,6 +27,11 @@ summarize_taxa <- function(
     absolute = TRUE,
     sep = "|") {
 
+
+  if (all(!ps@otu_table@taxa_are_rows)) {
+    ps <- phyloseq::t(ps)
+  }
+
   # return ps if it has been summarized
   summarized <- check_tax_summarize(ps)
   if (summarized) {

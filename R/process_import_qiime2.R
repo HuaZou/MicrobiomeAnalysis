@@ -139,7 +139,7 @@ import_qiime2 <- function(
     phy_tree = tree,
     refseq = refseq)
 
-  if (keep_taxa_rows) {
+  if (all(!ps@otu_table@taxa_are_rows, keep_taxa_rows)) {
     ps <- phyloseq::t(ps)
   }
 

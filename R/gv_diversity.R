@@ -1,10 +1,8 @@
-#' @title Global view on Alpha diversity on microbiota data
+#' @title Calculating index of Alpha diversity on microbiota data
 #'
 #' @description
-#' The function is to use `phyloseq::estimate_richness()` to calculate
-#' the alpha diversity.
-#' Performs a number of standard alpha diversity estimates, and returns
-#' results as data.frame.
+#' The function is to calculate alpha diversity estimates.
+#'
 #' **NOTE**: You must use untrimmed datasets for meaningful results,
 #' as these estimates (and even the "observed" richness) are highly dependent
 #' on the number of singletons. You can always trim the data later on if needed,
@@ -19,9 +17,9 @@
 #' @param level (Optional). character. taxonomic level to summarize,
 #' default the top level rank of the `ps`. taxonomic level(Kingdom, Phylum,
 #' Class, Order, Family, Genus, Species, Strains; default: NULL).
-#' @param indexes (Optional). character, meaning that all available
-#' alpha-diversity indexes will be included. Alternatively, you can specify
-#' one or more indexes as a character vector of measure names (default: all).
+#' @param indices (Optional). character, meaning that all available
+#' alpha-diversity indices will be included. Alternatively, you can specify
+#' one or more indices as a character vector of measure names (default: all).
 #' Values must be among those supported:
 #' c("Observed", "Chao1", "ACE", "Shannon", "Simpson",
 #' "InvSimpson", "Fisher", "Evenness").
@@ -39,7 +37,7 @@
 #'     level = c(NULL, "Kingdom", "Phylum", "Class",
 #'            "Order", "Family", "Genus",
 #'            "Species", "Strain", "unique"),
-#'     indexes = c("all",
+#'     indices = c("all",
 #'       "Observed", "Chao1", "ACE", "Shannon",
 #'       "Simpson", "InvSimpson", "Fisher", "Evenness")
 #'    )
@@ -55,30 +53,30 @@
 #' get_alphaindex(
 #'   ps = enterotypes_arumugam,
 #'   level = "Genus",
-#'   indexes = c("Shannon", "Observed"))
+#'   indices = c("Shannon", "Observed"))
 #'
 #' # absolute abundance
 #' data("caporaso")
 #' get_alphaindex(
 #'   ps = caporaso,
 #'   level = "Genus",
-#'   indexes = c("Shannon", "Chao1"))
+#'   indices = c("Shannon", "Chao1"))
 #' }
 #'
 #'
 get_alphaindex <- function(
     ps,
     level = NULL,
-    indexes = c("Observed", "Chao1", "ACE", "Shannon",
+    indices = c("Observed", "Chao1", "ACE", "Shannon",
                 "Simpson", "InvSimpson", "Fisher", "Evenness")) {
 
   # ps = enterotypes_arumugam
   # level = "Genus"
-  # indexes = "Shannon"
+  # indices = "Shannon"
 
   # ps = caporaso
   # level = "Genus"
-  # indexes = "Shannon"
+  # indices = "Shannon"
 
   stopifnot(inherits(ps, "phyloseq"))
   ps <- preprocess_ps(ps)
@@ -90,17 +88,17 @@ get_alphaindex <- function(
     ps <- ps
   }
 
-  # alpha diversity indexes
+  # alpha diversity indices
   measures <- c("Observed", "Chao1", "ACE", "Shannon",
                 "Simpson", "InvSimpson", "Fisher", "Evenness")
-  if (all(length(indexes) == 1, indexes == "all")) {
-    indexes <- as.character(measures)
+  if (all(length(indices) == 1, indices == "all")) {
+    indices <- as.character(measures)
   }
-  if (any(indexes %in% measures)) {
-    indexes[indexes %in% measures] <- measures[measures %in% indexes]
+  if (any(indices %in% measures)) {
+    indices[indices %in% measures] <- measures[measures %in% indices]
   }
-  if (!any(indexes %in% measures)) {
-    stop("None of the `indexes` you provided are supported. Try default `all` instead.")
+  if (!any(indices %in% measures)) {
+    stop("None of the `indices` you provided are supported. Try default `all` instead.")
   }
 
   # otu table
@@ -145,7 +143,7 @@ get_alphaindex <- function(
     data.frame() %>%
     tibble::rownames_to_column("TempRowNames") %>%
     dplyr::inner_join(alpha %>%
-                        dplyr::select(all_of(indexes)) %>%
+                        dplyr::select(all_of(indices)) %>%
                         tibble::rownames_to_column("TempRowNames"),
                       by = "TempRowNames") %>%
     tibble::column_to_rownames("TempRowNames")

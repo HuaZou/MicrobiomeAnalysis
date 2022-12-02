@@ -136,16 +136,33 @@ ps_genus_transform <- transform_abundances(
 head(ps_genus_transform@otu_table@.Data, 3)
 ```
 
+## Imputation
+
++ Imputing missing value of OTU_table in phyloseq-class object
+
+```{r}
+ps_genus_impute <- impute_abundance(
+    object = ps_genus,
+    group_name = "body.site",
+    ZerosAsNA = TRUE,
+    RemoveNA = TRUE,
+    cutoff = 20,    
+    method = "half_min")
+
+head(ps_genus_impute@otu_table@.Data, 3)
+```
+
+
 ## Normalization
 
 + Normalizing the OTU_table in phyloseq-class object
 
 ```{r}
-ps_genus_transform_norm <- normalize(
-    object = ps_genus_transform,
+ps_genus_norm <- normalize(
+    object = ps_genus,
     method = "TSS")
 
-head(ps_genus_transform_norm@otu_table@.Data, 3)
+head(ps_genus_norm@otu_table@.Data, 3)
 ```
 
 ## Trimming
@@ -153,13 +170,13 @@ head(ps_genus_transform_norm@otu_table@.Data, 3)
 + Trimming samples or taxa whose prevalence is less than threshold
 
 ```{r}
-ps_genus_transform_norm_trim <- trim_prevalence(
-    object = ps_genus_transform,
+ps_genus_trim <- trim_prevalence(
+    object = ps_genus,
     level = NULL,
     cutoff = 0.1,
     trim = "feature")
 
-head(ps_genus_transform_norm_trim@otu_table@.Data, 3)
+head(ps_genus_trim@otu_table@.Data, 3)
 ```
 
 
@@ -172,14 +189,14 @@ head(ps_genus_transform_norm_trim@otu_table@.Data, 3)
   - 2. Taxa more than Minimum relative abundance at least one sample: 0.001 (1e-03).
 
 ```{r}
-ps_genus_transform_norm_trim_filter <- filter_abundance(
-    object = ps_genus_transform_norm_trim,
+ps_genus_filter <- filter_abundance(
+    object = ps_genus,
     level = NULL,
     cutoff_mean = 1e-04,
     cutoff_one = 1e-03,
     unclass = TRUE)
 
-head(ps_genus_transform_norm_trim_filter@otu_table@.Data, 3)
+head(ps_genus_filter@otu_table@.Data, 3)
 ```
 
 
@@ -238,6 +255,20 @@ run_MRPP(object = ps_object,
          level = "Genus",
          variable = "body.site", 
          method = "bray")
+```
+
+
+## Alpha diversity
+
++ calculating alpha diversity index on microbiota data
+
+```{r}
+alphaindex <- get_alphaindex(
+  ps = ps_object,
+  level = "Genus",
+  indices = c("Shannon", "Chao1"))
+
+head(alphaindex)
 ```
 
 

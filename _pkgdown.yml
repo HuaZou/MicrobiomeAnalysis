@@ -37,10 +37,11 @@ reference:
       - starts_with("norm")
       - trim_prevalence
       - filter_abundance
+      - impute_abundance
   - title: "Example data"
     contents:
       starts_with("data")
-  - title: "Community hypothesis test"
+  - title: "Community Analysis"
     desc: >
       Functions to investigate association between variables and community
     contents:
@@ -50,6 +51,7 @@ reference:
       - run_MANTEL
       - run_MRPP
       - run_PERMANOVA
+      - get_alphaindex
   - title: "Differential analysis"
     desc: Functions for identifying the microbiome markers
     contents:
