@@ -56,3 +56,55 @@ phyloseq::import_mothur
 #' @importFrom phyloseq import_biom
 #' @export
 phyloseq::import_biom
+
+#' @importFrom dplyr filter
+#' @export
+dplyr::filter
+
+#' @importFrom dplyr count
+#' @export
+dplyr::count
+
+#' @importFrom dplyr lag
+#' @export
+dplyr::lag
+
+#' @importFrom dplyr select
+#' @export
+dplyr::select
+
+#' @importFrom dplyr mutate
+#' @export
+dplyr::mutate
+
+#' @importFrom dplyr group_by
+#' @export
+dplyr::group_by
+
+#' @importFrom dplyr ungroup
+#' @export
+dplyr::ungroup
+
+#' @importFrom dplyr rename
+#' @export
+dplyr::rename
+
+#' @importFrom dplyr distinct
+#' @export
+dplyr::distinct
+
+#' @importFrom dplyr arrange
+#' @export
+dplyr::arrange
+
+#' @importFrom dplyr pull
+#' @export
+dplyr::pull
+
+#' @importFrom dplyr slice
+#' @export
+dplyr::slice
+
+#' @importFrom dplyr left_join
+#' @export
+dplyr::left_join

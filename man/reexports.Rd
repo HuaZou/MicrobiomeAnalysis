@@ -14,6 +14,19 @@
 \alias{import_qiime}
 \alias{import_mothur}
 \alias{import_biom}
+\alias{filter}
+\alias{count}
+\alias{lag}
+\alias{select}
+\alias{mutate}
+\alias{group_by}
+\alias{ungroup}
+\alias{rename}
+\alias{distinct}
+\alias{arrange}
+\alias{pull}
+\alias{slice}
+\alias{left_join}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -21,6 +34,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
+  \item{dplyr}{\code{\link[dplyr]{arrange}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{filter}}, \code{\link[dplyr]{group_by}}, \code{\link[dplyr:lead-lag]{lag}}, \code{\link[dplyr:mutate-joins]{left_join}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{pull}}, \code{\link[dplyr]{rename}}, \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}, \code{\link[dplyr:group_by]{ungroup}}}
+
   \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 
   \item{phyloseq}{\code{\link[phyloseq]{import_biom}}, \code{\link[phyloseq]{import_mothur}}, \code{\link[phyloseq]{import_qiime}}, \code{\link[phyloseq:nsamples-methods]{nsamples}}, \code{\link[phyloseq:ntaxa-methods]{ntaxa}}, \code{\link[phyloseq:otu_table-methods]{otu_table}}, \code{\link[phyloseq:sample_data-methods]{sample_data}}, \code{\link[phyloseq:sample_names-methods]{sample_names}}, \code{\link[phyloseq:tax_table-methods]{tax_table}}, \code{\link[phyloseq:taxa_names-methods]{taxa_names}}}
