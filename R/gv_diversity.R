@@ -100,7 +100,7 @@ get_alphaindex <- function(
     indexes[indexes %in% measures] <- measures[measures %in% indexes]
   }
   if (!any(indexes %in% measures)) {
-    stop("None of the `indexes` you provided are supported. Try default `NULL` instead.")
+    stop("None of the `indexes` you provided are supported. Try default `all` instead.")
   }
 
   # otu table
