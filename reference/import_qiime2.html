@@ -68,11 +68,13 @@ phyloseq object.</p>
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">import_qiime2</span><span class="op">(</span>
-        <span class="va">otu_qza</span>,
-        <span class="va">taxa_qza</span>,
-        <span class="va">sam_tab</span>,
-        <span class="va">refseq_qza</span>,
-        <span class="va">tree_qza</span><span class="op">)</span></code></pre></div>
+  <span class="va">otu_qza</span>,
+  taxa_qza <span class="op">=</span> <span class="cn">NULL</span>,
+  sam_tab <span class="op">=</span> <span class="cn">NULL</span>,
+  refseq_qza <span class="op">=</span> <span class="cn">NULL</span>,
+  tree_qza <span class="op">=</span> <span class="cn">NULL</span>,
+  keep_taxa_rows <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -91,6 +93,9 @@ qiime2, default <code>NULL</code>.</p></dd>
 <dt>tree_qza</dt>
 <dd><p>(Optional). character, file path of the phylogenetic tree from
 qiime2, default <code>NULL</code>.</p></dd>
+<dt>keep_taxa_rows</dt>
+<dd><p>(Optional). logical. whether keep taxa in rows or not
+in the <code>otu_table</code> of the returned <code>phyloseq</code> object, default <code>TRUE</code>.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

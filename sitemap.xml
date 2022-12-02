@@ -82,6 +82,9 @@
     <loc>/reference/get_GUniFrac.html</loc>
   </url>
   <url>
+    <loc>/reference/get_alphaindex.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_eigValue.html</loc>
   </url>
   <url>
@@ -89,6 +92,9 @@
   </url>
   <url>
     <loc>/reference/import_qiime2.html</loc>
+  </url>
+  <url>
+    <loc>/reference/impute_abundance.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>

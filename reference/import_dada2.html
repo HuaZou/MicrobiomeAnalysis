@@ -64,11 +64,12 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">import_dada2</span><span class="op">(</span>
-    <span class="va">seq_tab</span>,
-    tax_tab <span class="op">=</span> <span class="cn">NULL</span>,
-    sam_tab <span class="op">=</span> <span class="cn">NULL</span>,
-    phy_tree <span class="op">=</span> <span class="cn">NULL</span>,
-    keep_taxa_rows <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+  <span class="va">seq_tab</span>,
+  tax_tab <span class="op">=</span> <span class="cn">NULL</span>,
+  sam_tab <span class="op">=</span> <span class="cn">NULL</span>,
+  phy_tree <span class="op">=</span> <span class="cn">NULL</span>,
+  keep_taxa_rows <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -121,7 +122,10 @@ traditional OTU table. Conveniently, taxa names are saved as ASV1, ASV2,
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"dada2_samdata.txt"</span>,</span>
 <span class="r-in">              package <span class="op">=</span> <span class="st">"MicrobiomeAnalysis"</span><span class="op">)</span>,</span>
 <span class="r-in">  sep <span class="op">=</span> <span class="st">"\t"</span>, header <span class="op">=</span> <span class="cn">TRUE</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu">import_dada2</span><span class="op">(</span>seq_tab <span class="op">=</span> <span class="va">seq_tab</span>, tax_tab <span class="op">=</span> <span class="va">tax_tab</span>, sam_tab <span class="op">=</span> <span class="va">sam_tab</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu">import_dada2</span><span class="op">(</span></span>
+<span class="r-in">   seq_tab <span class="op">=</span> <span class="va">seq_tab</span>,</span>
+<span class="r-in">   tax_tab <span class="op">=</span> <span class="va">tax_tab</span>,</span>
+<span class="r-in">   sam_tab <span class="op">=</span> <span class="va">sam_tab</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">ps</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
