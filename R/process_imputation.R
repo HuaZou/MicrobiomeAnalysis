@@ -127,17 +127,6 @@ impute_abundance <- function(
     } else {
       ps <- ps
     }
-
-    if (!is.null(ps@phy_tree) & (method %in%
-                                 c("unifrac", "wunifrac", "GUniFrac"))) {
-      method <- match.arg(
-        method,
-        c("unifrac", "wunifrac", "GUniFrac")
-      )
-    } else if (method %in% c("unifrac", "wunifrac", "GUniFrac")) {
-      message("It enforces to use Bray-Curtis because no phy_tree")
-      method <- "bray"
-    }
     ## sample table & profile table
     sam_tab <- phyloseq::sample_data(ps) %>%
       data.frame() %>%
@@ -176,7 +165,7 @@ impute_abundance <- function(
   percent_na <- sum(is.na(to_imp_data))
   if (percent_na == 0) {
     message("No missing values detected in your data")
-    if (method == "rf") {
+    if (method != "none") {
       method <- "none"
     }
   }
