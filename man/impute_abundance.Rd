@@ -15,7 +15,7 @@ impute_abundance(
    cutoff = 20,
    method = c("none", "LOD", "half_min", "median",
        "mean", "min", "knn", "rf",
-       "global_mean", "svd"),
+       "global_mean", "svd", "QRILC"),
    LOD = NULL
    )
 }
@@ -48,10 +48,11 @@ cutoff value, these feature will not be removed.}
 \item "min": minimal values across samples except zero.
 \item "knn": k-nearest neighbors samples.
 \item "rf": nonparametric missing value imputation using Random Forest.
-\item "globalmean": a normal distribution with a mean that is down-shifted from
+\item "global_mean": a normal distribution with a mean that is down-shifted from
 the sample mean and a standard deviation that is a
 fraction of the standard deviation of the sample distribution.
-\item "svd": k-nearest neighbors samples.
+\item "svd": missing values imputation based Singular value decomposition.
+\item "QRILC": missing values imputation based quantile regression.
 (default: "knn").
 }}
 

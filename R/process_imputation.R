@@ -34,10 +34,11 @@
 #'  * "min": minimal values across samples except zero.
 #'  * "knn": k-nearest neighbors samples.
 #'  * "rf": nonparametric missing value imputation using Random Forest.
-#'  * "globalmean": a normal distribution with a mean that is down-shifted from
+#'  * "global_mean": a normal distribution with a mean that is down-shifted from
 #'  the sample mean and a standard deviation that is a
 #'  fraction of the standard deviation of the sample distribution.
-#'  * "svd": k-nearest neighbors samples.
+#'  * "svd": missing values imputation based Singular value decomposition.
+#'  * "QRILC": missing values imputation based quantile regression.
 #'  (default: "knn").
 #' @param LOD (Optional). Numeric. limit of detection (default: NULL).
 #'
@@ -52,7 +53,7 @@
 #'    cutoff = 20,
 #'    method = c("none", "LOD", "half_min", "median",
 #'        "mean", "min", "knn", "rf",
-#'        "global_mean", "svd"),
+#'        "global_mean", "svd", "QRILC"),
 #'    LOD = NULL
 #'    )
 #'
@@ -94,7 +95,7 @@ impute_abundance <- function(
   # ZerosAsNA = TRUE
   # RemoveNA = TRUE
   # cutoff = 20
-  # method = "svd"
+  # method = "QRILC"
 
   if (base::missing(object)) {
     stop("object argument is empty!")
@@ -107,7 +108,7 @@ impute_abundance <- function(
 
   if (!(method %in% c("none", "LOD", "half_min", "median",
                       "mean", "min", "knn", "rf",
-                      "global_mean", "svd"))) {
+                      "global_mean", "svd", "QRILC"))) {
     stop("Incorrect value for method argument!")
   }
 
@@ -238,6 +239,11 @@ impute_abundance <- function(
       t()
   } else if (method == "svd") {
     depurdata <- .SVD_wrapper(depurdata)
+  } else if (method == "QRILC") {
+    fit <- log(t(depurdata)) %>%
+      imputeLCMD::impute.QRILC() #%>%
+      #extract2(1) %>% exp
+    depurdata <- t(fit[[1]])
   }
 
   colnames(depurdata) <- correct_names
