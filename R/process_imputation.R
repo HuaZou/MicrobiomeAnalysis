@@ -196,9 +196,11 @@ impute_abundance <- function(
   } else if (method == "LOD") {
     if (is.null(LOD)) {
       message("No LOD provided, regard one-tenth mininal value as LOD")
-      LOD <- min(depurdata[!is.na(depurdata)]) / 10
+      depurdata_withoutNA <- depurdata[!is.na(depurdata)]
+      LOD <- min(depurdata_withoutNA[depurdata_withoutNA != 0]) / 10
     }
     depurdata[is.na(depurdata)] <- LOD
+    depurdata[depurdata == 0] <- LOD
   } else if (method == "half_min") {
     depurdata <- apply(depurdata, 2, function(x) {
       if(is.numeric(x)) ifelse(is.na(x), min(x, na.rm = TRUE)/2, x) else x})
