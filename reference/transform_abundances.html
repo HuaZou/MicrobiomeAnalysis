@@ -67,7 +67,8 @@ the counts of each sample will be transformed individually.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">transform_abundances</span><span class="op">(</span>
    <span class="va">object</span>,
-   transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span><span class="op">)</span>,
+   transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span>,
+            <span class="st">"SquareRoot"</span>, <span class="st">"CubicRoot"</span>, <span class="st">"logit"</span><span class="op">)</span>,
    level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="st">"Kingdom"</span>, <span class="st">"Phylum"</span>, <span class="st">"Class"</span>,
            <span class="st">"Order"</span>, <span class="st">"Family"</span>, <span class="st">"Genus"</span>,
            <span class="st">"Species"</span>, <span class="st">"Strain"</span>, <span class="st">"unique"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -83,6 +84,10 @@ the counts of each sample will be transformed individually.</p>
 <li><p>"log10", the transformation is <code>log10(object)</code>, and if the data contains
 zeros the transformation is <code>log10(1 + object)</code>.</p></li>
 <li><p>"log10p", the transformation is <code>log10(1 + object)</code>.</p></li>
+<li><p>"SquareRoot", the transformation is <code>Square Root</code>.</p></li>
+<li><p>"CubicRoot", the transformation is <code>Cubic Root</code>.</p></li>
+<li><p>"logit", the transformation is <code>Zero-inflated Logit Transformation</code>
+(Does not work well for microbiome data).</p></li>
 </ul></dd>
 <dt>level</dt>
 <dd><p>(Optional). character. Summarization
@@ -109,11 +114,9 @@ level (from <code>rank_names(pseq)</code>, default: NULL).</p></dd>
 <span class="r-in"><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu">transform_abundances</span><span class="op">(</span>object <span class="op">=</span> <span class="va">enterotypes_arumugam</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/otu_table-methods.html" class="external-link">otu_table</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu">transform_abundances</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>, transform <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu">transform_abundances</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>,</span>
+<span class="r-in">    transform <span class="op">=</span> <span class="st">"log10p"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/otu_table-methods.html" class="external-link">otu_table</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">x3</span> <span class="op">&lt;-</span> <span class="fu">transform_abundances</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>, transform <span class="op">=</span> <span class="st">"log10p"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/otu_table-methods.html" class="external-link">otu_table</a></span><span class="op">(</span><span class="va">x3</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
 </code></pre></div>

@@ -73,7 +73,7 @@ using <strong>DESeq2</strong>.</p>
   taxa_rank <span class="op">=</span> <span class="st">"all"</span>,
   norm <span class="op">=</span> <span class="st">"RLE"</span>,
   norm_para <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span><span class="op">)</span>,
+  transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span>, <span class="st">"SquareRoot"</span>, <span class="st">"CubicRoot"</span>, <span class="st">"logit"</span><span class="op">)</span>,
   fitType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parametric"</span>, <span class="st">"local"</span>, <span class="st">"mean"</span>, <span class="st">"glmGamPoi"</span><span class="op">)</span>,
   sfType <span class="op">=</span> <span class="st">"poscounts"</span>,
   betaPrior <span class="op">=</span> <span class="cn">FALSE</span>,
@@ -134,6 +134,10 @@ options include:</p><ul><li><p>"identity", return the original data without any 
 <li><p>"log10", the transformation is <code>log10(object)</code>, and if the data contains
 zeros the transformation is <code>log10(1 + object)</code>.</p></li>
 <li><p>"log10p", the transformation is <code>log10(1 + object)</code>.</p></li>
+<li><p>"SquareRoot", the transformation is <code>Square Root</code>.</p></li>
+<li><p>"CubicRoot", the transformation is <code>Cubic Root</code>.</p></li>
+<li><p>"logit", the transformation is <code>Zero-inflated Logit Transformation</code>
+(Does not work well for microbiome data).</p></li>
 </ul></dd>
 <dt>fitType, sfType, betaPrior, modelMatrixType, useT, minmu</dt>
 <dd><p>these seven

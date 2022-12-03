@@ -81,49 +81,8 @@
         </td>
         <td><p>Convert phyloseq data to MetagenomeSeq <code>MRexperiment</code> object</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="microbiome-marker">Microbiome marker <a href="#microbiome-marker" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>S4 class and methods for microbiomeMarker</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="microbiomeMarker.html">microbiomeMarker()</a></code> </p>
-        </td>
-        <td><p>Build microbiomeMarker-class objects</p></td>
-      </tr><tr><td>
-          <p><code><a href="microbiomeMarker-class.html">show(<i>&lt;microbiomeMarker&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>The main class for microbiomeMarker data</p></td>
-      </tr><tr><td>
-          <p><code><a href="marker_table-class.html">marker_table-class</a></code> </p>
-        </td>
-        <td><p>The S4 class for storing microbiome marker information</p></td>
-      </tr><tr><td>
-          <p><code><a href="marker_table-methods.html">marker_table()</a></code> </p>
-        </td>
-        <td><p>Build or access the marker_table</p></td>
-      </tr><tr><td>
-          <p><code><a href="assign-marker_table.html">`marker_table&lt;-`()</a></code> </p>
-        </td>
-        <td><p>Assign marker_table to <code>object</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="assign-otu_table.html">`otu_table&lt;-`(<i>&lt;microbiomeMarker&gt;</i>,<i>&lt;otu_table&gt;</i>)</a></code> <code><a href="assign-otu_table.html">`otu_table&lt;-`(<i>&lt;microbiomeMarker&gt;</i>,<i>&lt;phyloseq&gt;</i>)</a></code> <code><a href="assign-otu_table.html">`otu_table&lt;-`(<i>&lt;microbiomeMarker&gt;</i>,<i>&lt;microbiomeMarker&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Assign a new OTU table</p></td>
-      </tr><tr><td>
-          <p><code><a href="abundances-methods.html">abundances()</a></code> </p>
-        </td>
-        <td><p>Extract taxa abundances</p></td>
-      </tr><tr><td>
-          <p><code><a href="nmarker-methods.html">nmarker()</a></code> </p>
-        </td>
-        <td><p>Get the number of microbiome markers</p></td>
-      </tr><tr><td>
-          <p><code><a href="postHocTest-class.html">show(<i>&lt;postHocTest&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>The postHocTest Class, represents the result of post-hoc test result among
-multiple groups</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="miscellaneous">Miscellaneous <a href="#miscellaneous" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions to aggregate and collapse taxa</p>
+          <p class="section-desc"></p><p>Functions to manipulate object</p>
         </th>
       </tr></tbody><tbody><tr><td>
           <p><code><a href="aggregate_taxa.html">aggregate_taxa()</a></code> </p>
@@ -150,10 +109,6 @@ multiple groups</p></td>
         </td>
         <td><p>Transform the taxa abundances in <code>otu_table</code> sample by sample</p></td>
       </tr><tr><td>
-          <p><code><a href="normalize-methods.html">normalize(<i>&lt;phyloseq&gt;</i>)</a></code> <code><a href="normalize-methods.html">normalize(<i>&lt;otu_table&gt;</i>)</a></code> <code><a href="normalize-methods.html">normalize(<i>&lt;data.frame&gt;</i>)</a></code> <code><a href="normalize-methods.html">normalize(<i>&lt;matrix&gt;</i>)</a></code> <code><a href="normalize-methods.html">norm_rarefy()</a></code> <code><a href="normalize-methods.html">norm_tss()</a></code> <code><a href="normalize-methods.html">norm_css()</a></code> <code><a href="normalize-methods.html">norm_rle()</a></code> <code><a href="normalize-methods.html">norm_tmm()</a></code> <code><a href="normalize-methods.html">norm_clr()</a></code> <code><a href="normalize-methods.html">norm_cpm()</a></code> </p>
-        </td>
-        <td><p>Normalize the microbial abundance data</p></td>
-      </tr><tr><td>
           <p><code><a href="trim_prevalence.html">trim_prevalence()</a></code> </p>
         </td>
         <td><p>Trimming samples or taxa whose prevalence is less than threshold</p></td>
@@ -165,6 +120,14 @@ multiple groups</p></td>
           <p><code><a href="impute_abundance.html">impute_abundance()</a></code> </p>
         </td>
         <td><p>Imputation methods on missing value</p></td>
+      </tr><tr><td>
+          <p><code><a href="normalize-methods.html">normalize(<i>&lt;phyloseq&gt;</i>)</a></code> <code><a href="normalize-methods.html">normalize(<i>&lt;otu_table&gt;</i>)</a></code> <code><a href="normalize-methods.html">normalize(<i>&lt;data.frame&gt;</i>)</a></code> <code><a href="normalize-methods.html">normalize(<i>&lt;matrix&gt;</i>)</a></code> <code><a href="normalize-methods.html">norm_rarefy()</a></code> <code><a href="normalize-methods.html">norm_tss()</a></code> <code><a href="normalize-methods.html">norm_css()</a></code> <code><a href="normalize-methods.html">norm_rle()</a></code> <code><a href="normalize-methods.html">norm_tmm()</a></code> <code><a href="normalize-methods.html">norm_clr()</a></code> <code><a href="normalize-methods.html">norm_cpm()</a></code> </p>
+        </td>
+        <td><p>Normalize the microbial abundance data</p></td>
+      </tr><tr><td>
+          <p><code><a href="scale_variables.html">scale_variables()</a></code> </p>
+        </td>
+        <td><p>Data scaling adjusts each variable/feature</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="example-data">Example data <a href="#example-data" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p>
@@ -191,7 +154,7 @@ multiple groups</p></td>
         <td><p>Data from a study on colorectal cancer (kostic 2012)</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="community-analysis">Community Analysis <a href="#community-analysis" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions to investigate association between variables and community</p>
+          <p class="section-desc"></p><p>Functions to investigate association between variables and microbiota community</p>
         </th>
       </tr></tbody><tbody><tr><td>
           <p><code><a href="run_betadisper.html">run_betadisper()</a></code> </p>
@@ -278,6 +241,47 @@ multiple groups</p></td>
           <p><code><a href="run_test_two_groups.html">run_test_two_groups()</a></code> </p>
         </td>
         <td><p>Statistical test between two groups</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="microbiome-marker">Microbiome marker <a href="#microbiome-marker" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>S4 class and methods for microbiomeMarker</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="microbiomeMarker.html">microbiomeMarker()</a></code> </p>
+        </td>
+        <td><p>Build microbiomeMarker-class objects</p></td>
+      </tr><tr><td>
+          <p><code><a href="microbiomeMarker-class.html">show(<i>&lt;microbiomeMarker&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The main class for microbiomeMarker data</p></td>
+      </tr><tr><td>
+          <p><code><a href="marker_table-class.html">marker_table-class</a></code> </p>
+        </td>
+        <td><p>The S4 class for storing microbiome marker information</p></td>
+      </tr><tr><td>
+          <p><code><a href="marker_table-methods.html">marker_table()</a></code> </p>
+        </td>
+        <td><p>Build or access the marker_table</p></td>
+      </tr><tr><td>
+          <p><code><a href="assign-marker_table.html">`marker_table&lt;-`()</a></code> </p>
+        </td>
+        <td><p>Assign marker_table to <code>object</code></p></td>
+      </tr><tr><td>
+          <p><code><a href="assign-otu_table.html">`otu_table&lt;-`(<i>&lt;microbiomeMarker&gt;</i>,<i>&lt;otu_table&gt;</i>)</a></code> <code><a href="assign-otu_table.html">`otu_table&lt;-`(<i>&lt;microbiomeMarker&gt;</i>,<i>&lt;phyloseq&gt;</i>)</a></code> <code><a href="assign-otu_table.html">`otu_table&lt;-`(<i>&lt;microbiomeMarker&gt;</i>,<i>&lt;microbiomeMarker&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Assign a new OTU table</p></td>
+      </tr><tr><td>
+          <p><code><a href="abundances-methods.html">abundances()</a></code> </p>
+        </td>
+        <td><p>Extract taxa abundances</p></td>
+      </tr><tr><td>
+          <p><code><a href="nmarker-methods.html">nmarker()</a></code> </p>
+        </td>
+        <td><p>Get the number of microbiome markers</p></td>
+      </tr><tr><td>
+          <p><code><a href="postHocTest-class.html">show(<i>&lt;postHocTest&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The postHocTest Class, represents the result of post-hoc test result among
+multiple groups</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="statistical-tookits">Statistical tookits <a href="#statistical-tookits" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions to do statistical test</p>
