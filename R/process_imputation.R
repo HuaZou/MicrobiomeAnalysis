@@ -39,7 +39,7 @@
 #'  fraction of the standard deviation of the sample distribution.
 #'  * "svd": missing values imputation based Singular value decomposition.
 #'  * "QRILC": missing values imputation based quantile regression.
-#'  (default: "knn").
+#'  (default: "none").
 #' @param LOD (Optional). Numeric. limit of detection (default: NULL).
 #'
 #' @usage impute_abundance(
@@ -85,7 +85,9 @@ impute_abundance <- function(
     ZerosAsNA = FALSE,
     RemoveNA = TRUE,
     cutoff = 20,
-    method = "knn",
+    method = c("none", "LOD", "half_min", "median",
+               "mean", "min", "knn", "rf",
+               "global_mean", "svd", "QRILC"),
     LOD = NULL) {
 
   # data("enterotypes_arumugam")
@@ -106,11 +108,17 @@ impute_abundance <- function(
     stop("object is not either a phyloseq or ExpressionSet object.")
   }
 
-  if (!(method %in% c("none", "LOD", "half_min", "median",
-                      "mean", "min", "knn", "rf",
-                      "global_mean", "svd", "QRILC"))) {
-    stop("Incorrect value for method argument!")
-  }
+  method <- match.arg(
+    method, c("none", "LOD", "half_min", "median",
+              "mean", "min", "knn", "rf",
+              "global_mean", "svd", "QRILC")
+  )
+
+  # if (!(method %in% c("none", "LOD", "half_min", "median",
+  #                     "mean", "min", "knn", "rf",
+  #                     "global_mean", "svd", "QRILC"))) {
+  #   stop("Incorrect value for method argument!")
+  # }
 
   if (base::missing(method)) {
     message("method argument is empty! KNN will be used")

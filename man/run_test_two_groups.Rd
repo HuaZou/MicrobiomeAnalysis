@@ -8,7 +8,7 @@ run_test_two_groups(
   ps,
   group,
   taxa_rank = "all",
-  transform = c("identity", "log10", "log10p"),
+  transform = c("identity", "log10", "log10p", "SquareRoot", "CubicRoot", "logit"),
   norm = "TSS",
   norm_para = list(),
   method = c("welch.test", "t.test", "white.test"),
@@ -42,6 +42,10 @@ options include:
 \item "log10", the transformation is \code{log10(object)}, and if the data contains
 zeros the transformation is \code{log10(1 + object)}.
 \item "log10p", the transformation is \code{log10(1 + object)}.
+\item "SquareRoot", the transformation is \verb{Square Root}.
+\item "CubicRoot", the transformation is \verb{Cubic Root}.
+\item "logit", the transformation is \verb{Zero-inflated Logit Transformation}
+(Does not work well for microbiome data).
 }}
 
 \item{norm}{the methods used to normalize the microbial abundance data. See
@@ -92,7 +96,7 @@ estimation}
 a \code{\linkS4class{microbiomeMarker}} object.
 }
 \description{
-Statistical test between two groups
+Differential expression analysis for two groups.
 }
 \examples{
 data(enterotypes_arumugam)

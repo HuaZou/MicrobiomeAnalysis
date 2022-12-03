@@ -53,7 +53,7 @@ the sample mean and a standard deviation that is a
 fraction of the standard deviation of the sample distribution.
 \item "svd": missing values imputation based Singular value decomposition.
 \item "QRILC": missing values imputation based quantile regression.
-(default: "knn").
+(default: "none").
 }}
 
 \item{LOD}{(Optional). Numeric. limit of detection (default: NULL).}

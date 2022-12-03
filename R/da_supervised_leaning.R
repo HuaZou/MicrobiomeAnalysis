@@ -1,5 +1,6 @@
-#' Identify biomarkers using supervised leaning (SL) methods
+#' @title Identify biomarkers using supervised leaning (SL) methods
 #'
+#' @description
 #' Identify biomarkers using logistic regression, random forest, or support
 #' vector machine.
 #'
@@ -19,6 +20,10 @@
 #'   * "log10", the transformation is `log10(object)`, and if the data contains
 #'     zeros the transformation is `log10(1 + object)`.
 #'   * "log10p", the transformation is `log10(1 + object)`.
+#'   * "SquareRoot", the transformation is `Square Root`.
+#'   * "CubicRoot", the transformation is `Cubic Root`.
+#'   * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm the methods used to normalize the microbial abundance data. See
 #'   [`normalize()`] for more details.
 #'   Options include:
@@ -99,7 +104,8 @@
 run_sl <- function(ps,
     group,
     taxa_rank = "all",
-    transform = c("identity", "log10", "log10p"),
+    transform = c("identity", "log10", "log10p",
+                  "SquareRoot", "CubicRoot", "logit"),
     norm = "none",
     norm_para = list(),
     nfolds = 3,
@@ -130,7 +136,11 @@ run_sl <- function(ps,
         )
     }
 
-    transform <- match.arg(transform, c("identity", "log10", "log10p"))
+    transform <- match.arg(
+      transform, c("identity", "log10", "log10p",
+                   "SquareRoot", "CubicRoot", "logit")
+    )
+
     method <- match.arg(method, choices = c("LR", "RF", "SVM"))
     full_method <- switch(method,
         LR = "logistic regression",

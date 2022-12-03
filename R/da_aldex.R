@@ -31,6 +31,10 @@
 #'   * "log10", the transformation is `log10(object)`, and if the data contains
 #'     zeros the transformation is `log10(1 + object)`.
 #'   * "log10p", the transformation is `log10(1 + object)`.
+#'   * "SquareRoot", the transformation is `Square Root`.
+#'   * "CubicRoot", the transformation is `Cubic Root`.
+#'   * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm the methods used to normalize the microbial abundance data. See
 #'   [`normalize()`] for more details.
 #'   Options include:
@@ -82,18 +86,19 @@
 #'
 #' @examples
 #' \dontrun{
-#' data(enterotypes_arumugam)
+#' data(caporaso)
 #' ps <- phyloseq::subset_samples(
-#'     enterotypes_arumugam,
-#'     Enterotype %in% c("Enterotype 3", "Enterotype 2")
+#'     caporaso,
+#'     SampleType %in% c("gut", "tongue", "right palm")
 #' )
-#' run_aldex(ps, group = "Enterotype")
+#' run_aldex(ps, group = "SampleType", method = "kruskal")
 #' }
 #'
 run_aldex <- function(ps,
                       group,
                       taxa_rank = "all",
-                      transform = c("identity", "log10", "log10p"),
+                      transform = c("identity", "log10", "log10p",
+                                    "SquareRoot", "CubicRoot", "logit"),
                       norm = "none",
                       norm_para = list(),
                       method = c(
@@ -109,20 +114,20 @@ run_aldex <- function(ps,
                       denom = c("all", "iqlr", "zero", "lvha"),
                       paired = FALSE) {
 
-  ps = phyloseq::subset_samples(
-         enterotypes_arumugam,
-         Enterotype %in% c("Enterotype 3", "Enterotype 2", "Enterotype 1"))
-  group = "Enterotype"
-  taxa_rank = "Genus"
-  transform = "identity"
-  norm = "none"
-  norm_para = list()
-  method = "kruskal"
-  p_adjust = "none"
-  pvalue_cutoff = 0.05
-  mc_samples = 128
-  denom = "all"
-  paired = FALSE
+  # ps = phyloseq::subset_samples(
+  #   caporaso,
+  #   SampleType %in% c("gut", "tongue", "right palm"))
+  # group = "SampleType"
+  # taxa_rank = "Genus"
+  # transform = "identity"
+  # norm = "none"
+  # norm_para = list()
+  # method = "kruskal"
+  # p_adjust = "none"
+  # pvalue_cutoff = 0.05
+  # mc_samples = 128
+  # denom = "all"
+  # paired = FALSE
 
   stopifnot(inherits(ps, "phyloseq"))
   ps <- check_rank_names(ps) %>%
@@ -158,7 +163,10 @@ run_aldex <- function(ps,
     )
   }
 
-  transform <- match.arg(transform, c("identity", "log10", "log10p"))
+  transform <- match.arg(
+    transform, c("identity", "log10", "log10p",
+                 "SquareRoot", "CubicRoot", "logit")
+  )
 
   # preprocess phyloseq object
   ps <- preprocess_ps(ps)
@@ -183,6 +191,13 @@ run_aldex <- function(ps,
   if (test == "t") {
     test_para <- c(test_para, paired = paired)
   }
+
+# test_fun(reads = abd,
+#          conditions = groups,
+#          method = method,
+#          mc_samples = mc_samples,
+#          denom = denom,
+#          p_adjust = p_adjust)
 
   test_out <- tryCatch(
     do.call(test_fun, test_para),

@@ -25,10 +25,10 @@
 #' @param method (Optional). character. Provide one of the currently supported
 #' options. See `distanceMethodList` for a detailed list of the supported options
 #' and links to accompanying documentation. Options include:
+#'  * "bray": bray crutis distance.
 #'  * "unifrac" : unweighted UniFrac distance.
 #'  * "wunifrac": weighted-UniFrac distance.
 #'  * "GUniFrac": The variance-adjusted weighted UniFrac distances (default: alpha=0.5).
-#'  * "bray": bray crutis distance.
 #'  * "dpcoa": sample-wise distance used in Double Principle Coordinate Analysis.
 #'  * "jsd": Jensen-Shannon Divergence.
 #'  Alternatively, you can provide a character string that defines a custom
@@ -76,7 +76,8 @@ run_ANOSIM <- function(
     object,
     level = NULL,
     variable,
-    method = "bray",
+    method = c("bray", "unifrac", "wunifrac",
+               "GUniFrac", "dpcoa", "jsd"),
     seedNum = 123,
     alpha = 0.5) {
 
@@ -87,6 +88,11 @@ run_ANOSIM <- function(
   # method = "bray"
   # seedNum = 123
   # alpha = 0.5
+
+  method <- match.arg(
+    method, c("bray", "unifrac", "wunifrac",
+              "GUniFrac", "dpcoa", "jsd")
+  )
 
   # phyloseq object
   if (all(!is.null(object), inherits(object, "phyloseq"))) {

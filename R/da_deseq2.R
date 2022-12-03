@@ -31,8 +31,9 @@
 #
 #
 #
-#' Perform DESeq differential analysis
+#' @title Perform DESeq differential analysis
 #'
+#' @description
 #' Differential expression analysis based on the Negative Binomial distribution
 #' using **DESeq2**.
 #'
@@ -57,6 +58,10 @@
 #'   * "log10", the transformation is `log10(object)`, and if the data contains
 #'     zeros the transformation is `log10(1 + object)`.
 #'   * "log10p", the transformation is `log10(1 + object)`.
+#'   * "SquareRoot", the transformation is `Square Root`.
+#'   * "CubicRoot", the transformation is `Cubic Root`.
+#'   * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm the methods used to normalize the microbial abundance data. See
 #'   [`normalize()`] for more details.
 #'   Options include:
@@ -158,7 +163,8 @@ run_deseq2 <- function(ps,
     taxa_rank = "all",
     norm = "RLE",
     norm_para = list(),
-    transform = c("identity", "log10", "log10p"),
+    transform = c("identity", "log10", "log10p",
+                  "SquareRoot", "CubicRoot", "logit"),
     # test = c("Wald", "LRT"),
     fitType = c("parametric", "local", "mean", "glmGamPoi"),
     sfType = "poscounts",
@@ -172,9 +178,9 @@ run_deseq2 <- function(ps,
     ),
     pvalue_cutoff = 0.05,
     ...) {
-    ps <- check_rank_names(ps) %>% 
+    ps <- check_rank_names(ps) %>%
         check_taxa_rank( taxa_rank)
-    
+
     norm_methods <- c("none", "rarefy", "RLE", "CSS", "TMM")
     if (!norm %in% norm_methods) {
         stop(
@@ -182,7 +188,7 @@ run_deseq2 <- function(ps,
             call. = FALSE
         )
     }
-    
+
     if (length(confounders)) {
         confounders <- check_confounder(ps, group, confounders)
     }
@@ -234,7 +240,10 @@ run_deseq2 <- function(ps,
     ef_name <- ifelse(test == "Wald", "logFC", "F")
 
     fitType <- match.arg(fitType, c("parametric", "local", "mean", "glmGamPoi"))
-    transform <- match.arg(transform, c("identity", "log10", "log10p"))
+    transform <- match.arg(
+      transform, c("identity", "log10", "log10p",
+                   "SquareRoot", "CubicRoot", "logit")
+    )
     p_adjust <- match.arg(
         p_adjust,
         c(
@@ -255,16 +264,16 @@ run_deseq2 <- function(ps,
     norm_para <- c(norm_para, method = norm, object = list(ps))
     ps_normed <- do.call(normalize, norm_para)
     ps_summarized <- pre_ps_taxa_rank(ps_normed, taxa_rank)
-    
+
     if (!length(confounders)) {
         dsg <- formula(paste("~", group))
     } else {
         dsg <- formula(paste(
-            "~", 
+            "~",
             paste(c(confounders, group), collapse = " + ")
         ))
     }
-    
+
     dds_summarized <- phyloseq2DESeq2(
         ps_summarized,
         design = dsg
@@ -281,8 +290,8 @@ run_deseq2 <- function(ps,
     #
     # If dispersion values are less than 1e-6  (minimal value is 1e-8),
     # it would be problematic to fit a dispersion trend in DESeq2.
-    # The reason for a minimal value, is that for a given row of the count 
-    # matrix, the maximum likelihood estimate can tend to 0 (and so we have a 
+    # The reason for a minimal value, is that for a given row of the count
+    # matrix, the maximum likelihood estimate can tend to 0 (and so we have a
     # rule to stop after 1e-8)
     # https://support.bioconductor.org/p/63845/
     # https://support.bioconductor.org/p/122757/
@@ -358,7 +367,7 @@ run_deseq2 <- function(ps,
                 "as final estimates"
             )
             dds_summarized <- DESeq2::estimateDispersionsGeneEst(dds_summarized)
-            DESeq2::dispersions(dds_summarized) <- 
+            DESeq2::dispersions(dds_summarized) <-
                 mcols(dds_summarized)$dispGeneEst
 
             dds_summarized <- DESeq2::nbinomWaldTest(
@@ -427,7 +436,7 @@ run_deseq2 <- function(ps,
         enrich_group <- ifelse(res$logFC > 0, contrast_new[2], contrast_new[3])
     } else {
         cf <- coef(dds_summarized)
-        
+
         # extract coef of interested var
         target_idx <- grepl(group, colnames(cf))
         cf <- cf[, target_idx]
@@ -465,7 +474,7 @@ run_deseq2 <- function(ps,
 
     marker <- microbiomeMarker(
         marker_table = marker,
-        # if no pre-calculated size factors, DESeq2 will calculate the 
+        # if no pre-calculated size factors, DESeq2 will calculate the
         # size factors internally, so norm method shoule be RLE
         norm_method = ifelse(is.null(nf), "RLE", get_norm_method(norm)),
         diff_method = paste0("DESeq2: ", test),

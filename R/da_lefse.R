@@ -1,5 +1,6 @@
-#' Liner discriminant analysis (LDA) effect size (LEFSe) analysis
+#' @title Liner discriminant analysis (LDA) effect size (LEFSe) analysis
 #'
+#' @description
 #' Perform Metagenomic LEFSe analysis based on phyloseq object.
 #'
 #' @param ps a \code{\link[phyloseq]{phyloseq-class}} object
@@ -19,6 +20,10 @@
 #'   * "log10", the transformation is `log10(object)`, and if the data contains
 #'     zeros the transformation is `log10(1 + object)`.
 #'   * "log10p", the transformation is `log10(1 + object)`.
+#'   * "SquareRoot", the transformation is `Square Root`.
+#'   * "CubicRoot", the transformation is `Cubic Root`.
+#'   * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm the methods used to normalize the microbial abundance data. See
 #'   [`normalize()`] for more details.
 #'   Options include:
@@ -95,7 +100,8 @@ run_lefse <- function(ps,
     group,
     subgroup = NULL,
     taxa_rank = "all",
-    transform = c("identity", "log10", "log10p"),
+    transform = c("identity", "log10", "log10p",
+                  "SquareRoot", "CubicRoot", "logit"),
     norm = "CPM",
     norm_para = list(),
     kw_cutoff = 0.05,
@@ -111,12 +117,15 @@ run_lefse <- function(ps,
     if (!inherits(ps, "phyloseq")) {
         stop("`ps` must be phyloseq object", call. = FALSE)
     }
-    
+
     # check rank names and para taxa_rank
     ps <- check_rank_names(ps)
     ps <- check_taxa_rank(ps, taxa_rank)
-    
-    transform <- match.arg(transform, c("identity", "log10", "log10p"))
+
+    transform <- match.arg(
+      transform, c("identity", "log10", "log10p",
+                   "SquareRoot", "CubicRoot", "logit")
+    )
     strict <- match.arg(strict, c("0", "1", "2"))
     strict <- as.numeric(strict)
 
@@ -146,13 +155,13 @@ run_lefse <- function(ps,
     grp_hie <- grp_info$group_hie
 
     ps_summarized <- pre_ps_taxa_rank(ps_normed, taxa_rank)
-    
+
     otus <- abundances(ps_summarized, norm = TRUE)
     # transform it for test
     otus_test <- as.data.frame(t(otus), stringsAsFactors = FALSE)
     feature <- tax_table(ps_summarized)@.Data[, 1]
     names(otus_test) <- feature
-    
+
     # tax table
     tax <- matrix(feature) %>%
         tax_table()
@@ -187,7 +196,7 @@ run_lefse <- function(ps,
         )
     )
     sig_otus <- sig_otus[, wilcoxon_p]
-    
+
     if (ncol(sig_otus) == 0) {
         warning("No marker was identified", call. = FALSE)
         mm <- microbiomeMarker(
@@ -199,7 +208,7 @@ run_lefse <- function(ps,
             sam_data = sample_data(ps_normed),
             tax_table = tax
         )
-        
+
         return(mm)
     }
 

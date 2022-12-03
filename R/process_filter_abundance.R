@@ -16,18 +16,18 @@
 #' default the top level rank of the `ps`. taxonomic level(Kingdom, Phylum,
 #' Class, Order, Family, Genus, Species, Strains; default: NULL).
 #' @param cutoff_mean (Optional). numeric. Threshold for Mean
-#' relative abundance all samples (default, `1e-04`).
+#' absolute (integer) or relative (float) abundance all samples (default, `100`).
 #' @param cutoff_one (Optional). numeric. Threshold for Minimum
-#' relative abundance at least one sample (default, `1e-03`).
+#' absolute (integer) or relative (float) abundance at least one sample (default, `1000`).
 #' @param unclass (Optional). logical. whether to filter the unclassified taxa (default `TRUE`).
-#'
-#' @return a [`phyloseq::phyloseq-class`] object, where each row represents a
-#'   taxa, and each col represents the taxa abundance of each sample.
 #'
 #' @import phyloseq
 #' @importFrom purrr map
 #' @importFrom dplyr bind_rows %>% group_split
 #' @importFrom tibble as_tibble rownames_to_column column_to_rownames
+#'
+#' @return a [`phyloseq::phyloseq-class`] object, where each row represents a
+#'   taxa, and each col represents the taxa abundance of each sample.
 #'
 #' @export
 #'
@@ -77,6 +77,8 @@ filter_abundance <- function(
   # cutoff_mean = 100
   # cutoff_one = 1000
   # unclass = TRUE
+
+  stopifnot(inherits(object, "phyloseq"))
 
   ps_LRA <- LowAbundance_taxa(
       ps = object,

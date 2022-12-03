@@ -12,7 +12,7 @@ run_deseq2(
   taxa_rank = "all",
   norm = "RLE",
   norm_para = list(),
-  transform = c("identity", "log10", "log10p"),
+  transform = c("identity", "log10", "log10p", "SquareRoot", "CubicRoot", "logit"),
   fitType = c("parametric", "local", "mean", "glmGamPoi"),
   sfType = "poscounts",
   betaPrior = FALSE,
@@ -74,6 +74,10 @@ options include:
 \item "log10", the transformation is \code{log10(object)}, and if the data contains
 zeros the transformation is \code{log10(1 + object)}.
 \item "log10p", the transformation is \code{log10(1 + object)}.
+\item "SquareRoot", the transformation is \verb{Square Root}.
+\item "CubicRoot", the transformation is \verb{Cubic Root}.
+\item "logit", the transformation is \verb{Zero-inflated Logit Transformation}
+(Does not work well for microbiome data).
 }}
 
 \item{fitType, sfType, betaPrior, modelMatrixType, useT, minmu}{these seven

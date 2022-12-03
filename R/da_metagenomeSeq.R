@@ -11,8 +11,9 @@
 #
 # fitFeatureModel doesn't seem to allow for multiple comparisons.
 
-#' metagenomeSeq differential analysis
+#' @title metagenomeSeq differential analysis
 #'
+#' @description
 #' Differential expression analysis based on the Zero-inflated Log-Normal
 #' mixture model or Zero-inflated Gaussian mixture model using metagenomeSeq.
 #'
@@ -37,6 +38,10 @@
 #'   * "log10", the transformation is `log10(object)`, and if the data contains
 #'     zeros the transformation is `log10(1 + object)`.
 #'   * "log10p", the transformation is `log10(1 + object)`.
+#'   * "SquareRoot", the transformation is `Square Root`.
+#'   * "CubicRoot", the transformation is `Cubic Root`.
+#'   * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm the methods used to normalize the microbial abundance data. See
 #'   [`normalize()`] for more details.
 #'   Options include:
@@ -125,7 +130,8 @@ run_metagenomeseq <- function(ps,
     confounders =  character(0),
     contrast = NULL,
     taxa_rank = "all",
-    transform = c("identity", "log10", "log10p"),
+    transform = c("identity", "log10", "log10p",
+                  "SquareRoot", "CubicRoot", "logit"),
     norm = "CSS",
     norm_para = list(),
     method = c("ZILN", "ZIG"),
@@ -138,7 +144,10 @@ run_metagenomeseq <- function(ps,
     ps <- check_rank_names(ps) %>%
         check_taxa_rank(taxa_rank)
 
-    transform <- match.arg(transform, c("identity", "log10", "log10p"))
+    transform <- match.arg(
+      transform, c("identity", "log10", "log10p",
+                   "SquareRoot", "CubicRoot", "logit")
+    )
     method <- match.arg(method, c("ZILN", "ZIG"))
     p_adjust <- match.arg(
         p_adjust,

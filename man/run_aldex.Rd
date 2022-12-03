@@ -8,7 +8,7 @@ run_aldex(
   ps,
   group,
   taxa_rank = "all",
-  transform = c("identity", "log10", "log10p"),
+  transform = c("identity", "log10", "log10p", "SquareRoot", "CubicRoot", "logit"),
   norm = "none",
   norm_para = list(),
   method = c("t.test", "wilcox.test", "kruskal", "glm_anova"),
@@ -40,6 +40,10 @@ options include:
 \item "log10", the transformation is \code{log10(object)}, and if the data contains
 zeros the transformation is \code{log10(1 + object)}.
 \item "log10p", the transformation is \code{log10(1 + object)}.
+\item "SquareRoot", the transformation is \verb{Square Root}.
+\item "CubicRoot", the transformation is \verb{Cubic Root}.
+\item "logit", the transformation is \verb{Zero-inflated Logit Transformation}
+(Does not work well for microbiome data).
 }}
 
 \item{norm}{the methods used to normalize the microbial abundance data. See
@@ -109,12 +113,12 @@ and \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.
 }
 \examples{
 \dontrun{
-data(enterotypes_arumugam)
+data(caporaso)
 ps <- phyloseq::subset_samples(
-    enterotypes_arumugam,
-    Enterotype \%in\% c("Enterotype 3", "Enterotype 2")
+    caporaso,
+    SampleType \%in\% c("gut", "tongue", "right palm")
 )
-run_aldex(ps, group = "Enterotype")
+run_aldex(ps, group = "SampleType", method = "kruskal")
 }
 
 }

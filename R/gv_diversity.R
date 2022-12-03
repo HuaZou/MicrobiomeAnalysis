@@ -81,6 +81,7 @@ get_alphaindex <- function(
   stopifnot(inherits(ps, "phyloseq"))
   ps <- preprocess_ps(ps)
 
+
   # taxa level
   if (!is.null(level)) {
     ps <- aggregate_taxa(x = ps, level = level)

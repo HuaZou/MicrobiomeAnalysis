@@ -1,5 +1,6 @@
-#' Perform differential analysis using edgeR
+#' @title Perform differential analysis using edgeR
 #'
+#' @description
 #' Differential expression analysis based on the Negative Binomial distribution
 #' using **edgeR**.
 #'
@@ -26,6 +27,10 @@
 #'   * "log10", the transformation is `log10(object)`, and if the data contains
 #'     zeros the transformation is `log10(1 + object)`.
 #'   * "log10p", the transformation is `log10(1 + object)`.
+#'   * "SquareRoot", the transformation is `Square Root`.
+#'   * "CubicRoot", the transformation is `Cubic Root`.
+#'   * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm the methods used to normalize the microbial abundance data. See
 #'   [`normalize()`] for more details.
 #'   Options include:
@@ -104,7 +109,8 @@ run_edger <- function(ps,
     contrast = NULL,
     taxa_rank = "all",
     method = c("LRT", "QLFT"),
-    transform = c("identity", "log10", "log10p"),
+    transform = c("identity", "log10", "log10p",
+                  "SquareRoot", "CubicRoot", "logit"),
     norm = "TMM",
     norm_para = list(),
     disp_para = list(),
@@ -114,9 +120,12 @@ run_edger <- function(ps,
     ),
     pvalue_cutoff = 0.05,
     ...) {
-    ps <- check_rank_names(ps) %>% 
+    ps <- check_rank_names(ps) %>%
         check_taxa_rank( taxa_rank)
-    transform <- match.arg(transform, c("identity", "log10", "log10p"))
+    transform <- match.arg(
+      transform, c("identity", "log10", "log10p",
+                   "SquareRoot", "CubicRoot", "logit")
+    )
     method <- match.arg(method, c("LRT", "QLFT"))
     p_adjust <- match.arg(
         p_adjust,
@@ -125,7 +134,7 @@ run_edger <- function(ps,
             "hochberg", "hommel", "BH", "BY"
         )
     )
-    
+
     if (length(confounders)) {
         confounders <- check_confounder(ps, group, confounders)
     }
@@ -173,7 +182,7 @@ run_edger <- function(ps,
     #     model_data[confounders] <- meta[confounders]
     #     design <- stats::model.matrix(
     #         formula(paste(
-    #             "~ + ", 
+    #             "~ + ",
     #             paste(c(confounders, "group"), collapse = " + "))),
     #         data = model_data
     #     )
@@ -209,7 +218,7 @@ run_edger <- function(ps,
     }
 
     # normalized counts
-    ef_nf <- dge_summarized$samples$lib.size * 
+    ef_nf <- dge_summarized$samples$lib.size *
         dge_summarized$samples$norm.factors
     ref_nf <- mean(ef_nf)
     counts_normalized <-
@@ -245,7 +254,7 @@ run_edger <- function(ps,
     # edgeR::decideTestsDGE(), identify which genes are significantly
     # differentially expressed from an edgeR fit object containing p-values and
     # test statistics.
-    
+
     # first two columns: feature enrich_group (write a function)
     res <- cbind(feature = row.names(res), res)
     other_col <- setdiff(names(res), c("feature", "enrich_group"))
@@ -303,7 +312,7 @@ run_edger <- function(ps,
 phyloseq2edgeR <- function(ps, ...) {
     ps <- keep_taxa_in_rows(ps)
     abd <- as(otu_table(ps), "matrix")
-    
+
     if (any(round(abd) != abd)) {
         warning(
             "Some counts are non-integers, they are rounded to integers.\n",

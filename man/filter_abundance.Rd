@@ -21,10 +21,10 @@ default the top level rank of the \code{ps}. taxonomic level(Kingdom, Phylum,
 Class, Order, Family, Genus, Species, Strains; default: NULL).}
 
 \item{cutoff_mean}{(Optional). numeric. Threshold for Mean
-relative abundance all samples (default, \code{1e-04}).}
+absolute (integer) or relative (float) abundance all samples (default, \code{100}).}
 
 \item{cutoff_one}{(Optional). numeric. Threshold for Minimum
-relative abundance at least one sample (default, \code{1e-03}).}
+absolute (integer) or relative (float) abundance at least one sample (default, \code{1000}).}
 
 \item{unclass}{(Optional). logical. whether to filter the unclassified taxa (default \code{TRUE}).}
 }

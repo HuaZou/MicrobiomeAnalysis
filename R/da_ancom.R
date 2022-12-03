@@ -21,6 +21,10 @@
 #'   * "log10", the transformation is `log10(object)`, and if the data contains
 #'     zeros the transformation is `log10(1 + object)`.
 #'   * "log10p", the transformation is `log10(1 + object)`.
+#'   * "SquareRoot", the transformation is `Square Root`.
+#'   * "CubicRoot", the transformation is `Cubic Root`.
+#'   * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm the methods used to normalize the microbial abundance data. See
 #'   [`normalize()`] for more details.
 #'   Options include:
@@ -98,7 +102,8 @@ run_ancom <- function(ps,
     group,
     confounders = character(0),
     taxa_rank = "all",
-    transform = c("identity", "log10", "log10p"),
+    transform = c("identity", "log10", "log10p",
+                  "SquareRoot", "CubicRoot", "logit"),
     norm = "TSS",
     norm_para = list(),
     p_adjust = c(
@@ -108,8 +113,14 @@ run_ancom <- function(ps,
     pvalue_cutoff = 0.05,
     W_cutoff = 0.75) {
     stopifnot(inherits(ps, "phyloseq"))
-    transform <- match.arg(transform, c("identity", "log10", "log10p"))
-    p_adjust <- match.arg(
+
+
+  transform <- match.arg(
+      transform, c("identity", "log10", "log10p",
+                 "SquareRoot", "CubicRoot", "logit")
+    )
+
+  p_adjust <- match.arg(
         p_adjust,
         c(
             "none", "fdr", "bonferroni", "holm",

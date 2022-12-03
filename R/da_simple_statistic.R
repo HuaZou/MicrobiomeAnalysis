@@ -1,5 +1,6 @@
-#' Simple statistical analysis of metagenomic profiles
+#' @title Simple statistical analysis of metagenomic profiles
 #'
+#' @description
 #' Perform simple statistical analysis of metagenomic profiles. This function
 #' is a wrapper of `run_test_two_groups` and `run_test_multiple_groups`.
 #'
@@ -19,6 +20,10 @@
 #'   * "log10", the transformation is `log10(object)`, and if the data contains
 #'     zeros the transformation is `log10(1 + object)`.
 #'   * "log10p", the transformation is `log10(1 + object)`.
+#'   * "SquareRoot", the transformation is `Square Root`.
+#'   * "CubicRoot", the transformation is `Cubic Root`.
+#'   * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm the methods used to normalize the microbial abundance data. See
 #'   [`normalize()`] for more details.
 #'   Options include:
@@ -69,10 +74,12 @@
 #'     Enterotype %in% c("Enterotype 3", "Enterotype 2")
 #' )
 #' run_simple_stat(ps, group = "Enterotype")
+#'
 run_simple_stat <- function(ps,
     group,
     taxa_rank = "all",
-    transform = c("identity", "log10", "log10p"),
+    transform = c("identity", "log10", "log10p",
+                  "SquareRoot", "CubicRoot", "logit"),
     norm = "TSS",
     norm_para = list(),
     method = c(
@@ -90,9 +97,13 @@ run_simple_stat <- function(ps,
     conf_level = 0.95,
     nperm = 1000,
     ...) {
+
     stopifnot(inherits(ps, "phyloseq"))
-    
-    transform <- match.arg(transform, c("identity", "log10", "log10p"))
+
+    transform <- match.arg(
+      transform, c("identity", "log10", "log10p",
+                   "SquareRoot", "CubicRoot", "logit")
+    )
     method <- match.arg(
         method,
         c("welch.test", "t.test", "white.test", "anova", "kruskal")

@@ -1,4 +1,7 @@
-#' Differential analysis using limma-voom
+#' @title Differential analysis using limma-voom
+#'
+#' @description
+#'  Differential expression analysis based on limma-voom.
 #'
 #' @param ps  ps a [`phyloseq::phyloseq-class`] object.
 #' @param group  character, the variable to set the group, must be one of
@@ -21,6 +24,10 @@
 #'   * "log10", the transformation is `log10(object)`, and if the data contains
 #'     zeros the transformation is `log10(1 + object)`.
 #'   * "log10p", the transformation is `log10(1 + object)`.
+#'   * "SquareRoot", the transformation is `Square Root`.
+#'   * "CubicRoot", the transformation is `Cubic Root`.
+#'   * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm the methods used to normalize the microbial abundance data. See
 #'   [`normalize()`] for more details.
 #'   Options include:
@@ -80,7 +87,8 @@ run_limma_voom <- function(ps,
     confounders =  character(0),
     contrast = NULL,
     taxa_rank = "all",
-    transform = c("identity", "log10", "log10p"),
+    transform = c("identity", "log10", "log10p",
+                  "SquareRoot", "CubicRoot", "logit"),
     norm = "none",
     norm_para = list(),
     voom_span = 0.5,
@@ -91,9 +99,9 @@ run_limma_voom <- function(ps,
     pvalue_cutoff = 0.05,
     ...) {
     stopifnot(inherits(ps, "phyloseq"))
-    ps <- check_rank_names(ps) %>% 
+    ps <- check_rank_names(ps) %>%
         check_taxa_rank(taxa_rank)
-    
+
     p_adjust <- match.arg(
         p_adjust,
         c(
@@ -101,7 +109,7 @@ run_limma_voom <- function(ps,
             "hochberg", "hommel", "BH", "BY"
         )
     )
-    
+
      if (length(confounders)) {
         confounders <- check_confounder(ps, group, confounders)
     }
@@ -126,7 +134,10 @@ run_limma_voom <- function(ps,
     lvl <- levels(groups)
     n_lvl <- length(lvl)
 
-    transform <- match.arg(transform, c("identity", "log10", "log10p"))
+    transform <- match.arg(
+      transform, c("identity", "log10", "log10p",
+                   "SquareRoot", "CubicRoot", "logit")
+    )
 
     # preprocess phyloseq object
     ps <- preprocess_ps(ps)
@@ -156,10 +167,10 @@ run_limma_voom <- function(ps,
         span = voom_span
     )
     fit_out <- limma::lmFit(voom_out, design = design)
-    
+
     para_cf <- calc_coef(groups, design, contrast)
     # fit_out <- limma::contrasts.fit(fit_out, coefficients = para_cf)
-    
+
     # if (length(contrast_new) == n_lvl) {
     #     # warning: row names of contrasts don't match col names of coefficients
     #     fit_out <- limma::contrasts.fit(fit_out, contrast_new)
@@ -175,7 +186,7 @@ run_limma_voom <- function(ps,
     counts_normed <- abundances(ps_summarized, norm = TRUE)
     if (n_lvl == 2 || !is.null(contrast)) {
         enrich_group <- ifelse(test_df$logFC > 0, lvl[2], lvl[1])
-        
+
         ef <- test_df[["logFC"]]
         ef_name <- "ef_logFC"
     } else {
@@ -185,7 +196,7 @@ run_limma_voom <- function(ps,
         cf <- cbind(0, cf)
         enrich_group <- lvl[apply(cf, 1, which.max)]
         enrich_group <- enrich_group[match(row.names(test_df), row.names(cf))]
-        
+
         ef <- test_df[["F"]]
         ef_name <- "ef_F_statistic"
     }

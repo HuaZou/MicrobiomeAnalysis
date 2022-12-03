@@ -589,7 +589,8 @@ normalize_feature <- function(feature, normalization) {
 scale_variables <- function(
     object,
     level = NULL,
-    method = "none") {
+    method = c("none", "mean_center", "zscore",
+               "pareto", "range")) {
 
   # object = enterotypes_arumugam
   # level = "Genus"

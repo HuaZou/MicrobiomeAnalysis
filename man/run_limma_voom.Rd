@@ -10,7 +10,7 @@ run_limma_voom(
   confounders = character(0),
   contrast = NULL,
   taxa_rank = "all",
-  transform = c("identity", "log10", "log10p"),
+  transform = c("identity", "log10", "log10p", "SquareRoot", "CubicRoot", "logit"),
   norm = "none",
   norm_para = list(),
   voom_span = 0.5,
@@ -47,6 +47,10 @@ options include:
 \item "log10", the transformation is \code{log10(object)}, and if the data contains
 zeros the transformation is \code{log10(1 + object)}.
 \item "log10p", the transformation is \code{log10(1 + object)}.
+\item "SquareRoot", the transformation is \verb{Square Root}.
+\item "CubicRoot", the transformation is \verb{Cubic Root}.
+\item "logit", the transformation is \verb{Zero-inflated Logit Transformation}
+(Does not work well for microbiome data).
 }}
 
 \item{norm}{the methods used to normalize the microbial abundance data. See
@@ -86,7 +90,7 @@ for more details see \link[stats:p.adjust]{stats::p.adjust}.}
 a \code{\linkS4class{microbiomeMarker}} object.
 }
 \description{
-Differential analysis using limma-voom
+Differential expression analysis based on limma-voom.
 }
 \details{
 \code{contrast} must be a two length character or \code{NULL} (default). It is only

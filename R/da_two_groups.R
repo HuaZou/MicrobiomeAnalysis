@@ -1,4 +1,7 @@
-#' Statistical test between two groups
+#' @title Statistical test between two groups
+#'
+#' @description
+#' Differential expression analysis for two groups.
 #'
 #' @param ps a [`phyloseq::phyloseq-class`] object
 #' @param group character, the variable to set the group
@@ -16,6 +19,10 @@
 #'   * "log10", the transformation is `log10(object)`, and if the data contains
 #'     zeros the transformation is `log10(1 + object)`.
 #'   * "log10p", the transformation is `log10(1 + object)`.
+#'   * "SquareRoot", the transformation is `Square Root`.
+#'   * "CubicRoot", the transformation is `Cubic Root`.
+#'   * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm the methods used to normalize the microbial abundance data. See
 #'   [`normalize()`] for more details.
 #'   Options include:
@@ -66,7 +73,8 @@
 run_test_two_groups <- function(ps,
     group,
     taxa_rank = "all",
-    transform = c("identity", "log10", "log10p"),
+    transform = c("identity", "log10", "log10p",
+                  "SquareRoot", "CubicRoot", "logit"),
     norm = "TSS",
     norm_para = list(),
     method = c("welch.test", "t.test", "white.test"),
@@ -82,7 +90,7 @@ run_test_two_groups <- function(ps,
     ...) {
     stopifnot(inherits(ps, "phyloseq"))
     ps <- check_rank_names(ps)
-    
+
     # ps_rank <- rank_names(ps)
     # if ("Picrust_trait" %in% ps_rank) {
     #     picrust_rank <- c("Picrust_trait", "Picrust_description")
@@ -107,7 +115,10 @@ run_test_two_groups <- function(ps,
         c("none", "fdr", "bonferroni", "holm", "hochberg", "hommel", "BH", "BY")
     )
     method <- match.arg(method, c("welch.test", "t.test", "white.test"))
-
+    transform <- match.arg(
+      transform, c("identity", "log10", "log10p",
+                   "SquareRoot", "CubicRoot", "logit")
+    )
     # preprocess phyloseq object
     ps <- preprocess_ps(ps)
     ps <- transform_abundances(ps, transform = transform)
@@ -156,8 +167,8 @@ run_test_two_groups <- function(ps,
         test_res <- run_t_test(abd_norm_group, conf_level = conf_level, ...)
     } else if (method == "t.test") {
         test_res <- run_t_test(
-            abd_norm_group, 
-            conf_level, 
+            abd_norm_group,
+            conf_level,
             var_equal = TRUE, ...
         )
     } else if (method == "white.test") {
@@ -193,7 +204,7 @@ run_test_two_groups <- function(ps,
     row.names(test_res) <- paste0("feature", seq_len(nrow(test_res)))
 
     test_filtered <- filter(test_res, .data$padj <= pvalue_cutoff)
-    
+
     if (!is.null(diff_mean_cutoff)) {
         test_filtered <- filter(
             test_filtered,
@@ -290,7 +301,7 @@ run_t_test <- function(abd_group, conf_level = 0.95, var_equal = FALSE, ...) {
         ci_upper
     )
     names(res) <- c(
-        "pvalue", mean_names, 
+        "pvalue", mean_names,
         "ef_diff_mean", "ci_lower", "ci_upper"
     )
 
@@ -386,7 +397,7 @@ run_white_test <- function(norm_group1,
         ci_upper
     )
     names(res) <- c(
-        "pvalue", mean_names, 
+        "pvalue", mean_names,
         "ef_diff_mean", "ci_lower", "ci_upper"
     )
 
@@ -417,7 +428,7 @@ calc_permute_p <- function(norm_group1,
 
     # calculate p value -------------------------------------------------------
     permuted_res <- purrr::rerun(
-        nperm, 
+        nperm,
         calc_permute_ts(norm_group1, norm_group2)
     )
     permuted_ts <- purrr::map_df(
@@ -459,9 +470,9 @@ calc_permute_p <- function(norm_group1,
                 }
             }
 
-            pvalue_one_side[hf_index] <- 1 / 
+            pvalue_one_side[hf_index] <- 1 /
                 (nperm * length(high_freq_indices)) * one_side
-            pvalue_two_side[hf_index] <- 1 / 
+            pvalue_two_side[hf_index] <- 1 /
                 (nperm * length(high_freq_indices)) * two_side
         }
     } else {

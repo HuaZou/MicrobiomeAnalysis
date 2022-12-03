@@ -22,16 +22,16 @@
 #'
 #' @importFrom phyloseq t otu_table<-
 #'
+#' @return A object matches the class of argument `object` with the transformed
+#'   `otu_table`.
+#'
 #' @usage transform_abundances(
 #'    object,
 #'    transform = c("identity", "log10", "log10p",
-#'            "SquareRoot", "CubicRoot", "logit"),
+#'             "SquareRoot", "CubicRoot", "logit"),
 #'    level = c(NULL, "Kingdom", "Phylum", "Class",
 #'            "Order", "Family", "Genus",
 #'            "Species", "Strain", "unique"))
-#'
-#' @return A object matches the class of argument `object` with the transformed
-#'   `otu_table`.
 #'
 #' @export
 #'
@@ -40,8 +40,7 @@
 #' @examples
 #' \dontrun{
 #' data(enterotypes_arumugam)
-#' x1 <- transform_abundances(object = enterotypes_arumugam,
-#'     transform = "identity")
+#' x1 <- transform_abundances(object = enterotypes_arumugam)
 #' head(otu_table(x1), 10)
 #'
 #' x2 <- transform_abundances(enterotypes_arumugam,
@@ -51,7 +50,8 @@
 #'
 transform_abundances <- function(
     object,
-    transform = "identity",
+    transform = c("identity", "log10", "log10p",
+                 "SquareRoot", "CubicRoot", "logit"),
     level = NULL) {
 
   # data(enterotypes_arumugam)

@@ -54,6 +54,7 @@ trim_prevalence <- function(
   # trim = "both"
 
   trim <- match.arg(trim, c("none", "both", "feature", "sample"))
+
   if (inherits(object, "phyloseq")) {
 
     # taxa level

@@ -189,6 +189,8 @@ ps_genus_trim <- trim_prevalence(
     cutoff = 0.1,
     trim = "feature")
 
+ps_genus_trim
+
 head(ps_genus_trim@otu_table@.Data, 3)
 ```
 
@@ -197,17 +199,19 @@ head(ps_genus_trim@otu_table@.Data, 3)
 
 + Filtering taxa who is low relative abundance or unclassified (Ref: [@thingholm2019obese])
 
-  - 1. Taxa more than Mean relative abundance across all samples: 0.0001 (1e-04);
+  - Taxa more than Mean relative abundance across all samples: 100;
 
-  - 2. Taxa more than Minimum relative abundance at least one sample: 0.001 (1e-03).
+  - Taxa more than Minimum relative abundance at least one sample: 1000.
 
 ```{r}
 ps_genus_filter <- filter_abundance(
     object = ps_genus,
     level = NULL,
-    cutoff_mean = 1e-04,
-    cutoff_one = 1e-03,
+    cutoff_mean = 100,
+    cutoff_one = 1000,
     unclass = TRUE)
+
+ps_genus_filter
 
 head(ps_genus_filter@otu_table@.Data, 3)
 ```
@@ -295,7 +299,7 @@ ps_genus_group <- phyloseq::subset_samples(
 
 run_aldex(ps = ps_genus_group, 
           group = "body.site", 
-          taxa_rank = "Phylum")
+          taxa_rank = "Genus")
 ```
 
 ## limma-voom

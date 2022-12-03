@@ -1,4 +1,7 @@
-#' Statistical test for multiple groups
+#' @title Statistical test for multiple groups
+#'
+#' @description
+#' Differential expression analysis for multiple groups.
 #'
 #' @param ps a [`phyloseq::phyloseq-class`] object
 #' @param group character, the variable to set the group
@@ -16,6 +19,10 @@
 #'   * "log10", the transformation is `log10(object)`, and if the data contains
 #'     zeros the transformation is `log10(1 + object)`.
 #'   * "log10p", the transformation is `log10(1 + object)`.
+#'   * "SquareRoot", the transformation is `Square Root`.
+#'   * "CubicRoot", the transformation is `Cubic Root`.
+#'   * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm the methods used to normalize the microbial abundance data. See
 #'   [`normalize()`] for more details.
 #'   Options include:
@@ -64,7 +71,8 @@
 run_test_multiple_groups <- function(ps,
     group,
     taxa_rank = "all",
-    transform = c("identity", "log10", "log10p"),
+    transform = c("identity", "log10", "log10p",
+                  "SquareRoot", "CubicRoot", "logit"),
     norm = "TSS",
     norm_para = list(),
     method = c("anova", "kruskal"),
@@ -75,7 +83,7 @@ run_test_multiple_groups <- function(ps,
     ),
     pvalue_cutoff = 0.05,
     effect_size_cutoff = NULL) {
-    
+
     stopifnot(inherits(ps, "phyloseq"))
     ps <- check_rank_names(ps)
     ps <- check_taxa_rank(ps, taxa_rank)
@@ -85,6 +93,11 @@ run_test_multiple_groups <- function(ps,
         c("none", "fdr", "bonferroni", "holm", "hochberg", "hommel", "BH", "BY")
     )
     method <- match.arg(method, c("anova", "kruskal"))
+
+    transform <- match.arg(
+      transform, c("identity", "log10", "log10p",
+                   "SquareRoot", "CubicRoot", "logit")
+    )
 
     # preprocess phyloseq object
     ps <- preprocess_ps(ps)
@@ -111,7 +124,7 @@ run_test_multiple_groups <- function(ps,
 
         # separator "|" and some strings (such as "/", "-", "+") have a special
         # meaning in formula
-        # replace this strings with ___(three underscores) before aov 
+        # replace this strings with ___(three underscores) before aov
         # (new_feature), and reset the names as `feature`
         names(aov_df) <- gsub("[-|+*//]", "___", names(aov_df))
         new_features <- setdiff(names(aov_df), "groups")
@@ -139,7 +152,7 @@ run_test_multiple_groups <- function(ps,
     # enriched group
     group_enriched_idx <- apply(abd_means, 1, which.max)
     groups_uniq <- unique(groups)
-    group_nms <- strsplit(names(abd_means), ":") %>% 
+    group_nms <- strsplit(names(abd_means), ":") %>%
         vapply(function(x)x[[1]], FUN.VALUE = "a")
     group_enriched <- group_nms[group_enriched_idx]
 
@@ -176,7 +189,7 @@ run_test_multiple_groups <- function(ps,
     # only keep five variables: feature, enrich_group, effect_size (diff_mean),
     # pvalue, and padj
     res <- res[, c(
-        "feature", "enrich_group", 
+        "feature", "enrich_group",
         "ef_eta_squared", "pvalue", "padj"
     )]
     res_filtered <- res_filtered[, c(

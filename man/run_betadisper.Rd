@@ -31,10 +31,10 @@ spatial "median" or the group "centroid" (default: "median").}
 options. See \code{distanceMethodList} for a detailed list of the supported options
 and links to accompanying documentation. Options include:
 \itemize{
+\item "bray": bray crutis distance.
 \item "unifrac" : unweighted UniFrac distance.
 \item "wunifrac": weighted-UniFrac distance.
 \item "GUniFrac": The variance-adjusted weighted UniFrac distances (default: alpha=0.5).
-\item "bray": bray crutis distance.
 \item "dpcoa": sample-wise distance used in Double Principle Coordinate Analysis.
 \item "jsd": Jensen-Shannon Divergence.
 Alternatively, you can provide a character string that defines a custom
