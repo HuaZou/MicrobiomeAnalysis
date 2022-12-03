@@ -9,21 +9,9 @@ reference:
       - phyloseq2edgeR
       - phyloseq2metagenomeSeq
       - otu_table2metagenomeSeq
-  - title: "Microbiome marker"
-    desc: S4 class and methods for microbiomeMarker
-    contents:
-      - microbiomeMarker
-      - starts_with("microbiomeMarker-class")
-      - marker_table-class
-      - marker_table
-      - marker_table<-
-      - assign-otu_table
-      - abundances
-      - nmarker
-      - starts_with("postHocTest-class")
   - title: Miscellaneous
     desc: >
-      Functions to aggregate and collapse taxa
+      Functions to manipulate object
     contents:
       - aggregate_taxa
       - summarize_taxa
@@ -34,16 +22,17 @@ reference:
     contents:
       - abundances
       - transform_abundances
-      - starts_with("norm")
       - trim_prevalence
       - filter_abundance
       - impute_abundance
+      - starts_with("norm")
+      - scale_variables
   - title: "Example data"
     contents:
       starts_with("data")
   - title: "Community Analysis"
     desc: >
-      Functions to investigate association between variables and community
+      Functions to investigate association between variables and microbiota community
     contents:
       - run_betadisper
       - run_ANOSIM
@@ -69,6 +58,18 @@ reference:
       - run_sl
       - run_test_two_groups
       - run_simple_stat
+  - title: "Microbiome marker"
+    desc: S4 class and methods for microbiomeMarker
+    contents:
+      - microbiomeMarker
+      - starts_with("microbiomeMarker-class")
+      - marker_table-class
+      - marker_table
+      - marker_table<-
+      - assign-otu_table
+      - abundances
+      - nmarker
+      - starts_with("postHocTest-class")
   - title: "Statistical tookits"
     desc: >
       Functions to do statistical test
@@ -86,4 +87,3 @@ reference:
       - run_summarySE
       - insertRow
       - insertCol
-
