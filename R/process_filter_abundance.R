@@ -2,8 +2,8 @@
 #'
 #' @description whether to filter the low relative abundance or unclassified
 #' taxa by the threshold. Here, we choose the following criterion:
-#' 1. Taxa more than Mean relative abundance across all samples: 0.0001 (1e-04);
-#' 2. Taxa more than Minimum relative abundance at least one sample: 0.001 (1e-03).
+#' 1. Taxa more than Mean absolute or relative abundance across all samples;
+#' 2. Taxa more than Minimum absolute or relative abundance at least one sample.
 #'
 #' @references Thingholm, Louise B., et al. "Obese individuals with and without
 #' type 2 diabetes show different gut microbial functional capacity and
