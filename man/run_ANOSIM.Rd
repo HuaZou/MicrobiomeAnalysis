@@ -16,7 +16,7 @@ run_ANOSIM(
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
-\code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+\code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.}
 
 \item{level}{(Optional). character. Summarization
 level (from \code{rank_names(pseq)}, default: NULL).}
@@ -59,15 +59,18 @@ by permutation test to determine the significance. It can be applied to both
 \examples{
 
 \dontrun{
-data("enterotypes_arumugam")
 
-run_ANOSIM(enterotypes_arumugam,
-   variable = "Enterotype",
+# phyloseq object
+data("Zeybel_2022_gut")
+run_ANOSIM(Zeybel_2022_gut,
+   level = "Phylum",
+   variable = "Liver.Fat.Class",
    method = "bray")
 
-run_ANOSIM(enterotypes_arumugam,
-   level = "Phylum",
-   variable = "Enterotype",
+# SummarizedExperiment
+data("Zeybel_2022_protein")
+run_ANOSIM(Zeybel_2022_protein,
+   variable = "Liver.Fat.Class",
    method = "bray")
 }
 

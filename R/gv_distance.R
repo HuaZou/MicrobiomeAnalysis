@@ -6,7 +6,7 @@
 #' @author Created by Hua Zou (5/14/2022 Shenzhen China)
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
-#' [`Biobase::ExpressionSet`] object.
+#' [`SummarizedExperiment::SummarizedExperiment`] object.
 #' @param level (Optional). character. Summarization
 #' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param method (Required). character. Provide one of the currently supported
@@ -27,6 +27,7 @@
 #'   distance object, which could be applied for ordination analysis.
 #'
 #' @import phyloseq
+#' @importFrom SummarizedExperiment colData assay
 #' @import dplyr
 #' @import vegan
 #' @importFrom stats setNames as.dist
@@ -44,9 +45,16 @@
 #' @examples
 #'
 #' \dontrun{
-#' data("enterotypes_arumugam")
-#' res <- run_distance(enterotypes_arumugam,
-#'                     method = "bray")
+#' # phyloseq object
+#' data("Zeybel_2022_gut")
+#' run_distance(Zeybel_2022_gut,
+#'    level = "Phylum",
+#'    method = "bray")
+#'
+#' # SummarizedExperiment
+#' data("Zeybel_2022_protein")
+#' run_distance(Zeybel_2022_protein,
+#'    method = "bray")
 #' }
 #'
 run_distance <- function(
@@ -57,9 +65,17 @@ run_distance <- function(
       alpha = 0.5) {
 
 
-  # data("enterotypes_arumugam")
-  # object = enterotypes_arumugam
+  # data("Zeybel_2022_gut")
+  # object = Zeybel_2022_gut
   # level = "Phylum"
+  # variable = "Liver.Fat.Class"
+  # method = "bray"
+  # alpha = 0.5
+
+
+  # data("Zeybel_2022_protein")
+  # object = Zeybel_2022_protein
+  # level = NULL
   # method = "bray"
   # alpha = 0.5
 
@@ -99,16 +115,21 @@ run_distance <- function(
     } else {
       disMatrix <- phyloseq::distance(physeq = ps, method = method)
     }
-  } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
-    prf_tab <- Biobase::exprs(object) %>% data.frame()
-    if (any(prf_tab < 0)) {
+  } else if (all(!is.null(object), inherits(object, "SummarizedExperiment"))) {
+    prf_tab <- SummarizedExperiment::assay(object) %>%
+      data.frame() %>%
+      t()
+    if (any(is.na(prf_tab))) {
+      print("Missing value identified")
+    }
+    if (any(prf_tab[!is.na(prf_tab)] < 0)) {
       if (method %in% c("bray", "jaccard")) {
         message(method, " is not suitable for Negative values and Replace it by euclidean")
         method <- "euclidean"
       }
     }
 
-    disMatrix <- vegan::vegdist(prf_tab, method = method)
+    disMatrix <- vegan::vegdist(prf_tab, method = method, na.rm = TRUE)
   }
 
   return(disMatrix)

@@ -18,7 +18,7 @@
 #' @author Created by Hua Zou (5/15/2022 Shenzhen China)
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
-#' [`Biobase::ExpressionSet`] object.
+#' [`SummarizedExperiment::SummarizedExperiment`] object.
 #' @param level (Optional). character. Summarization
 #' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param variable (Required). character. grouping variable for test.
@@ -42,7 +42,7 @@
 #'
 #' @importFrom vegan vegdist anosim
 #' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom Biobase pData exprs
+#' @importFrom SummarizedExperiment colData assay
 #' @importFrom stats setNames p.adjust
 #'
 #' @usage run_ANOSIM(
@@ -60,15 +60,18 @@
 #' @examples
 #'
 #' \dontrun{
-#' data("enterotypes_arumugam")
 #'
-#' run_ANOSIM(enterotypes_arumugam,
-#'    variable = "Enterotype",
+#' # phyloseq object
+#' data("Zeybel_2022_gut")
+#' run_ANOSIM(Zeybel_2022_gut,
+#'    level = "Phylum",
+#'    variable = "Liver.Fat.Class",
 #'    method = "bray")
 #'
-#' run_ANOSIM(enterotypes_arumugam,
-#'    level = "Phylum",
-#'    variable = "Enterotype",
+#' # SummarizedExperiment
+#' data("Zeybel_2022_protein")
+#' run_ANOSIM(Zeybel_2022_protein,
+#'    variable = "Liver.Fat.Class",
 #'    method = "bray")
 #' }
 #'
@@ -84,6 +87,14 @@ run_ANOSIM <- function(
   # data("Zeybel_2022_gut")
   # object = Zeybel_2022_gut
   # level = "Phylum"
+  # variable = "Liver.Fat.Class"
+  # method = "bray"
+  # seedNum = 123
+  # alpha = 0.5
+
+  # data("Zeybel_2022_protein")
+  # object = Zeybel_2022_protein
+  # level = NULL
   # variable = "Liver.Fat.Class"
   # method = "bray"
   # seedNum = 123
@@ -126,13 +137,14 @@ run_ANOSIM <- function(
       prf_tab <- phyloseq::otu_table(ps) %>%
         data.frame()
     }
-  } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
+  } else if (all(!is.null(object), inherits(object, "SummarizedExperiment"))) {
     # sample table & profile table
-    sam_tab <- Biobase::pData(object) %>%
+    sam_tab <- SummarizedExperiment::colData(object) %>%
       data.frame() %>%
       tibble::rownames_to_column("TempRowNames")
-    prf_tab <- Biobase::exprs(object) %>%
-      data.frame()
+    prf_tab <- SummarizedExperiment::assay(object) %>%
+      data.frame() %>%
+      t()
   }
 
   # distance
@@ -164,7 +176,7 @@ run_ANOSIM <- function(
 
       dat_cln <- dat[-na_index, ]
       datprf <- dat_cln[, -1, F]
-      dis <- vegan::vegdist(datprf, method = method)
+      dis <- vegan::vegdist(datprf, method = method, na.rm = TRUE)
 
     } else {
       datphe <- dat$value

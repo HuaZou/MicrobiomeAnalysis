@@ -14,7 +14,7 @@ run_distance(
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
-\code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+\code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.}
 
 \item{level}{(Optional). character. Summarization
 level (from \code{rank_names(pseq)}, default: NULL).}
@@ -45,9 +45,16 @@ The function is to calculate the distance among samples
 \examples{
 
 \dontrun{
-data("enterotypes_arumugam")
-res <- run_distance(enterotypes_arumugam,
-                    method = "bray")
+# phyloseq object
+data("Zeybel_2022_gut")
+run_distance(Zeybel_2022_gut,
+   level = "Phylum",
+   method = "bray")
+
+# SummarizedExperiment
+data("Zeybel_2022_protein")
+run_distance(Zeybel_2022_protein,
+   method = "bray")
 }
 
 }
