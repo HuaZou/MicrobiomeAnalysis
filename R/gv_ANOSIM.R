@@ -81,10 +81,10 @@ run_ANOSIM <- function(
     seedNum = 123,
     alpha = 0.5) {
 
-  # data("enterotypes_arumugam")
-  # object = enterotypes_arumugam
+  # data("Zeybel_2022_gut")
+  # object = Zeybel_2022_gut
   # level = "Phylum"
-  # variable = "Enterotype"
+  # variable = "Liver.Fat.Class"
   # method = "bray"
   # seedNum = 123
   # alpha = 0.5

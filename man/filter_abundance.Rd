@@ -36,8 +36,8 @@ taxa, and each col represents the taxa abundance of each sample.
 whether to filter the low relative abundance or unclassified
 taxa by the threshold. Here, we choose the following criterion:
 \enumerate{
-\item Taxa more than Mean relative abundance across all samples: 0.0001 (1e-04);
-\item Taxa more than Minimum relative abundance at least one sample: 0.001 (1e-03).
+\item Taxa more than Mean absolute or relative abundance across all samples;
+\item Taxa more than Minimum absolute or relative abundance at least one sample.
 }
 }
 \examples{

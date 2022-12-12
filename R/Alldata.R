@@ -21,27 +21,6 @@
 #' @author Yang Cao
 NA
 
-#' 16S rRNA data of 94 patients from CID 2012
-#'
-#' Data from a cohort of 94 Bone Marrow Transplant patients previously published
-#' on in CID
-#'
-#' @format a [phyloseq::phyloseq] object
-#' @references
-#' Ying, et al. Intestinal Domination and the Risk of Bacteremia in Patients
-#' Undergoing Allogeneic Hematopoietic Stem Cell Transplantation,
-#' Clinical Infectious Diseases, Volume 55, Issue 7, 1 October 2012,
-#' Pages 905–914,
-#'
-#' \url{https://academic.oup.com/cid/article/55/7/905/428203}
-#'
-#' @source \url{https://github.com/ying14/yingtools2/tree/master/data}
-#' @name data-cid_ying
-#' @aliases cid_ying
-#' @docType data
-#' @author Yang Cao
-NA
-
 
 #' Enterotypes data of 39 samples
 #'
@@ -54,24 +33,6 @@ NA
 #' nature 473.7346 (2011): 174-180.
 #' @name data-enterotypes_arumugam
 #' @aliases enterotypes_arumugam
-#' @docType data
-#' @author Yang Cao
-NA
-
-
-#' Data from a study on colorectal cancer (kostic 2012)
-#'
-#' The data from a study on colorectal cancer. Samples that had no `DIAGNOSIS`
-#' attribute assigned and with less than 500 reads (counts) were removed, and
-#' 191 samples remains (91 healthy and 86 Tumors).
-#'
-#' @format a [`phyloseq::phyloseq-class`] object
-#'
-#' @references
-#' Kostic et al. Genomic analysis identifies association of Fusobacterium with
-#' colorectal carcinoma. Genome research, 2012, 22(2), 292-298.
-#' @name data-kostic_crc
-#' @aliases kostic_crc
 #' @docType data
 #' @author Yang Cao
 NA
@@ -95,5 +56,150 @@ NA
 #' \url{https://github.com/FrederickHuangLin/ANCOM/tree/master/data}
 #' @name data-ecam
 #' @aliases ecam
+#' @docType data
+NA
+
+#' gut microbiota from Zeybel et al. - 2022 paper
+#'
+#' The data from Zeybel et al. - 2022 paper, which investigated the
+#' microbiome composition and development of 56 MAFLD,
+#' identifying gut microbiome associations with oral microbiome.
+#'
+#' @format a [`phyloseq::phyloseq-class`] object
+#'
+#' @references
+#' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota
+#' on host metabolism in hepatic steatosis."
+#' Advanced Science 9.11 (2022): 2104373.
+#'
+#' @name data-Zeybel_2022_gut
+#' @aliases Zeybel_2022_gut
+#' @docType data
+NA
+
+#' oral microbiota from Zeybel et al. - 2022 paper
+#'
+#' The data from Zeybel et al. - 2022 paper, which investigated the
+#' microbiome composition and development of 56 MAFLD,
+#' identifying gut microbiome associations with oral microbiome.
+#'
+#' @format a [`phyloseq::phyloseq-class`] object
+#'
+#' @references
+#' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota
+#' on host metabolism in hepatic steatosis."
+#' Advanced Science 9.11 (2022): 2104373.
+#'
+#' @name data-Zeybel_2022_oral
+#' @aliases Zeybel_2022_oral
+#' @docType data
+NA
+
+#' fecal metabolites from Zeybel et al. - 2022 paper
+#'
+#' The data from Zeybel et al. - 2022 paper, which investigated the
+#' microbiome composition and development of 56 MAFLD,
+#' identifying gut microbiome associations with oral microbiome.
+#'
+#' @format a [`phyloseq::phyloseq-class`] object
+#'
+#' @references
+#' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota
+#' on host metabolism in hepatic steatosis."
+#' Advanced Science 9.11 (2022): 2104373.
+#'
+#' @name data-Zeybel_2022_metabolite
+#' @aliases Zeybel_2022_metabolite
+#' @docType data
+NA
+
+#' serum protein from Zeybel et al. - 2022 paper
+#'
+#' The data from Zeybel et al. - 2022 paper, which investigated the
+#' microbiome composition and development of 56 MAFLD,
+#' identifying gut microbiome associations with oral microbiome.
+#'
+#' @format a [`phyloseq::phyloseq-class`] object
+#'
+#' @references
+#' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota
+#' on host metabolism in hepatic steatosis."
+#' Advanced Science 9.11 (2022): 2104373.
+#'
+#' @name data-Zeybel_2022_protein
+#' @aliases Zeybel_2022_protein
+#' @docType data
+NA
+
+
+#' Paired gut microbiota from Zeybel et al. - 2022 paper
+#'
+#' The data from Zeybel et al. - 2022 paper, which investigated the
+#' microbiome composition and development of 56 MAFLD,
+#' identifying gut microbiome associations with oral microbiome.
+#'
+#' @format a [`phyloseq::phyloseq-class`] object
+#'
+#' @references
+#' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota
+#' on host metabolism in hepatic steatosis."
+#' Advanced Science 9.11 (2022): 2104373.
+#'
+#' @name data-Zeybel_2022_gut_paired
+#' @aliases Zeybel_2022_gut_paired
+#' @docType data
+NA
+
+#' Paired oral microbiota from Zeybel et al. - 2022 paper
+#'
+#' The data from Zeybel et al. - 2022 paper, which investigated the
+#' microbiome composition and development of 56 MAFLD,
+#' identifying gut microbiome associations with oral microbiome.
+#'
+#' @format a [`phyloseq::phyloseq-class`] object
+#'
+#' @references
+#' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota
+#' on host metabolism in hepatic steatosis."
+#' Advanced Science 9.11 (2022): 2104373.
+#'
+#' @name data-Zeybel_2022_oral_paired
+#' @aliases Zeybel_2022_oral_paired
+#' @docType data
+NA
+
+#' Paired fecal metabolites from Zeybel et al. - 2022 paper
+#'
+#' The data from Zeybel et al. - 2022 paper, which investigated the
+#' microbiome composition and development of 56 MAFLD,
+#' identifying gut microbiome associations with oral microbiome.
+#'
+#' @format a [`phyloseq::phyloseq-class`] object
+#'
+#' @references
+#' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota
+#' on host metabolism in hepatic steatosis."
+#' Advanced Science 9.11 (2022): 2104373.
+#'
+#' @name data-Zeybel_2022_metabolite_paired
+#' @aliases Zeybel_2022_metabolite_paired
+#' @docType data
+NA
+
+#' Paired serum protein from Zeybel et al. - 2022 paper
+#'
+#' The data from Zeybel et al. - 2022 paper, which investigated the
+#' microbiome composition and development of 56 MAFLD,
+#' identifying gut microbiome associations with oral microbiome.
+#'
+#' @format a [`phyloseq::phyloseq-class`] object
+#'
+#' @references
+#' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota
+#' on host metabolism in hepatic steatosis."
+#' Advanced Science 9.11 (2022): 2104373.
+#'
+#' @name data-Zeybel_2022_protein_paired
+#' @aliases Zeybel_2022_protein_paired
 #' @docType data
 NA

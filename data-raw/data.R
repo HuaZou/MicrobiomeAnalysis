@@ -68,9 +68,9 @@ pediatric_ibd <- phyloseq(
 )
 tree <- read_tree(treefile = "data-raw/ibd_data/IBD_data/ibd_tree.tre")
 phy_tree(pediatric_ibd) <- tree
-usethis::use_data(pediatric_ibd, overwrite = TRUE)
-unlink("data-raw/ibd_data", recursive = TRUE)
-unlink("data-raw/pediatric_idb.zip")
+# usethis::use_data(pediatric_ibd, overwrite = TRUE)
+# unlink("data-raw/ibd_data", recursive = TRUE)
+# unlink("data-raw/pediatric_idb.zip")
 
 
 # oxygen availability -----------------------------------------------------
@@ -114,8 +114,8 @@ oxygen <- import_biobakery_lefse_in(
   ranks_prefix = c("k", "p", "c", "o", "f", "g"),
   meta_rows = 1:3,
 )
-unlink("data-raw/oxygen.txt")
-usethis::use_data(oxygen, overwrite = TRUE)
+# unlink("data-raw/oxygen.txt")
+# usethis::use_data(oxygen, overwrite = TRUE)
 
 # data from lefse galaxy --------------------------------------------------
 # Fecal microbiota in a mouse model of spontaneous colitis. The dataset contains
@@ -151,7 +151,7 @@ spontaneous_colitis <- import_biobakery_lefse_in(
   meta_rows = 1,
 )
 unlink("data-raw/lefse_in")
-usethis::use_data(spontaneous_colitis, overwrite = TRUE)
+# usethis::use_data(spontaneous_colitis, overwrite = TRUE)
 
 # Enterotypes data from Arumugam's paper from stamp -----------------------
 
@@ -225,3 +225,28 @@ ecam <- phyloseq::phyloseq(
   phyloseq::sample_data(ecam_meta)
 )
 usethis::use_data(ecam, overwrite = TRUE)
+
+
+##### Zeybel et al. - 2022
+# ../../bookdown/Microbiota_notes/dataset/Zeybel-2022/result/
+#cross-section data
+Zeybel_2022_gut <- readRDS("Zeybel_2022_gut_MGS_ps.RDS")
+Zeybel_2022_oral <- readRDS("Zeybel_2022_oral_MGS_ps.RDS")
+Zeybel_2022_metabolite <- readRDS("Zeybel_2022_fecal_metabolite_se.RDS")
+Zeybel_2022__protein <- readRDS("Zeybel_2022_plasma_protein_se.RDS")
+
+usethis::use_data(Zeybel_2022_gut, overwrite = TRUE)
+usethis::use_data(Zeybel_2022_oral, overwrite = TRUE)
+usethis::use_data(Zeybel_2022_metabolite, overwrite = TRUE)
+usethis::use_data(Zeybel_2022__protein, overwrite = TRUE)
+
+# longitudinal data
+Zeybel_2022_gut_paired <- readRDS("Zeybel_2022_gut_MGS_ps_Paired.RDS")
+Zeybel_2022_oral_paired <- readRDS("Zeybel_2022_oral_MGS_ps_Paired.RDS")
+Zeybel_2022_metabolite_paired <- readRDS("Zeybel_2022_fecal_metabolite_se_Paired.RDS")
+Zeybel_2022__protein_paired <- readRDS("Zeybel_2022_plasma_protein_se_Paired.RDS")
+
+usethis::use_data(Zeybel_2022_gut_paired, overwrite = TRUE)
+usethis::use_data(Zeybel_2022_oral_paired, overwrite = TRUE)
+usethis::use_data(Zeybel_2022_metabolite_paired, overwrite = TRUE)
+usethis::use_data(Zeybel_2022__protein_paired, overwrite = TRUE)
