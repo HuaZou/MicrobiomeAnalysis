@@ -9,7 +9,7 @@
 #' the community and environmental variables, applying the distance in profile
 #' and calculating the F statistic between community and variable by permutation
 #' test to determine the significance. It can be applied to both
-#' [`phyloseq::phyloseq-class`] and [`Biobase::ExpressionSet`] object.
+#' [`phyloseq::phyloseq-class`] and [`SummarizedExperiment::SummarizedExperiment`] object.
 #'
 #' @references Anderson, Marti J. "Permutational multivariate analysis of
 #' variance."Department of Statistics, University of Auckland,
@@ -18,7 +18,7 @@
 #' @author Created by Hua Zou (5/14/2022 Shenzhen China)
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
-#' [`Biobase::ExpressionSet`] object.
+#' [`SummarizedExperiment::SummarizedExperiment`] object.
 #' @param level (Optional). character. Summarization
 #' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param variables (Optional). vector. variables for test (default: all).
@@ -47,7 +47,7 @@
 #'
 #' @importFrom vegan adonis vegdist
 #' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom Biobase pData exprs
+#' @importFrom SummarizedExperiment colData assay
 #' @importFrom stats setNames p.adjust
 #'
 #' @usage run_PERMANOVA(
@@ -66,16 +66,19 @@
 #' @examples
 #'
 #' \dontrun{
-#' data("enterotypes_arumugam")
-#' run_PERMANOVA(enterotypes_arumugam,
-#'   method = "bray",
-#'   mode = "one")
+#' # phyloseq object
+#' data("Zeybel_2022_gut")
+#' run_PERMANOVA(Zeybel_2022_gut,
+#'           variables = c("LiverFatClass", "Liver_fat", "Gender"),
+#'           mode = "one",
+#'           method = "bray")
 #'
-#' data("caporaso")
-#' run_PERMANOVA(caporaso,
-#'   method = "bray",
-#'   mode = "all",
-#'   variables = c("Month", "SampleType"))
+#' # SummarizedExperiment object
+#' data("Zeybel_2022_protein")
+#' run_PERMANOVA(Zeybel_2022_protein,
+#'           variables = c("LiverFatClass", "Liver_fat"),
+#'           mode = "all",
+#'           method = "bray")
 #' }
 #'
 run_PERMANOVA <- function(
@@ -88,10 +91,10 @@ run_PERMANOVA <- function(
     seedNum = 123,
     alpha = 0.5) {
 
-  # data("enterotypes_arumugam")
-  # object = enterotypes_arumugam
+  # data("Zeybel_2022_gut")
+  # object = Zeybel_2022_gut
   # level = "Phylum"
-  # variables = "all"
+  # variables = c("LiverFatClass", "Liver_fat", "Gender")
   # mode = "all"
   # method = "bray"
   # seedNum = 123
@@ -135,13 +138,14 @@ run_PERMANOVA <- function(
       prf_tab <- phyloseq::otu_table(ps) %>% data.frame()
     }
 
-  } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
+  }  else if (all(!is.null(object), inherits(object, "SummarizedExperiment"))) {
     # sample table & profile table
-    sam_tab <- Biobase::pData(object) %>%
+    sam_tab <- SummarizedExperiment::colData(object) %>%
       data.frame() %>%
       tibble::rownames_to_column("TempRowNames")
-    prf_tab <- Biobase::exprs(object) %>%
-      data.frame()
+    prf_tab <- SummarizedExperiment::assay(object) %>%
+      data.frame() %>%
+      t()
   }
 
   # distance

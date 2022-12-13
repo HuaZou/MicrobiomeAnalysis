@@ -14,7 +14,7 @@
 #' of Levene's test for homogeneity of variances if the distances between
 #' group members and group centroids is the Euclidean distance.
 #' See `?vegan::betadisper` for more details. It can be applied to both
-#' [`phyloseq::phyloseq-class`] and [`Biobase::ExpressionSet`] object.
+#' [`phyloseq::phyloseq-class`] and [`SummarizedExperiment::SummarizedExperiment`] object.
 #'
 #' @references Anderson, Marti J., Kari E. Ellingsen, and Brian H. McArdle.
 #' "Multivariate dispersion as a measure of beta diversity."
@@ -23,7 +23,7 @@
 #' @author Created by Hua Zou (5/15/2022 Shenzhen China)
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
-#' [`Biobase::ExpressionSet`] object.
+#' [`SummarizedExperiment::SummarizedExperiment`] object.
 #' @param level (Optional). character. Summarization
 #' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param variable (Required). character. grouping variable for test.
@@ -49,7 +49,7 @@
 #'
 #' @importFrom vegan vegdist betadisper permutest
 #' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom Biobase pData exprs
+#' @importFrom SummarizedExperiment colData assay
 #' @importFrom stats setNames p.adjust
 #'
 #' @usage run_betadisper(
@@ -68,10 +68,18 @@
 #' @examples
 #'
 #' \dontrun{
-#' data("enterotypes_arumugam")
-#' run_betadisper(enterotypes_arumugam,
-#'   variable = "Enterotype",
-#'   method = "bray")
+#' # phyloseq object
+#' data("Zeybel_2022_gut")
+#' run_betadisper(Zeybel_2022_gut,
+#'    level = "Phylum",
+#'    variable = "LiverFatClass",
+#'    method = "bray")
+#'
+#' # SummarizedExperiment object
+#' data("Zeybel_2022_protein")
+#' run_betadisper(Zeybel_2022_protein,
+#'    variable = "LiverFatClass",
+#'    method = "bray")
 #' }
 #'
 run_betadisper <- function(
@@ -84,12 +92,21 @@ run_betadisper <- function(
     seedNum = 123,
     alpha = 0.5) {
 
-  # data("enterotypes_arumugam")
-  # object = enterotypes_arumugam
+  # data("Zeybel_2022_gut")
+  # object = Zeybel_2022_gut
   # level = "Phylum"
-  # variable = "Enterotype"
+  # variable = "LiverFatClass"
   # type = "median"
   # method = "bray"
+  # seedNum = 123
+  # alpha = 0.5
+
+  # data("Zeybel_2022_protein")
+  # object = Zeybel_2022_protein
+  # level = NULL
+  # variable = "LiverFatClass"
+  # method = "bray"
+  # type = "median"
   # seedNum = 123
   # alpha = 0.5
 
@@ -129,11 +146,14 @@ run_betadisper <- function(
     } else {
       prf_tab <- phyloseq::otu_table(ps) %>% data.frame()
     }
-  } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
+  } else if (all(!is.null(object), inherits(object, "SummarizedExperiment"))) {
     # sample table & profile table
-    sam_tab <- Biobase::pData(object) %>% data.frame() %>%
+    sam_tab <- SummarizedExperiment::colData(object) %>%
+      data.frame() %>%
       tibble::rownames_to_column("TempRowNames")
-    prf_tab <- Biobase::exprs(object) %>% data.frame()
+    prf_tab <- SummarizedExperiment::assay(object) %>%
+      data.frame() %>%
+      t()
   }
 
   # distance

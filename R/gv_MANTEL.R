@@ -12,7 +12,7 @@
 #' X and Y, the partial Mantel test is used to estimate the correlation
 #' between these two matrices, while controlling for the effect of
 #' a control matrix Z. It can be applied to both
-#' [`phyloseq::phyloseq-class`] and [`Biobase::ExpressionSet`] object.
+#' [`phyloseq::phyloseq-class`] and [`SummarizedExperiment::SummarizedExperiment`] object.
 #'
 #' @references Mantel, Nathan. "The detection of disease clustering and
 #' a generalized regression approach." Cancer research 27.2 Part 1
@@ -21,7 +21,7 @@
 #' @author Created by Hua Zou (5/15/2022 Shenzhen China)
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
-#' [`Biobase::ExpressionSet`] object.
+#' [`SummarizedExperiment::SummarizedExperiment`] object.
 #' @param level (Optional). character. Summarization
 #' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param y_variables (Required). vector. variables for a control matrix Y.
@@ -54,7 +54,7 @@
 #'
 #' @importFrom vegan vegdist mantel mantel.partial
 #' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom Biobase pData exprs
+#' @importFrom SummarizedExperiment colData assay
 #' @importFrom stats setNames p.adjust
 #'
 #' @usage run_MANTEL(
@@ -76,10 +76,20 @@
 #' @examples
 #'
 #' \dontrun{
-#' data("enterotypes_arumugam")
-#' run_MANTEL(enterotypes_arumugam,
-#'           y_variables = c("Enterotype", "Clinical.Status"),
-#'           z_variables = c("Nationality", "Gender"),
+#' # phyloseq object
+#' data("Zeybel_2022_gut")
+#' run_MANTEL(Zeybel_2022_gut,
+#'           y_variables = c("LiverFatClass", "Liver_fat"),
+#'           z_variables = c("Gender", "Age"),
+#'           norm = FALSE,
+#'           method = "mantel.partial",
+#'           method_dist = c("bray", "euclidean", "jaccard"))
+#'
+#' # SummarizedExperiment object
+#' data("Zeybel_2022_protein")
+#' run_MANTEL(Zeybel_2022_protein,
+#'           y_variables = c("LiverFatClass", "Liver_fat"),
+#'           z_variables = c("Gender", "Age"),
 #'           norm = FALSE,
 #'           method = "mantel.partial",
 #'           method_dist = c("bray", "euclidean", "jaccard"))
@@ -97,11 +107,24 @@ run_MANTEL <- function(
     seedNum = 123,
     alpha = 0.5) {
 
-  # data("enterotypes_arumugam")
-  # object = enterotypes_arumugam
+
+  # data("Zeybel_2022_gut")
+  # object = Zeybel_2022_gut
   # level = "Phylum"
-  # y_variables = c("Enterotype", "Clinical.Status")
-  # z_variables = c("Nationality", "Gender")
+  # y_variables = c("LiverFatClass", "Liver_fat")
+  # z_variables = c("Gender", "Age")
+  # norm = FALSE
+  # method = "mantel.partial"
+  # method_cor = "spearman"
+  # method_dist = c("bray", "euclidean", "jaccard")
+  # seedNum = 123
+  # alpha = 0.5
+  #
+  # data("Zeybel_2022_protein")
+  # object = Zeybel_2022_protein
+  # level = NULL
+  # y_variables = c("LiverFatClass", "Liver_fat")
+  # z_variables = c("Gender", "Age")
   # norm = FALSE
   # method = "mantel.partial"
   # method_cor = "spearman"
@@ -159,11 +182,14 @@ run_MANTEL <- function(
     } else {
       prf_tab <- phyloseq::otu_table(ps) %>% data.frame()
     }
-  } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
+  } else if (all(!is.null(object), inherits(object, "SummarizedExperiment"))) {
     # sample table & profile table
-    sam_tab <- Biobase::pData(object) %>% data.frame() %>%
+    sam_tab <- SummarizedExperiment::colData(object) %>%
+      data.frame() %>%
       tibble::rownames_to_column("TempRowNames")
-    prf_tab <- Biobase::exprs(object) %>% data.frame()
+    prf_tab <- SummarizedExperiment::assay(object) %>%
+      data.frame() %>%
+      t()
   }
   # x distance
   x_dis <- run_distance(object = object, method = method_dist[1], alpha = alpha)

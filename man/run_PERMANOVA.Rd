@@ -17,7 +17,7 @@ run_PERMANOVA(
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
-\code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+\code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.}
 
 \item{level}{(Optional). character. Summarization
 level (from \code{rank_names(pseq)}, default: NULL).}
@@ -63,21 +63,24 @@ The \code{run_PERMANOVA} function is used to identify the association between
 the community and environmental variables, applying the distance in profile
 and calculating the F statistic between community and variable by permutation
 test to determine the significance. It can be applied to both
-\code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} and \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.
+\code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} and \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.
 }
 \examples{
 
 \dontrun{
-data("enterotypes_arumugam")
-run_PERMANOVA(enterotypes_arumugam,
-  method = "bray",
-  mode = "one")
+# phyloseq object
+data("Zeybel_2022_gut")
+run_PERMANOVA(Zeybel_2022_gut,
+          variables = c("LiverFatClass", "Liver_fat", "Gender"),
+          mode = "one",
+          method = "bray")
 
-data("caporaso")
-run_PERMANOVA(caporaso,
-  method = "bray",
-  mode = "all",
-  variables = c("Month", "SampleType"))
+# SummarizedExperiment object
+data("Zeybel_2022_protein")
+run_PERMANOVA(Zeybel_2022_protein,
+          variables = c("LiverFatClass", "Liver_fat"),
+          mode = "all",
+          method = "bray")
 }
 
 }

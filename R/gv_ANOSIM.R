@@ -9,7 +9,7 @@
 #' the community and environmental variables by rank, applying the distance
 #' in profile and calculating the R statistic between community and rank variable
 #' by permutation test to determine the significance. It can be applied to both
-#' [`phyloseq::phyloseq-class`] and [`Biobase::ExpressionSet`] object.
+#' [`phyloseq::phyloseq-class`] and [`SummarizedExperiment::SummarizedExperiment`] object.
 #'
 #' @references Clarke, K. Robert. "Non‐parametric multivariate analyses of
 #' changes in community structure." Australian journal of ecology 18.1
@@ -65,13 +65,13 @@
 #' data("Zeybel_2022_gut")
 #' run_ANOSIM(Zeybel_2022_gut,
 #'    level = "Phylum",
-#'    variable = "Liver.Fat.Class",
+#'    variable = "LiverFatClass",
 #'    method = "bray")
 #'
-#' # SummarizedExperiment
+#' # SummarizedExperiment object
 #' data("Zeybel_2022_protein")
 #' run_ANOSIM(Zeybel_2022_protein,
-#'    variable = "Liver.Fat.Class",
+#'    variable = "LiverFatClass",
 #'    method = "bray")
 #' }
 #'
@@ -87,7 +87,7 @@ run_ANOSIM <- function(
   # data("Zeybel_2022_gut")
   # object = Zeybel_2022_gut
   # level = "Phylum"
-  # variable = "Liver.Fat.Class"
+  # variable = "LiverFatClass"
   # method = "bray"
   # seedNum = 123
   # alpha = 0.5
@@ -95,7 +95,7 @@ run_ANOSIM <- function(
   # data("Zeybel_2022_protein")
   # object = Zeybel_2022_protein
   # level = NULL
-  # variable = "Liver.Fat.Class"
+  # variable = "LiverFatClass"
   # method = "bray"
   # seedNum = 123
   # alpha = 0.5

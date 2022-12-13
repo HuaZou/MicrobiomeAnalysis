@@ -20,7 +20,7 @@ run_MANTEL(
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
-\code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+\code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.}
 
 \item{level}{(Optional). character. Summarization
 level (from \code{rank_names(pseq)}, default: NULL).}
@@ -74,15 +74,25 @@ is used to compare between two distance (dissimilarity) matrices, such as
 X and Y, the partial Mantel test is used to estimate the correlation
 between these two matrices, while controlling for the effect of
 a control matrix Z. It can be applied to both
-\code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} and \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.
+\code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} and \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.
 }
 \examples{
 
 \dontrun{
-data("enterotypes_arumugam")
-run_MANTEL(enterotypes_arumugam,
-          y_variables = c("Enterotype", "Clinical.Status"),
-          z_variables = c("Nationality", "Gender"),
+# phyloseq object
+data("Zeybel_2022_gut")
+run_MANTEL(Zeybel_2022_gut,
+          y_variables = c("LiverFatClass", "Liver_fat"),
+          z_variables = c("Gender", "Age"),
+          norm = FALSE,
+          method = "mantel.partial",
+          method_dist = c("bray", "euclidean", "jaccard"))
+
+# SummarizedExperiment object
+data("Zeybel_2022_protein")
+run_MANTEL(Zeybel_2022_protein,
+          y_variables = c("LiverFatClass", "Liver_fat"),
+          z_variables = c("Gender", "Age"),
           norm = FALSE,
           method = "mantel.partial",
           method_dist = c("bray", "euclidean", "jaccard"))

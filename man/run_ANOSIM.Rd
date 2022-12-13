@@ -54,7 +54,7 @@ The \code{run_ANOSIM} function is used to identify the association between
 the community and environmental variables by rank, applying the distance
 in profile and calculating the R statistic between community and rank variable
 by permutation test to determine the significance. It can be applied to both
-\code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} and \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.
+\code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} and \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.
 }
 \examples{
 
@@ -64,13 +64,13 @@ by permutation test to determine the significance. It can be applied to both
 data("Zeybel_2022_gut")
 run_ANOSIM(Zeybel_2022_gut,
    level = "Phylum",
-   variable = "Liver.Fat.Class",
+   variable = "LiverFatClass",
    method = "bray")
 
-# SummarizedExperiment
+# SummarizedExperiment object
 data("Zeybel_2022_protein")
 run_ANOSIM(Zeybel_2022_protein,
-   variable = "Liver.Fat.Class",
+   variable = "LiverFatClass",
    method = "bray")
 }
 

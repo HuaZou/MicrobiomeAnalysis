@@ -14,7 +14,7 @@
 #' Modified by Hua Zou (12/02/2022 Shenzhen China)
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
-#' [`Biobase::ExpressionSet`] object.
+#' [`SummarizedExperiment::SummarizedExperiment`] object.
 #' @param level (Optional). character. Summarization
 #' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param group_name (Required). character. group for determining missing values.
@@ -60,18 +60,31 @@
 #' @export
 #'
 #' @return A [`phyloseq::phyloseq-class`] or
-#' [`Biobase::ExpressionSet`] object with cleaned data.
+#' [`SummarizedExperiment::SummarizedExperiment`] object with cleaned data.
 #'
 #' @importFrom dplyr %>%
+#' @importFrom SummarizedExperiment colData assay
 #'
 #' @examples
 #'
 #' \dontrun{
-#' data("enterotypes_arumugam")
+#' # phyloseq object
+#' data("Zeybel_2022_gut")
 #' impute_abundance(
-#'   enterotypes_arumugam,
+#'   Zeybel_2022_gut,
 #'   level = "Phylum",
-#'   group_name = "Enterotype",
+#'   group_name = "LiverFatClass",
+#'   ZerosAsNA = TRUE,
+#'   RemoveNA = TRUE,
+#'   cutoff = 20,
+#'   method = "knn")
+#'
+#' # SummarizedExperiment object
+#' data("Zeybel_2022_protein")
+#' impute_abundance(
+#'   Zeybel_2022_protein,
+#'   level = "Phylum",
+#'   group_name = "LiverFatClass",
 #'   ZerosAsNA = TRUE,
 #'   RemoveNA = TRUE,
 #'   cutoff = 20,
@@ -90,22 +103,31 @@ impute_abundance <- function(
                "global_mean", "svd", "QRILC"),
     LOD = NULL) {
 
-  # data("enterotypes_arumugam")
-  # object = enterotypes_arumugam
+  # data("Zeybel_2022_gut")
+  # object = Zeybel_2022_gut
   # level = "Phylum"
-  # group_name = "Enterotype"
+  # group_name = "LiverFatClass"
   # ZerosAsNA = TRUE
   # RemoveNA = TRUE
   # cutoff = 20
   # method = "QRILC"
+
+  # data("Zeybel_2022_protein")
+  # object = Zeybel_2022_protein
+  # level = "Phylum"
+  # group_name = "LiverFatClass"
+  # ZerosAsNA = TRUE
+  # RemoveNA = TRUE
+  # cutoff = 20
+  # method = "rf"
 
   if (base::missing(object)) {
     stop("object argument is empty!")
   }
 
   if (all(!methods::is(object, "phyloseq"),
-          !methods::is(object, "ExpressionSet"))) {
-    stop("object is not either a phyloseq or ExpressionSet object.")
+          !methods::is(object, "SummarizedExperiment"))) {
+    stop("object is not either a phyloseq or SummarizedExperiment object.")
   }
 
   method <- match.arg(
@@ -147,13 +169,14 @@ impute_abundance <- function(
       prf_tab <- phyloseq::otu_table(ps) %>% data.frame()
     }
 
-  } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
+  } else if (all(!is.null(object), inherits(object, "SummarizedExperiment"))) {
     # sample table & profile table
-    sam_tab <- Biobase::pData(object) %>%
+    sam_tab <- SummarizedExperiment::colData(object) %>%
       data.frame() %>%
       tibble::rownames_to_column("TempRowNames")
-    prf_tab <- Biobase::exprs(object) %>%
-      data.frame()
+    prf_tab <- SummarizedExperiment::assay(object) %>%
+      data.frame() %>%
+      t()
   }
 
   group_index <- which(colnames(sam_tab) == group_name)
@@ -254,9 +277,9 @@ impute_abundance <- function(
                                                    taxa_are_rows = TRUE)
   }
 
-  if (methods::is(object, "ExpressionSet")) {
+  if (methods::is(object, "SummarizedExperiment")) {
     res <- object
-    Biobase::exprs(res) <- depurdata
+    SummarizedExperiment::assay(res) <- t(depurdata)
   }
 
   return(res)

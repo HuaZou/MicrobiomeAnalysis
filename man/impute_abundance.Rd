@@ -21,7 +21,7 @@ impute_abundance(
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
-\code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+\code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.}
 
 \item{level}{(Optional). character. Summarization
 level (from \code{rank_names(pseq)}, default: NULL).}
@@ -68,11 +68,23 @@ This function offers different methods to impute missing values in data.
 \examples{
 
 \dontrun{
-data("enterotypes_arumugam")
+# phyloseq object
+data("Zeybel_2022_gut")
 impute_abundance(
-  enterotypes_arumugam,
+  Zeybel_2022_gut,
   level = "Phylum",
-  group_name = "Enterotype",
+  group_name = "LiverFatClass",
+  ZerosAsNA = TRUE,
+  RemoveNA = TRUE,
+  cutoff = 20,
+  method = "knn")
+
+# SummarizedExperiment object
+data("Zeybel_2022_protein")
+impute_abundance(
+  Zeybel_2022_protein,
+  level = "Phylum",
+  group_name = "LiverFatClass",
   ZerosAsNA = TRUE,
   RemoveNA = TRUE,
   cutoff = 20,

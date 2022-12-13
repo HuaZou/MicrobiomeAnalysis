@@ -51,7 +51,7 @@
 #'    level = "Phylum",
 #'    method = "bray")
 #'
-#' # SummarizedExperiment
+#' # SummarizedExperiment object
 #' data("Zeybel_2022_protein")
 #' run_distance(Zeybel_2022_protein,
 #'    method = "bray")
@@ -68,7 +68,6 @@ run_distance <- function(
   # data("Zeybel_2022_gut")
   # object = Zeybel_2022_gut
   # level = "Phylum"
-  # variable = "Liver.Fat.Class"
   # method = "bray"
   # alpha = 0.5
 

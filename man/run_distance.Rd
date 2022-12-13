@@ -51,7 +51,7 @@ run_distance(Zeybel_2022_gut,
    level = "Phylum",
    method = "bray")
 
-# SummarizedExperiment
+# SummarizedExperiment object
 data("Zeybel_2022_protein")
 run_distance(Zeybel_2022_protein,
    method = "bray")

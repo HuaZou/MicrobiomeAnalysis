@@ -68,10 +68,18 @@ See \code{?vegan::betadisper} for more details. It can be applied to both
 \examples{
 
 \dontrun{
-data("enterotypes_arumugam")
-run_betadisper(enterotypes_arumugam,
-  variable = "Enterotype",
-  method = "bray")
+# phyloseq object
+data("Zeybel_2022_gut")
+run_betadisper(Zeybel_2022_gut,
+   level = "Phylum",
+   variable = "LiverFatClass",
+   method = "bray")
+
+# SummarizedExperiment object
+data("Zeybel_2022_protein")
+run_betadisper(Zeybel_2022_protein,
+   variable = "LiverFatClass",
+   method = "bray")
 }
 
 }

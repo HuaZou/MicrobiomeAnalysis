@@ -16,7 +16,7 @@ run_MRPP(
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
-\code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+\code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.}
 
 \item{level}{(Optional). character. Summarization
 level (from \code{rank_names(pseq)}, default: NULL).}
@@ -54,13 +54,22 @@ The \code{run_MRPP} function is used to identify the association between
 the community and environmental variables by average distance, applying the
 distance in profile and calculating the delta statistic between community and
 variable by permutation test to determine the significance. It can be applied
-to both \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} and \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.
+to both \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} and \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.
 }
 \examples{
 
 \dontrun{
-data("enterotypes_arumugam")
-run_MRPP(enterotypes_arumugam, variable = "Enterotype", method = "bray")
+# phyloseq object
+data("Zeybel_2022_gut")
+run_MRPP(Zeybel_2022_gut,
+          variable = "LiverFatClass",
+          method = "bray")
+
+# SummarizedExperiment object
+data("Zeybel_2022_protein")
+run_MRPP(Zeybel_2022_protein,
+          variable = "LiverFatClass",
+          method = "bray")
 }
 
 }

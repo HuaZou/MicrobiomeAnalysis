@@ -9,7 +9,7 @@
 #' the community and environmental variables by average distance, applying the
 #' distance in profile and calculating the delta statistic between community and
 #' variable by permutation test to determine the significance. It can be applied
-#' to both [`phyloseq::phyloseq-class`] and [`Biobase::ExpressionSet`] object.
+#' to both [`phyloseq::phyloseq-class`] and [`SummarizedExperiment::SummarizedExperiment`] object.
 #'
 #' @references Mielke Jr, Paul W. "The application of multivariate permutation
 #' methods based on distance functions in the earth sciences."
@@ -18,7 +18,7 @@
 #' @author Created by Hua Zou (5/15/2022 Shenzhen China)
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
-#' [`Biobase::ExpressionSet`] object.
+#' [`SummarizedExperiment::SummarizedExperiment`] object.
 #' @param level (Optional). character. Summarization
 #' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param variable (Required). character. grouping variable for test.
@@ -42,7 +42,7 @@
 #'
 #' @importFrom vegan vegdist mrpp
 #' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom Biobase pData exprs
+#' @importFrom SummarizedExperiment colData assay
 #' @importFrom stats setNames p.adjust
 #'
 #' @usage run_MRPP(
@@ -60,8 +60,17 @@
 #' @examples
 #'
 #' \dontrun{
-#' data("enterotypes_arumugam")
-#' run_MRPP(enterotypes_arumugam, variable = "Enterotype", method = "bray")
+#' # phyloseq object
+#' data("Zeybel_2022_gut")
+#' run_MRPP(Zeybel_2022_gut,
+#'           variable = "LiverFatClass",
+#'           method = "bray")
+#'
+#' # SummarizedExperiment object
+#' data("Zeybel_2022_protein")
+#' run_MRPP(Zeybel_2022_protein,
+#'           variable = "LiverFatClass",
+#'           method = "bray")
 #' }
 #'
 run_MRPP <- function(
@@ -73,10 +82,18 @@ run_MRPP <- function(
     seedNum = 123,
     alpha = 0.5) {
 
-  # data("enterotypes_arumugam")
-  # object = enterotypes_arumugam
+  # data("Zeybel_2022_gut")
+  # object = Zeybel_2022_gut
   # level = "Phylum"
-  # variable = "Enterotype"
+  # variable = "LiverFatClass"
+  # method = "bray"
+  # seedNum = 123
+  # alpha = 0.5
+
+  # data("Zeybel_2022_protein")
+  # object = Zeybel_2022_protein
+  # level = NULL
+  # variable = "LiverFatClass"
   # method = "bray"
   # seedNum = 123
   # alpha = 0.5
@@ -116,11 +133,14 @@ run_MRPP <- function(
     } else {
       prf_tab <- phyloseq::otu_table(ps) %>% data.frame()
     }
-  } else if (all(!is.null(object), inherits(object, "ExpressionSet"))) {
+  } else if (all(!is.null(object), inherits(object, "SummarizedExperiment"))) {
     # sample table & profile table
-    sam_tab <- Biobase::pData(object) %>% data.frame() %>%
+    sam_tab <- SummarizedExperiment::colData(object) %>%
+      data.frame() %>%
       tibble::rownames_to_column("TempRowNames")
-    prf_tab <- Biobase::exprs(object) %>% data.frame()
+    prf_tab <- SummarizedExperiment::assay(object) %>%
+      data.frame() %>%
+      t()
   }
   # distance
   disMatrix <- run_distance(object = object, method = method, alpha = alpha)

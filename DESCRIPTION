@@ -55,7 +55,8 @@ Imports:
     multtest,
     plotROC,
     vegan,
-    RColorBrewer
+    RColorBrewer,
+    SummarizedExperiment    
 Suggests: 
     testthat,
     rmarkdown,
