@@ -60,7 +60,7 @@ fraction of the standard deviation of the sample distribution.
 }
 \value{
 A \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
-\code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object with cleaned data.
+\code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object with cleaned data.
 }
 \description{
 This function offers different methods to impute missing values in data.
@@ -83,7 +83,6 @@ impute_abundance(
 data("Zeybel_2022_protein")
 impute_abundance(
   Zeybel_2022_protein,
-  level = "Phylum",
   group_name = "LiverFatClass",
   ZerosAsNA = TRUE,
   RemoveNA = TRUE,

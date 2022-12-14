@@ -1,13 +1,13 @@
-#' @title Transform the taxa abundances in `otu_table` sample by sample
+#' @title Transform the abundances in `profile` sample by sample
 #'
 #' @description
-#' Transform the taxa abundances in `otu_table` sample by sample, which means
+#' Transform the abundances in `profile` sample by sample, which means
 #' the counts of each sample will be transformed individually.
 #'
 #' @author Created by Yang Cao; modified by Hua Zou (11/30/2022 Shenzhen China)
 #'
-#' @param object  [`otu_table-class`], [`phyloseq-class`], or
-#'   [`microbiomeMarker-class`].
+#' @param object  [`otu_table-class`], [`phyloseq-class`],
+#' [`SummarizedExperiment-class`] or [`microbiomeMarker-class`].
 #' @param transform transformation to apply, the options inclulde:
 #' * "identity", return the original data without any transformation.
 #' * "log10", the transformation is `log10(object)`, and if the data contains
@@ -21,6 +21,7 @@
 #' level (from \code{rank_names(pseq)}, default: NULL).
 #'
 #' @importFrom phyloseq t otu_table<-
+#' @importFrom SummarizedExperiment assay
 #'
 #' @return A object matches the class of argument `object` with the transformed
 #'   `otu_table`.
@@ -39,13 +40,18 @@
 #'
 #' @examples
 #' \dontrun{
-#' data(enterotypes_arumugam)
-#' x1 <- transform_abundances(object = enterotypes_arumugam)
-#' head(otu_table(x1), 10)
+#' # phyloseq object
+#' data("Zeybel_2022_gut")
+#' transform_abundances(
+#'   Zeybel_2022_gut,
+#'   level = "Phylum",
+#'   transform = "log10p")
 #'
-#' x2 <- transform_abundances(enterotypes_arumugam,
-#'     transform = "log10p")
-#' head(otu_table(x2), 10)
+#' # SummarizedExperiment object
+#' data("Zeybel_2022_protein")
+#' transform_abundances(
+#'   Zeybel_2022_protein,
+#'   transform = "log10p")
 #' }
 #'
 transform_abundances <- function(
@@ -54,10 +60,15 @@ transform_abundances <- function(
                  "SquareRoot", "CubicRoot", "logit"),
     level = NULL) {
 
-  # data(enterotypes_arumugam)
-  # object = enterotypes_arumugam
+  # data(Zeybel_2022_gut)
+  # object = Zeybel_2022_gut
   # transform = "SquareRoot"
   # level = "Genus"
+
+  # data(Zeybel_2022_gut)
+  # object = Zeybel_2022_protein
+  # transform = "log10"
+  # level = NULL
 
   transform <- match.arg(
     transform, c("identity", "log10", "log10p",
@@ -74,6 +85,10 @@ transform_abundances <- function(
     }
 
     otu <- as(otu_table(object), "matrix")
+  } else if (inherits(object, "SummarizedExperiment")) {
+    otu <- SummarizedExperiment::assay(object) %>%
+      data.frame() %>%
+      t()
   } else {
     otu <- as.matrix(object)
   }
@@ -85,7 +100,7 @@ transform_abundances <- function(
   } else if (transform == "log10p") {
     abd <- transform_log10p(otu)
   } else if (transform == "SquareRoot") {
-    min_val <- min(abs(otu[otu != 0 | is.na(otu)]))/10
+    min_val <- min(abs(otu[otu != 0 & !is.na(otu)]))/10
     abd <- transform_SquareRoot(otu, min_val)
   } else if (transform == "CubicRoot") {
     abd <- transform_CubicRoot(otu)
@@ -95,6 +110,8 @@ transform_abundances <- function(
 
   if (any(inherits(object, "environment"), inherits(object, "phyloseq"))) {
     otu_table(object) <- otu_table(abd, taxa_are_rows = taxa_are_rows(object))
+  } else if (inherits(object, "SummarizedExperiment")) {
+    SummarizedExperiment::assay(object) <- t(abd)
   } else {
     object <- abd
   }
@@ -108,11 +125,11 @@ transform_abundances <- function(
 transform_log10 <- function(x) {
 
   x_norm <- x
-  if (min(x) == 0) {
+  if (min(x[!is.na(x)]) == 0) {
     warning("OTU table contains zeroes. Using log10(1 + x) instead.")
     for(i in 1:nrow(x_norm)) {
       for (j in 1:ncol(x_norm)) {
-        if (x_norm[i, j] == 0) {
+        if (x_norm[i, j] == 0 | is.na(x_norm[i, j])) {
           x_norm[i, j] <- log10(x_norm[i, j] + 1)
         } else {
           x_norm[i, j] <- log10(x_norm[i, j])
@@ -134,7 +151,7 @@ transform_log10p <- function(x) {
   x_norm <- x
   for(i in 1:nrow(x_norm)) {
     for (j in 1:ncol(x_norm)) {
-      if (x_norm[i, j] == 0) {
+      if (x_norm[i, j] == 0 | is.na(x_norm[i, j])) {
         x_norm[i, j] <- log10(x_norm[i, j] + 1)
       } else {
         x_norm[i, j] <- log10(x_norm[i, j])

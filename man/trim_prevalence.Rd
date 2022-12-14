@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_trim_prevalence.R
 \name{trim_prevalence}
 \alias{trim_prevalence}
-\title{Trimming samples or taxa whose prevalence is less than threshold}
+\title{Trimming samples or features whose prevalence is less than threshold}
 \usage{
 trim_prevalence(
     object,
@@ -13,7 +13,8 @@ trim_prevalence(
     trim = c("none", "both", "feature", "sample"))
 }
 \arguments{
-\item{object}{(Required). a \code{\link{matrix}} or \code{\linkS4class{otu_table}} or \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}}.}
+\item{object}{(Required). a \code{\link{matrix}}, \code{\linkS4class{otu_table}},
+\code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or \code{\linkS4class{SummarizedExperiment}}}
 
 \item{level}{(Optional). character. taxonomic level to summarize,
 default the top level rank of the \code{ps}. taxonomic level(Kingdom, Phylum,
@@ -24,23 +25,35 @@ Class, Order, Family, Genus, Species, Strains; default: NULL).}
 \item{trim}{(Optional). Character. trimming to apply, the options include:
 \itemize{
 \item "none", return the original data without any actions.
-\item "both", prevalence of taxa and samples more than cutoff.
-\item "feature", prevalence of taxa more than cutoff.
+\item "both", prevalence of features and samples more than cutoff.
+\item "feature", prevalence of features more than cutoff.
 \item "sample", prevalence of samples more than cutoff.
 }}
 }
 \value{
-A trimed \code{object} whose prevalence of taxa or samples more than cutoff.
+A trimed \code{object} whose prevalence of features or samples more than cutoff.
 }
 \description{
-trim samples or taxa in \code{otu_table} by Prevalence,
-which means the samples or taxa will be discarded if they could not pass the cutoff.
+trim samples or features in \code{profile} by Prevalence,
+which means the samples or features will be discarded if they could not pass the cutoff.
 }
 \examples{
 \donttest{
- data("enterotypes_arumugam")
- trim_prevalence(object = enterotypes_arumugam,
-   cutoff = 0.1, trim = "feature")
+# phyloseq object
+data("Zeybel_2022_gut")
+trim_prevalence(
+  Zeybel_2022_gut,
+  level = "Phylum",
+  cutoff = 0.1,
+  trim = "feature")
+
+# SummarizedExperiment object
+data("Zeybel_2022_protein")
+trim_prevalence(
+  Zeybel_2022_protein,
+  level = NULL,
+  cutoff = 0.1,
+  trim = "feature")
 }
 
 }

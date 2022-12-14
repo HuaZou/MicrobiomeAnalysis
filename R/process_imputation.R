@@ -83,7 +83,6 @@
 #' data("Zeybel_2022_protein")
 #' impute_abundance(
 #'   Zeybel_2022_protein,
-#'   level = "Phylum",
 #'   group_name = "LiverFatClass",
 #'   ZerosAsNA = TRUE,
 #'   RemoveNA = TRUE,

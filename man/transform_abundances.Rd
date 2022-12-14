@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_transform.R
 \name{transform_abundances}
 \alias{transform_abundances}
-\title{Transform the taxa abundances in \code{otu_table} sample by sample}
+\title{Transform the abundances in \code{profile} sample by sample}
 \usage{
 transform_abundances(
    object,
@@ -13,8 +13,8 @@ transform_abundances(
            "Species", "Strain", "unique"))
 }
 \arguments{
-\item{object}{\code{\linkS4class{otu_table}}, \code{\linkS4class{phyloseq}}, or
-\code{\linkS4class{microbiomeMarker}}.}
+\item{object}{\code{\linkS4class{otu_table}}, \code{\linkS4class{phyloseq}},
+\code{\linkS4class{SummarizedExperiment}} or \code{\linkS4class{microbiomeMarker}}.}
 
 \item{transform}{transformation to apply, the options inclulde:
 \itemize{
@@ -36,18 +36,23 @@ A object matches the class of argument \code{object} with the transformed
 \code{otu_table}.
 }
 \description{
-Transform the taxa abundances in \code{otu_table} sample by sample, which means
+Transform the abundances in \code{profile} sample by sample, which means
 the counts of each sample will be transformed individually.
 }
 \examples{
 \dontrun{
-data(enterotypes_arumugam)
-x1 <- transform_abundances(object = enterotypes_arumugam)
-head(otu_table(x1), 10)
+# phyloseq object
+data("Zeybel_2022_gut")
+transform_abundances(
+  Zeybel_2022_gut,
+  level = "Phylum",
+  transform = "log10p")
 
-x2 <- transform_abundances(enterotypes_arumugam,
-    transform = "log10p")
-head(otu_table(x2), 10)
+# SummarizedExperiment object
+data("Zeybel_2022_protein")
+transform_abundances(
+  Zeybel_2022_protein,
+  transform = "log10p")
 }
 
 }

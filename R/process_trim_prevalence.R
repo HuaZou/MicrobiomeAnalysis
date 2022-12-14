@@ -1,30 +1,32 @@
-#' @title Trimming samples or taxa whose prevalence is less than threshold
+#' @title Trimming samples or features whose prevalence is less than threshold
 #'
 #' @description
-#' trim samples or taxa in `otu_table` by Prevalence,
-#' which means the samples or taxa will be discarded if they could not pass the cutoff.
+#' trim samples or features in `profile` by Prevalence,
+#' which means the samples or features will be discarded if they could not pass the cutoff.
 #'
 #' @author Created by Hua Zou (11/30/2021 Shenzhen China)
 #'
-#' @param object (Required). a [`matrix`] or [`otu_table-class`] or [`phyloseq::phyloseq-class`].
+#' @param object (Required). a [`matrix`], [`otu_table-class`],
+#' [`phyloseq::phyloseq-class`] or [`SummarizedExperiment-class`]
 #' @param level (Optional). character. taxonomic level to summarize,
 #' default the top level rank of the `ps`. taxonomic level(Kingdom, Phylum,
 #' Class, Order, Family, Genus, Species, Strains; default: NULL).
 #' @param cutoff (Optional). Numeric. the Prevalence threshold (default: 0.1).
 #' @param trim (Optional). Character. trimming to apply, the options include:
 #' * "none", return the original data without any actions.
-#' * "both", prevalence of taxa and samples more than cutoff.
-#' * "feature", prevalence of taxa more than cutoff.
+#' * "both", prevalence of features and samples more than cutoff.
+#' * "feature", prevalence of features more than cutoff.
 #' * "sample", prevalence of samples more than cutoff.
 #'
 #' @return
-#'  A trimed `object` whose prevalence of taxa or samples more than cutoff.
+#'  A trimed `object` whose prevalence of features or samples more than cutoff.
 #'
 #' @export
 #'
 #' @import phyloseq
 #' @importFrom stats setNames
 #' @importFrom dplyr filter %>%
+#' @importFrom SummarizedExperiment colData assay
 #'
 #' @usage trim_prevalence(
 #'     object,
@@ -36,9 +38,21 @@
 #'
 #' @examples
 #' \donttest{
-#'  data("enterotypes_arumugam")
-#'  trim_prevalence(object = enterotypes_arumugam,
-#'    cutoff = 0.1, trim = "feature")
+#' # phyloseq object
+#' data("Zeybel_2022_gut")
+#' trim_prevalence(
+#'   Zeybel_2022_gut,
+#'   level = "Phylum",
+#'   cutoff = 0.1,
+#'   trim = "feature")
+#'
+#' # SummarizedExperiment object
+#' data("Zeybel_2022_protein")
+#' trim_prevalence(
+#'   Zeybel_2022_protein,
+#'   level = NULL,
+#'   cutoff = 0.1,
+#'   trim = "feature")
 #' }
 #'
 trim_prevalence <- function(
@@ -47,11 +61,17 @@ trim_prevalence <- function(
     cutoff = 0.1,
     trim = c("none", "both", "feature", "sample")){
 
-  # data("enterotypes_arumugam")
-  # object = enterotypes_arumugam
-  # level = "Phylum"
+  # data(Zeybel_2022_gut)
+  # object = Zeybel_2022_gut
+  # trim = "feature"
+  # level = "Genus"
   # cutoff = 0.1
+
+  # data(Zeybel_2022_gut)
+  # object = Zeybel_2022_protein
   # trim = "both"
+  # level = NULL
+  # cutoff = 0.1
 
   trim <- match.arg(trim, c("none", "both", "feature", "sample"))
 
@@ -67,6 +87,10 @@ trim_prevalence <- function(
     prf <- as(phyloseq::otu_table(ps), "matrix")
   } else if (inherits(object, "environment")) {
     prf <- as(object$.Data, "matrix")
+  } else if (inherits(object, "SummarizedExperiment")) {
+    prf <- SummarizedExperiment::assay(object) %>%
+      data.frame() %>%
+      t()
   } else {
     prf <- object
   }
@@ -112,6 +136,8 @@ trim_prevalence <- function(
     phyloseq::otu_table(ps) <- phyloseq::otu_table(prf_remain,
                                                    taxa_are_rows = taxa_are_rows(ps))
     object <- ps
+  } else if (inherits(object, "SummarizedExperiment")) {
+    SummarizedExperiment::assay(object) <- t(prf_remain)
   } else if (inherits(object, "environment")) {
     object <- phyloseq::otu_table(prf_remain, taxa_are_rows = taxa_are_rows(object))
   } else {

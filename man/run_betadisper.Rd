@@ -17,7 +17,7 @@ run_betadisper(
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
-\code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+\code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.}
 
 \item{level}{(Optional). character. Summarization
 level (from \code{rank_names(pseq)}, default: NULL).}
@@ -63,7 +63,7 @@ the group centroid are subject to ANOVA. This is a multivariate analogue
 of Levene's test for homogeneity of variances if the distances between
 group members and group centroids is the Euclidean distance.
 See \code{?vegan::betadisper} for more details. It can be applied to both
-\code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} and \code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.
+\code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} and \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.
 }
 \examples{
 

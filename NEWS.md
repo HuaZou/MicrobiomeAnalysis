@@ -14,6 +14,9 @@
 + Add `get_alphaindex` for alpha diversity. (2022-12-01) 
 + Add `impute_abundance` for imputing missing values. (2022-12-02)
 + Add `scale_variables` for scaling variables. (2022-12-02)
++ Add `Zeybel_2020` datasets. (2022-12-12)
++ Modify `run_ANOSIM`, `run_betadisper`, `run_distance`, `run_MANTEL`, `run_MRPP` and `run_PERMANOVA` for *SummarizedExperiment object*. (2022-12-13)
++ Modify `impute_abundance`, `transform_abundances` and `trim_prevalence`  for *SummarizedExperiment object*. (2022-12-14)
 
 
 # MicrobiomeAnalysis v1.0.2
