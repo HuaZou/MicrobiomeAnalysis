@@ -10,7 +10,12 @@ trim_prevalence(
            "Order", "Family", "Genus",
            "Species", "Strain", "unique"),
     cutoff = 0.1,
-    trim = c("none", "both", "feature", "sample"))
+    group = NULL,
+    trim = c("none",
+      "both",
+      "feature", "feature_group",
+      "sample"),
+    at_least_one = FALSE)
 }
 \arguments{
 \item{object}{(Required). a \code{\link{matrix}}, \code{\linkS4class{otu_table}},
@@ -22,13 +27,20 @@ Class, Order, Family, Genus, Species, Strains; default: NULL).}
 
 \item{cutoff}{(Optional). Numeric. the Prevalence threshold (default: 0.1).}
 
+\item{group}{(Optional). character. filtering features or samples by group
+(default: NULL).}
+
 \item{trim}{(Optional). Character. trimming to apply, the options include:
 \itemize{
 \item "none", return the original data without any actions.
 \item "both", prevalence of features and samples more than cutoff.
 \item "feature", prevalence of features more than cutoff.
+\item "feature_group", prevalence of features more than cutoff by groups.
 \item "sample", prevalence of samples more than cutoff.
 }}
+
+\item{at_least_one}{(Optional). Logical. prevalence of at least one group
+meets cutoff (FALSE means all groups meet cutoff, default: FALSE).}
 }
 \value{
 A trimed \code{object} whose prevalence of features or samples more than cutoff.
