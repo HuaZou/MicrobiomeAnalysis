@@ -124,15 +124,15 @@ contains four variables:
 Perform Metagenomic LEFSe analysis based on phyloseq object.
 }
 \examples{
-data(kostic_crc)
-kostic_crc_small <- phyloseq::subset_taxa(
-    kostic_crc,
-    Phylum == "Firmicutes"
+data(Zeybel_2022_gut)
+Zeybel_2022_gut_small <- phyloseq::subset_taxa(
+    Zeybel_2022_gut,
+    Phylum == "p__Firmicutes"
 )
 mm_lefse <- run_lefse(
-    kostic_crc_small,
+    Zeybel_2022_gut_small,
     wilcoxon_cutoff = 0.01,
-    group = "DIAGNOSIS",
+    group = "LiverFatClass",
     kw_cutoff = 0.01,
     multigrp_strat = TRUE,
     lda_cutoff = 4
