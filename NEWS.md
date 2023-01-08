@@ -20,6 +20,7 @@
 + Modify `trim_prevalence` for subset *SummarizedExperiment* object. (2023-1-7)
 + Add `import_SE` for *SummarizedExperiment* object. (2023-1-8)
 + Modify `scale_variables` for *SummarizedExperiment* object. (2023-1-8)
++ Modify `run_lefse` for example data. (2023-1-8)
 
 
 # MicrobiomeAnalysis v1.0.2
