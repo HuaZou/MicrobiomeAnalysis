@@ -75,6 +75,7 @@ transform_abundances <- function(
                  "SquareRoot", "CubicRoot", "logit")
   )
 
+  # profile: row->features; col->samples
   if (any(inherits(object, "environment"), inherits(object, "phyloseq"))) {
 
     # taxa level

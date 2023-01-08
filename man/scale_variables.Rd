@@ -15,12 +15,12 @@ scale_variables(
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
-\code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object.}
+\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.}
 
 \item{level}{(Optional). character. Summarization
 level (from \code{rank_names(pseq)}, default: NULL).}
 
-\item{method}{(Optional). character. scaling method. Options are:
+\item{method}{(Optional). character. scaling methods. Options are:
 \itemize{
 \item "none", return the original data
 \item "mean_center": values minus mean statistic.
@@ -34,7 +34,7 @@ the standard deviation of each variable.
 }
 \value{
 A \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
-\code{\link[Biobase:class.ExpressionSet]{Biobase::ExpressionSet}} object with cleaned data.
+\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object with cleaned data.
 }
 \description{
 Data Normalization not only normalizes data by samples, but also
@@ -46,11 +46,18 @@ variable/feature into same distribution.
 \examples{
 
 \dontrun{
+# phyloseq object
 data("enterotypes_arumugam")
 scale_variables(
   object = enterotypes_arumugam,
   level = "Phylum",
   method = "pareto")
+
+# SummarizedExperiment object
+data("Zeybel_2022_protein")
+scale_variables(
+  Zeybel_2022_protein,
+  method = "zscore")
 }
 
 }

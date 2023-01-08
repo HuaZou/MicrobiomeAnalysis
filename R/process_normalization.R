@@ -547,10 +547,10 @@ normalize_feature <- function(feature, normalization) {
 #' @author Created by Hua Zou (12/02/2022 Shenzhen China)
 #'
 #' @param object (Required). a [`phyloseq::phyloseq-class`] or
-#' [`Biobase::ExpressionSet`] object.
+#' [`SummarizedExperiment::SummarizedExperiment-class`] object.
 #' @param level (Optional). character. Summarization
 #' level (from \code{rank_names(pseq)}, default: NULL).
-#' @param method (Optional). character. scaling method. Options are:
+#' @param method (Optional). character. scaling methods. Options are:
 #'  * "none", return the original data
 #'  * "mean_center": values minus mean statistic.
 #'  * "zscore": mean-centered and divided by the
@@ -572,18 +572,25 @@ normalize_feature <- function(feature, normalization) {
 #' @export
 #'
 #' @return A [`phyloseq::phyloseq-class`] or
-#' [`Biobase::ExpressionSet`] object with cleaned data.
+#' [`SummarizedExperiment::SummarizedExperiment-class`] object with cleaned data.
 #'
 #' @importFrom dplyr %>%
 #'
 #' @examples
 #'
 #' \dontrun{
+#' # phyloseq object
 #' data("enterotypes_arumugam")
 #' scale_variables(
 #'   object = enterotypes_arumugam,
 #'   level = "Phylum",
 #'   method = "pareto")
+#'
+#' # SummarizedExperiment object
+#' data("Zeybel_2022_protein")
+#' scale_variables(
+#'   Zeybel_2022_protein,
+#'   method = "zscore")
 #' }
 #'
 scale_variables <- function(
@@ -611,6 +618,10 @@ scale_variables <- function(
     }
 
     otu <- as(otu_table(object), "matrix")
+  } else if (inherits(object, "SummarizedExperiment")) {
+    otu <- SummarizedExperiment::assay(object) %>%
+      data.frame() %>%
+      t()
   } else {
     otu <- as.matrix(object)
   }
@@ -633,6 +644,8 @@ scale_variables <- function(
 
   if (any(inherits(object, "environment"), inherits(object, "phyloseq"))) {
     otu_table(object) <- otu_table(abd, taxa_are_rows = taxa_are_rows(object))
+  }  else if (inherits(object, "SummarizedExperiment")) {
+    SummarizedExperiment::assay(object) <- t(abd)
   } else {
     object <- abd
   }

@@ -115,7 +115,7 @@ trim_prevalence <- function(
     }
   }
 
-  # profile
+  # profile: row->features; col->samples
   if (inherits(object, "phyloseq")) {
 
     # taxa level
@@ -180,12 +180,16 @@ trim_prevalence <- function(
     stop("No sample or taxa were remained, please reinput your cutoff")
   }
 
+  # subset dataset
   if (inherits(object, "phyloseq")) {
     phyloseq::otu_table(ps) <- phyloseq::otu_table(prf_remain,
                                                    taxa_are_rows = taxa_are_rows(ps))
     object <- ps
   } else if (inherits(object, "SummarizedExperiment")) {
-    SummarizedExperiment::assay(object, withDimnames = TRUE) <- prf_remain #t(prf_remain)
+    # SummarizedExperiment::assay(object, withDimnames = TRUE) <- prf_remain #t(prf_remain)
+
+    object <- base::subset(object, rownames(object) %in% rownames(prf_remain))
+
   } else if (inherits(object, "environment")) {
     object <- phyloseq::otu_table(prf_remain, taxa_are_rows = taxa_are_rows(object))
   } else {
@@ -210,7 +214,7 @@ trim_FeatureOrSample <- function(x, nRow, threshold) {
     rownames(df_occ) <- colnames(x)
   }
 
-  df_KEEP <- apply(df_occ > threshold, 1, all) %>%
+  df_KEEP <- apply(df_occ >= threshold, 1, all) %>%
     data.frame() %>%
     stats::setNames("Status") %>%
     dplyr::filter(Status)
@@ -255,12 +259,12 @@ trim_FeatureByGroup <- function(x, threshold,
   #rownames(df_filter) <- rownames(x)
 
   if (at_least_one) {
-    df_KEEP <- apply(df_filter, 1, function(x) {any(x > threshold)}) %>%
+    df_KEEP <- apply(df_filter, 1, function(x) {any(x >= threshold)}) %>%
       data.frame() %>%
       stats::setNames("Status") %>%
       dplyr::filter(Status)
   } else {
-    df_KEEP <- apply(df_filter, 1, function(x) {all(x > threshold)}) %>%
+    df_KEEP <- apply(df_filter, 1, function(x) {all(x >= threshold)}) %>%
       data.frame() %>%
       stats::setNames("Status") %>%
       dplyr::filter(Status)

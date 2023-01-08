@@ -113,7 +113,7 @@ impute_abundance <- function(
 
   # data("Zeybel_2022_protein")
   # object = Zeybel_2022_protein
-  # level = "Phylum"
+  # level = NULL
   # group_name = "LiverFatClass"
   # ZerosAsNA = TRUE
   # RemoveNA = TRUE
@@ -145,9 +145,9 @@ impute_abundance <- function(
     message("method argument is empty! KNN will be used")
   }
 
-  # phyloseq object
+  # profile: row->samples; col->features
   if (all(!is.null(object), inherits(object, "phyloseq"))) {
-
+    # phyloseq object
     ps <- check_sample_names(object = object)
 
     # taxa level
@@ -165,7 +165,8 @@ impute_abundance <- function(
       prf_tab <- phyloseq::otu_table(phyloseq::t(ps)) %>%
         data.frame()
     } else {
-      prf_tab <- phyloseq::otu_table(ps) %>% data.frame()
+      prf_tab <- phyloseq::otu_table(ps) %>%
+        data.frame()
     }
 
   } else if (all(!is.null(object), inherits(object, "SummarizedExperiment"))) {
