@@ -83,7 +83,7 @@
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>(Required). a <code><a href="https://rdrr.io/pkg/phyloseq/man/phyloseq-class.html" class="external-link">phyloseq::phyloseq</a></code> or
-<code><a href="https://rdrr.io/pkg/Biobase/man/class.ExpressionSet.html" class="external-link">Biobase::ExpressionSet</a></code> object.</p></dd>
+<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/RangedSummarizedExperiment-class.html" class="external-link">SummarizedExperiment::SummarizedExperiment</a></code> object.</p></dd>
 <dt>level</dt>
 <dd><p>(Optional). character. Summarization
 level (from <code>rank_names(pseq)</code>, default: NULL).</p></dd>
@@ -121,7 +121,7 @@ fraction of the standard deviation of the sample distribution.</p></li>
     <div id="value">
     <h2>Value</h2>
     <p>A <code><a href="https://rdrr.io/pkg/phyloseq/man/phyloseq-class.html" class="external-link">phyloseq::phyloseq</a></code> or
-<code><a href="https://rdrr.io/pkg/Biobase/man/class.ExpressionSet.html" class="external-link">Biobase::ExpressionSet</a></code> object with cleaned data.</p>
+<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/RangedSummarizedExperiment-class.html" class="external-link">SummarizedExperiment::SummarizedExperiment</a></code> object with cleaned data.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -139,11 +139,22 @@ Modified by Hua Zou (12/02/2022 Shenzhen China)</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"enterotypes_arumugam"</span><span class="op">)</span></span>
+<span class="r-in"><span class="co"># phyloseq object</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Zeybel_2022_gut"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">impute_abundance</span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">enterotypes_arumugam</span>,</span>
+<span class="r-in">  <span class="va">Zeybel_2022_gut</span>,</span>
 <span class="r-in">  level <span class="op">=</span> <span class="st">"Phylum"</span>,</span>
-<span class="r-in">  group_name <span class="op">=</span> <span class="st">"Enterotype"</span>,</span>
+<span class="r-in">  group_name <span class="op">=</span> <span class="st">"LiverFatClass"</span>,</span>
+<span class="r-in">  ZerosAsNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span class="r-in">  RemoveNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span class="r-in">  cutoff <span class="op">=</span> <span class="fl">20</span>,</span>
+<span class="r-in">  method <span class="op">=</span> <span class="st">"knn"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># SummarizedExperiment object</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Zeybel_2022_protein"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">impute_abundance</span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">Zeybel_2022_protein</span>,</span>
+<span class="r-in">  group_name <span class="op">=</span> <span class="st">"LiverFatClass"</span>,</span>
 <span class="r-in">  ZerosAsNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span class="r-in">  RemoveNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span class="r-in">  cutoff <span class="op">=</span> <span class="fl">20</span>,</span>

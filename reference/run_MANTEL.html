@@ -84,7 +84,7 @@ the community and environmental variables.</p>
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>(Required). a <code><a href="https://rdrr.io/pkg/phyloseq/man/phyloseq-class.html" class="external-link">phyloseq::phyloseq</a></code> or
-<code><a href="https://rdrr.io/pkg/Biobase/man/class.ExpressionSet.html" class="external-link">Biobase::ExpressionSet</a></code> object.</p></dd>
+<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/RangedSummarizedExperiment-class.html" class="external-link">SummarizedExperiment::SummarizedExperiment</a></code> object.</p></dd>
 <dt>level</dt>
 <dd><p>(Optional). character. Summarization
 level (from <code>rank_names(pseq)</code>, default: NULL).</p></dd>
@@ -134,7 +134,7 @@ is used to compare between two distance (dissimilarity) matrices, such as
 X and Y, the partial Mantel test is used to estimate the correlation
 between these two matrices, while controlling for the effect of
 a control matrix Z. It can be applied to both
-<code><a href="https://rdrr.io/pkg/phyloseq/man/phyloseq-class.html" class="external-link">phyloseq::phyloseq</a></code> and <code><a href="https://rdrr.io/pkg/Biobase/man/class.ExpressionSet.html" class="external-link">Biobase::ExpressionSet</a></code> object.</p>
+<code><a href="https://rdrr.io/pkg/phyloseq/man/phyloseq-class.html" class="external-link">phyloseq::phyloseq</a></code> and <code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/RangedSummarizedExperiment-class.html" class="external-link">SummarizedExperiment::SummarizedExperiment</a></code> object.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -151,10 +151,20 @@ a generalized regression approach." Cancer research 27.2 Part 1
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"enterotypes_arumugam"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">run_MANTEL</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>,</span>
-<span class="r-in">          y_variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Enterotype"</span>, <span class="st">"Clinical.Status"</span><span class="op">)</span>,</span>
-<span class="r-in">          z_variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Nationality"</span>, <span class="st">"Gender"</span><span class="op">)</span>,</span>
+<span class="r-in"><span class="co"># phyloseq object</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Zeybel_2022_gut"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">run_MANTEL</span><span class="op">(</span><span class="va">Zeybel_2022_gut</span>,</span>
+<span class="r-in">          y_variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LiverFatClass"</span>, <span class="st">"Liver_fat"</span><span class="op">)</span>,</span>
+<span class="r-in">          z_variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gender"</span>, <span class="st">"Age"</span><span class="op">)</span>,</span>
+<span class="r-in">          norm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span class="r-in">          method <span class="op">=</span> <span class="st">"mantel.partial"</span>,</span>
+<span class="r-in">          method_dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bray"</span>, <span class="st">"euclidean"</span>, <span class="st">"jaccard"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># SummarizedExperiment object</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Zeybel_2022_protein"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">run_MANTEL</span><span class="op">(</span><span class="va">Zeybel_2022_protein</span>,</span>
+<span class="r-in">          y_variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LiverFatClass"</span>, <span class="st">"Liver_fat"</span><span class="op">)</span>,</span>
+<span class="r-in">          z_variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gender"</span>, <span class="st">"Age"</span><span class="op">)</span>,</span>
 <span class="r-in">          norm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span class="r-in">          method <span class="op">=</span> <span class="st">"mantel.partial"</span>,</span>
 <span class="r-in">          method_dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bray"</span>, <span class="st">"euclidean"</span>, <span class="st">"jaccard"</span><span class="op">)</span><span class="op">)</span></span>

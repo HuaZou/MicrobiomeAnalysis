@@ -55,19 +55,37 @@
     <loc>/reference/confounder.html</loc>
   </url>
   <url>
-    <loc>/reference/data-caporaso.html</loc>
+    <loc>/reference/data-Zeybel_2022_gut.html</loc>
   </url>
   <url>
-    <loc>/reference/data-cid_ying.html</loc>
+    <loc>/reference/data-Zeybel_2022_gut_paired.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data-Zeybel_2022_metabolite.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data-Zeybel_2022_metabolite_paired.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data-Zeybel_2022_oral.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data-Zeybel_2022_oral_paired.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data-Zeybel_2022_protein.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data-Zeybel_2022_protein_paired.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data-caporaso.html</loc>
   </url>
   <url>
     <loc>/reference/data-ecam.html</loc>
   </url>
   <url>
     <loc>/reference/data-enterotypes_arumugam.html</loc>
-  </url>
-  <url>
-    <loc>/reference/data-kostic_crc.html</loc>
   </url>
   <url>
     <loc>/reference/default_color.html</loc>
@@ -86,6 +104,9 @@
   </url>
   <url>
     <loc>/reference/get_eigValue.html</loc>
+  </url>
+  <url>
+    <loc>/reference/import_SE.html</loc>
   </url>
   <url>
     <loc>/reference/import_dada2.html</loc>

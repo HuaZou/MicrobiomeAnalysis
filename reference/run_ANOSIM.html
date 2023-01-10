@@ -80,7 +80,7 @@ the community and environmental variables by rank.</p>
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>(Required). a <code><a href="https://rdrr.io/pkg/phyloseq/man/phyloseq-class.html" class="external-link">phyloseq::phyloseq</a></code> or
-<code><a href="https://rdrr.io/pkg/Biobase/man/class.ExpressionSet.html" class="external-link">Biobase::ExpressionSet</a></code> object.</p></dd>
+<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/RangedSummarizedExperiment-class.html" class="external-link">SummarizedExperiment::SummarizedExperiment</a></code> object.</p></dd>
 <dt>level</dt>
 <dd><p>(Optional). character. Summarization
 level (from <code>rank_names(pseq)</code>, default: NULL).</p></dd>
@@ -114,7 +114,7 @@ weight on abundant lineages (default: 0.5).</p></dd>
 the community and environmental variables by rank, applying the distance
 in profile and calculating the R statistic between community and rank variable
 by permutation test to determine the significance. It can be applied to both
-<code><a href="https://rdrr.io/pkg/phyloseq/man/phyloseq-class.html" class="external-link">phyloseq::phyloseq</a></code> and <code><a href="https://rdrr.io/pkg/Biobase/man/class.ExpressionSet.html" class="external-link">Biobase::ExpressionSet</a></code> object.</p>
+<code><a href="https://rdrr.io/pkg/phyloseq/man/phyloseq-class.html" class="external-link">phyloseq::phyloseq</a></code> and <code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/RangedSummarizedExperiment-class.html" class="external-link">SummarizedExperiment::SummarizedExperiment</a></code> object.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -131,15 +131,18 @@ changes in community structure." Australian journal of ecology 18.1
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"enterotypes_arumugam"</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="fu">run_ANOSIM</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>,</span>
-<span class="r-in">   variable <span class="op">=</span> <span class="st">"Enterotype"</span>,</span>
+<span class="r-in"><span class="co"># phyloseq object</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Zeybel_2022_gut"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">run_ANOSIM</span><span class="op">(</span><span class="va">Zeybel_2022_gut</span>,</span>
+<span class="r-in">   level <span class="op">=</span> <span class="st">"Phylum"</span>,</span>
+<span class="r-in">   variable <span class="op">=</span> <span class="st">"LiverFatClass"</span>,</span>
 <span class="r-in">   method <span class="op">=</span> <span class="st">"bray"</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="fu">run_ANOSIM</span><span class="op">(</span><span class="va">enterotypes_arumugam</span>,</span>
-<span class="r-in">   level <span class="op">=</span> <span class="st">"Phylum"</span>,</span>
-<span class="r-in">   variable <span class="op">=</span> <span class="st">"Enterotype"</span>,</span>
+<span class="r-in"><span class="co"># SummarizedExperiment object</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Zeybel_2022_protein"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">run_ANOSIM</span><span class="op">(</span><span class="va">Zeybel_2022_protein</span>,</span>
+<span class="r-in">   variable <span class="op">=</span> <span class="st">"LiverFatClass"</span>,</span>
 <span class="r-in">   method <span class="op">=</span> <span class="st">"bray"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>

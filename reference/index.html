@@ -61,6 +61,10 @@
           <p class="section-desc"></p><p>Functions for importing external data and converting other R object as phyloseq or reverse converting</p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="import_SE.html">import_SE()</a></code> </p>
+        </td>
+        <td><p>Convert the output of dada2 into phyloseq object</p></td>
+      </tr><tr><td>
           <p><code><a href="import_dada2.html">import_dada2()</a></code> </p>
         </td>
         <td><p>Convert the output of dada2 into phyloseq object</p></td>
@@ -107,15 +111,15 @@
       </tr><tr><td>
           <p><code><a href="transform_abundances.html">transform_abundances()</a></code> </p>
         </td>
-        <td><p>Transform the taxa abundances in <code>otu_table</code> sample by sample</p></td>
+        <td><p>Transform the abundances in <code>profile</code> sample by sample</p></td>
       </tr><tr><td>
           <p><code><a href="trim_prevalence.html">trim_prevalence()</a></code> </p>
         </td>
-        <td><p>Trimming samples or taxa whose prevalence is less than threshold</p></td>
+        <td><p>Trimming samples or features whose prevalence is less than threshold</p></td>
       </tr><tr><td>
           <p><code><a href="filter_abundance.html">filter_abundance()</a></code> </p>
         </td>
-        <td><p>Filtering taxa who is low relative abundance or unclassified</p></td>
+        <td><p>Filtering feature who is low relative abundance or unclassified</p></td>
       </tr><tr><td>
           <p><code><a href="impute_abundance.html">impute_abundance()</a></code> </p>
         </td>
@@ -133,13 +137,41 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="data-Zeybel_2022_gut.html">data-Zeybel_2022_gut</a></code> </p>
+        </td>
+        <td><p>gut microbiota from Zeybel et al. - 2022 paper</p></td>
+      </tr><tr><td>
+          <p><code><a href="data-Zeybel_2022_gut_paired.html">data-Zeybel_2022_gut_paired</a></code> </p>
+        </td>
+        <td><p>Paired gut microbiota from Zeybel et al. - 2022 paper</p></td>
+      </tr><tr><td>
+          <p><code><a href="data-Zeybel_2022_metabolite.html">data-Zeybel_2022_metabolite</a></code> </p>
+        </td>
+        <td><p>fecal metabolites from Zeybel et al. - 2022 paper</p></td>
+      </tr><tr><td>
+          <p><code><a href="data-Zeybel_2022_metabolite_paired.html">data-Zeybel_2022_metabolite_paired</a></code> </p>
+        </td>
+        <td><p>Paired fecal metabolites from Zeybel et al. - 2022 paper</p></td>
+      </tr><tr><td>
+          <p><code><a href="data-Zeybel_2022_oral.html">data-Zeybel_2022_oral</a></code> </p>
+        </td>
+        <td><p>oral microbiota from Zeybel et al. - 2022 paper</p></td>
+      </tr><tr><td>
+          <p><code><a href="data-Zeybel_2022_oral_paired.html">data-Zeybel_2022_oral_paired</a></code> </p>
+        </td>
+        <td><p>Paired oral microbiota from Zeybel et al. - 2022 paper</p></td>
+      </tr><tr><td>
+          <p><code><a href="data-Zeybel_2022_protein.html">data-Zeybel_2022_protein</a></code> </p>
+        </td>
+        <td><p>serum protein from Zeybel et al. - 2022 paper</p></td>
+      </tr><tr><td>
+          <p><code><a href="data-Zeybel_2022_protein_paired.html">data-Zeybel_2022_protein_paired</a></code> </p>
+        </td>
+        <td><p>Paired serum protein from Zeybel et al. - 2022 paper</p></td>
+      </tr><tr><td>
           <p><code><a href="data-caporaso.html">data-caporaso</a></code> </p>
         </td>
         <td><p>16S rRNA data from "Moving pictures of the human microbiome"</p></td>
-      </tr><tr><td>
-          <p><code><a href="data-cid_ying.html">data-cid_ying</a></code> </p>
-        </td>
-        <td><p>16S rRNA data of 94 patients from CID 2012</p></td>
       </tr><tr><td>
           <p><code><a href="data-ecam.html">data-ecam</a></code> </p>
         </td>
@@ -148,10 +180,6 @@
           <p><code><a href="data-enterotypes_arumugam.html">data-enterotypes_arumugam</a></code> </p>
         </td>
         <td><p>Enterotypes data of 39 samples</p></td>
-      </tr><tr><td>
-          <p><code><a href="data-kostic_crc.html">data-kostic_crc</a></code> </p>
-        </td>
-        <td><p>Data from a study on colorectal cancer (kostic 2012)</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="community-analysis">Community Analysis <a href="#community-analysis" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions to investigate association between variables and microbiota community</p>
