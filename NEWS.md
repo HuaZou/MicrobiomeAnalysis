@@ -21,6 +21,8 @@
 + Add `import_SE` for *SummarizedExperiment* object. (2023-1-8)
 + Modify `scale_variables` for *SummarizedExperiment* object. (2023-1-8)
 + Modify `run_lefse` for example data. (2023-1-8)
++ Modify `filter_abundance` for *SummarizedExperiment* object. (2023-1-10)
++ Modify `import_SE` for correcting order of samples and features. (2023-1-10)
 
 
 # MicrobiomeAnalysis v1.0.2

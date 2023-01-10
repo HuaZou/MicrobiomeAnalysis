@@ -1,9 +1,9 @@
-#' @title Filtering taxa who is low relative abundance or unclassified
+#' @title Filtering feature who is low relative abundance or unclassified
 #'
 #' @description whether to filter the low relative abundance or unclassified
-#' taxa by the threshold. Here, we choose the following criterion:
-#' 1. Taxa more than Mean absolute or relative abundance across all samples;
-#' 2. Taxa more than Minimum absolute or relative abundance at least one sample.
+#' feature by the threshold. Here, we choose the following criterion:
+#' 1. Feature more than Mean absolute or relative abundance across all samples;
+#' 2. Feature more than Minimum absolute or relative abundance at least one sample.
 #'
 #' @references Thingholm, Louise B., et al. "Obese individuals with and without
 #' type 2 diabetes show different gut microbial functional capacity and
@@ -11,14 +11,15 @@
 #'
 #' @author Created by Hua Zou (11/30/2021 Shenzhen China)
 #'
-#' @param object (Required). a \code{\link[phyloseq]{phyloseq-class}} object.
+#' @param object (Required). a [`phyloseq::phyloseq-class`] or
+#' [`SummarizedExperiment::SummarizedExperiment-class`] object.
 #' @param level (Optional). character. taxonomic level to summarize,
 #' default the top level rank of the `ps`. taxonomic level(Kingdom, Phylum,
 #' Class, Order, Family, Genus, Species, Strains; default: NULL).
 #' @param cutoff_mean (Optional). numeric. Threshold for Mean
-#' absolute (integer) or relative (float) abundance all samples (default, `100`).
+#' absolute (integer) or relative (float) abundance all samples (default, `0`).
 #' @param cutoff_one (Optional). numeric. Threshold for Minimum
-#' absolute (integer) or relative (float) abundance at least one sample (default, `1000`).
+#' absolute (integer) or relative (float) abundance at least one sample (default, `0`).
 #' @param unclass (Optional). logical. whether to filter the unclassified taxa (default `TRUE`).
 #'
 #' @import phyloseq
@@ -26,8 +27,10 @@
 #' @importFrom dplyr bind_rows %>% group_split
 #' @importFrom tibble as_tibble rownames_to_column column_to_rownames
 #'
-#' @return a [`phyloseq::phyloseq-class`] object, where each row represents a
-#'   taxa, and each col represents the taxa abundance of each sample.
+#' @return a [`phyloseq::phyloseq-class`] or
+#' [`SummarizedExperiment::SummarizedExperiment-class`] object,
+#' where each row represents a feature and each col represents the
+#' feature abundance of each sample.
 #'
 #' @export
 #'
@@ -36,82 +39,112 @@
 #'    level = c(NULL, "Kingdom", "Phylum", "Class",
 #'            "Order", "Family", "Genus",
 #'            "Species", "Strain", "unique"),
-#'    cutoff_mean = c(100, 1e-04),
-#'    cutoff_one = c(1000, 1e-03),
+#'    cutoff_mean = c(100, 1e-04, 2),
+#'    cutoff_one = c(1000, 1e-03, 3),
 #'    unclass = TRUE)
 #'
 #' @examples
 #'
 #'\dontrun{
-#'  data("enterotypes_arumugam")
+#' # phyloseq object
+#'  data("Zeybel_2022_gut")
+#'  Zeybel_2022_gut_counts <- phyloseq::transform_sample_counts(
+#'  Zeybel_2022_gut, function(x) {round(x * 10^7)})
 #'
 #'  # absolute abundance
 #'  ps <- filter_abundance(
-#'    object = enterotypes_arumugam,
+#'    object = Zeybel_2022_gut_counts,
 #'    level = NULL,
 #'    cutoff_mean = 100,
 #'    cutoff_one = 1000,
 #'    unclass = FALSE)
 #'
 #'  # relative abundance
-#'  enterotypes_arumugam_rb <- normalize(enterotypes_arumugam, method = "TSS")
 #'  ps <- filter_abundance(
-#'    object = enterotypes_arumugam_rb,
+#'    object = Zeybel_2022_gut,
 #'    level = "Phylum",
 #'    cutoff_mean = 1e-04,
 #'    cutoff_one = 1e-03,
 #'    unclass = TRUE)
 #'
+#'
+#' # SummarizedExperiment object
+#' data("Zeybel_2022_protein")
+#' filter_abundance(
+#'   object = Zeybel_2022_protein,
+#'   cutoff_mean = 5,
+#'   cutoff_one = 8)
 #' }
 #'
 filter_abundance <- function(
     object,
     level = NULL,
-    cutoff_mean = 100,
-    cutoff_one = 1000,
+    cutoff_mean = 0,
+    cutoff_one = 0,
     unclass = TRUE) {
 
-  # data("enterotypes_arumugam")
-  # object = enterotypes_arumugam
+  # data("Zeybel_2022_gut")
+  # object = Zeybel_2022_gut
   # level = "Phylum"
-  # cutoff_mean = 100
-  # cutoff_one = 1000
+  # cutoff_mean = 1e-04
+  # cutoff_one = 1e-03
   # unclass = TRUE
 
-  stopifnot(inherits(object, "phyloseq"))
+  # data("Zeybel_2022_protein")
+  # object = Zeybel_2022_protein
+  # level = NULL
+  # cutoff_mean = 2
+  # cutoff_one = 3
+  # unclass = TRUE
 
-  ps_LRA <- LowAbundance_taxa(
+  if (all(is.null(cutoff_mean), is.null(cutoff_one))) {
+    return(object)
+  }
+
+  # profile: row->samples; col->features
+  if (all(!is.null(object), inherits(object, "phyloseq"))) {
+
+    stopifnot(inherits(object, "phyloseq"))
+
+    res <- LowAbundance_taxa(
       ps = object,
       taxa_level = level,
       cutoff_mean = cutoff_mean,
       cutoff_one = cutoff_one,
       unclass = TRUE)
 
-  ps_LRA_otu_tab <- as(phyloseq::otu_table(ps_LRA), "matrix")
+    res_otu_tab <- as(phyloseq::otu_table(res), "matrix")
 
-  if (unclass) {
-    ps_LRA_otu_tab_filter <- ps_LRA_otu_tab %>% data.frame() %>%
-      tibble::rownames_to_column("TaxaID") %>%
-      dplyr::filter(!TaxaID %in% grep("Unclassified|LowAbundance", TaxaID, value = T)) %>%
-      tibble::column_to_rownames("TaxaID") %>%
-      as.matrix()
-  } else {
-    ps_LRA_otu_tab_filter <- ps_LRA_otu_tab %>% data.frame() %>%
-      tibble::rownames_to_column("TaxaID") %>%
-      dplyr::filter(!TaxaID %in% grep("LowAbundance", TaxaID, value = T)) %>%
-      tibble::column_to_rownames("TaxaID") %>%
-      as.matrix()
+    if (unclass) {
+      res_otu_tab_filter <- res_otu_tab %>% data.frame() %>%
+        tibble::rownames_to_column("TaxaID") %>%
+        dplyr::filter(!TaxaID %in% grep("Unclassified|LowAbundance", TaxaID, value = T)) %>%
+        tibble::column_to_rownames("TaxaID") %>%
+        as.matrix()
+    } else {
+      res_otu_tab_filter <- res_otu_tab %>% data.frame() %>%
+        tibble::rownames_to_column("TaxaID") %>%
+        dplyr::filter(!TaxaID %in% grep("LowAbundance", TaxaID, value = T)) %>%
+        tibble::column_to_rownames("TaxaID") %>%
+        as.matrix()
+    }
+
+    if (!is.null(res@sam_data)) {
+      colnames(res_otu_tab_filter) <- rownames(sample_data(res) %>%
+                                                    data.frame())
+    }
+
+    phyloseq::otu_table(res) <- phyloseq::otu_table(res_otu_tab_filter,
+                                                       taxa_are_rows = TRUE)
+
+  } else if (all(!is.null(object), inherits(object, "SummarizedExperiment"))) {
+    res <- LowAbundance_feature(
+      dat = object,
+      cutoff_mean = cutoff_mean,
+      cutoff_one = cutoff_one)
   }
 
-  if (!is.null(ps_LRA@sam_data)) {
-    colnames(ps_LRA_otu_tab_filter) <- rownames(sample_data(ps_LRA) %>%
-                                                  data.frame())
-  }
-
-  phyloseq::otu_table(ps_LRA) <- phyloseq::otu_table(ps_LRA_otu_tab_filter,
-                                                     taxa_are_rows = TRUE)
-
-  return(ps_LRA)
+  return(res)
 }
 
 #' low abundance taxa whose abundance less than threshold
@@ -265,6 +298,85 @@ LowAbundance_taxa <- function(
 
   res <- list(otu = otu_summarized,
               tax = tax_summarized)
+
+  return(res)
+}
+
+#' low abundance feature whose abundance less than threshold
+#' @noRd
+LowAbundance_feature <- function(
+    dat,
+    cutoff_mean,
+    cutoff_one) {
+
+  # dat = object
+  # cutoff_mean = cutoff_mean
+  # cutoff_one = cutoff_one
+
+  # profile: row->features; col->samples
+  prof_tab <- as(SummarizedExperiment::assay(dat), "matrix")
+
+  ############################################
+  # 1. Mean relative abundance across all samples
+  feture_mean <- apply(prof_tab, 1, function(x)sum(x, na.rm = TRUE)) %>%
+    data.frame() %>%
+    stats::setNames("SumAbundance") %>%
+    tibble::rownames_to_column("TaxaID") %>%
+    dplyr::mutate(MeanAbundance = SumAbundance/ncol(prof_tab))
+
+  # 2. Minimum relative abundance at least one sample
+  feture_one <- apply(prof_tab, 1, function(x) {
+    any(x[!is.na(x)] >= cutoff_one)
+  }) %>% data.frame() %>%
+    stats::setNames("LowAbundanceOrNot") %>%
+    tibble::rownames_to_column("TaxaID")
+
+  # 3. combine the results
+  feature_res <- feture_mean %>%
+    dplyr::inner_join(feture_one, by = "TaxaID")
+  ############################################
+
+  feature_define <- feature_res %>%
+    dplyr::mutate(TaxaID2 = ifelse(MeanAbundance <= cutoff_mean,
+                                   "Others_LowAbundance",
+                                   ifelse(LowAbundanceOrNot, TaxaID,
+                                          "Others_LowAbundance")))
+  feature_merge <- feature_define %>%
+    dplyr::select(TaxaID, TaxaID2) %>%
+    dplyr::inner_join(prof_tab %>%
+                        data.frame() %>%
+                        tibble::rownames_to_column("TaxaID"),
+                      by = "TaxaID") %>%
+    dplyr::select(-TaxaID)
+
+  feature_aggregate <-  feature_merge %>%
+    dplyr::group_by(TaxaID2) %>%
+    dplyr::summarise(across(everything(), ~ sum(., is.na(.), 0))) %>%
+    tibble::column_to_rownames("TaxaID2")
+
+
+  if (is.null(dat@elementMetadata)) {
+    res <- import_SE(object = feature_aggregate,
+                     #rowdata = dat@elementMetadata,
+                     coldata = dat@colData %>% data.frame(),
+                     metadata = dat@metadata %>% data.frame())
+  } else {
+    rowdf <- dat@elementMetadata %>% data.frame()
+    overlap_featureID <- intersect(rownames(feature_aggregate),
+                                 rowdf[, 1])
+    lowdf <- data.frame(matrix(NA, nrow = 1, ncol = ncol(rowdf))) %>%
+      stats::setNames(colnames(rowdf))
+    lowdf[1, 1] <- setdiff(rownames(feature_aggregate),
+                           rowdf[, 1])
+
+    rowdf_cln <- rowdf[rowdf[, 1] %in% overlap_featureID, , F] %>%
+      rbind(lowdf)
+    rownames(rowdf_cln) <- rowdf_cln[, 1]
+    res <- import_SE(object = feature_aggregate,
+                     rowdata = rowdf_cln,
+                     coldata = dat@colData %>% data.frame(),
+                     metadata = dat@metadata %>% data.frame())
+  }
 
   return(res)
 }

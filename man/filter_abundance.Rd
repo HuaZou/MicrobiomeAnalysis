@@ -2,66 +2,78 @@
 % Please edit documentation in R/process_filter_abundance.R
 \name{filter_abundance}
 \alias{filter_abundance}
-\title{Filtering taxa who is low relative abundance or unclassified}
+\title{Filtering feature who is low relative abundance or unclassified}
 \usage{
 filter_abundance(
    object,
    level = c(NULL, "Kingdom", "Phylum", "Class",
            "Order", "Family", "Genus",
            "Species", "Strain", "unique"),
-   cutoff_mean = c(100, 1e-04),
-   cutoff_one = c(1000, 1e-03),
+   cutoff_mean = c(100, 1e-04, 2),
+   cutoff_one = c(1000, 1e-03, 3),
    unclass = TRUE)
 }
 \arguments{
-\item{object}{(Required). a \code{\link[phyloseq]{phyloseq-class}} object.}
+\item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
+\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object.}
 
 \item{level}{(Optional). character. taxonomic level to summarize,
 default the top level rank of the \code{ps}. taxonomic level(Kingdom, Phylum,
 Class, Order, Family, Genus, Species, Strains; default: NULL).}
 
 \item{cutoff_mean}{(Optional). numeric. Threshold for Mean
-absolute (integer) or relative (float) abundance all samples (default, \code{100}).}
+absolute (integer) or relative (float) abundance all samples (default, \code{0}).}
 
 \item{cutoff_one}{(Optional). numeric. Threshold for Minimum
-absolute (integer) or relative (float) abundance at least one sample (default, \code{1000}).}
+absolute (integer) or relative (float) abundance at least one sample (default, \code{0}).}
 
 \item{unclass}{(Optional). logical. whether to filter the unclassified taxa (default \code{TRUE}).}
 }
 \value{
-a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} object, where each row represents a
-taxa, and each col represents the taxa abundance of each sample.
+a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
+\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object,
+where each row represents a feature and each col represents the
+feature abundance of each sample.
 }
 \description{
 whether to filter the low relative abundance or unclassified
-taxa by the threshold. Here, we choose the following criterion:
+feature by the threshold. Here, we choose the following criterion:
 \enumerate{
-\item Taxa more than Mean absolute or relative abundance across all samples;
-\item Taxa more than Minimum absolute or relative abundance at least one sample.
+\item Feature more than Mean absolute or relative abundance across all samples;
+\item Feature more than Minimum absolute or relative abundance at least one sample.
 }
 }
 \examples{
 
 \dontrun{
- data("enterotypes_arumugam")
+# phyloseq object
+ data("Zeybel_2022_gut")
+ Zeybel_2022_gut_counts <- phyloseq::transform_sample_counts(
+ Zeybel_2022_gut, function(x) {round(x * 10^7)})
 
  # absolute abundance
  ps <- filter_abundance(
-   object = enterotypes_arumugam,
+   object = Zeybel_2022_gut_counts,
    level = NULL,
    cutoff_mean = 100,
    cutoff_one = 1000,
    unclass = FALSE)
 
  # relative abundance
- enterotypes_arumugam_rb <- normalize(enterotypes_arumugam, method = "TSS")
  ps <- filter_abundance(
-   object = enterotypes_arumugam_rb,
+   object = Zeybel_2022_gut,
    level = "Phylum",
    cutoff_mean = 1e-04,
    cutoff_one = 1e-03,
    unclass = TRUE)
 
+
+# SummarizedExperiment object
+data("Zeybel_2022_protein")
+filter_abundance(
+  object = Zeybel_2022_protein,
+  cutoff_mean = 5,
+  cutoff_one = 8)
 }
 
 }

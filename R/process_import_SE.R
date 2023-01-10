@@ -58,7 +58,7 @@
 import_SE <- function(
     object,
     rowdata = NULL,
-    rowranges = GRangesList(),
+    rowranges = NULL,
     coldata = NULL,
     metadata = list()) {
 
@@ -67,7 +67,7 @@ import_SE <- function(
   #   data.frame()
   # rowdata = SummarizedExperiment::rowData(Zeybel_2022_protein) %>%
   #   data.frame()
-  # rowranges = GRangesList()
+  # rowranges = GenomicRanges::GRangesList()
   # coldata = SummarizedExperiment::colData(Zeybel_2022_protein) %>%
   #   data.frame()
   # metadata = list(lab="hua")
@@ -81,7 +81,8 @@ import_SE <- function(
     }
     object <- object %>%
       dplyr::select(dplyr::all_of(overlap_sample))
-    coldata <- coldata[rownames(coldata) %in% overlap_sample, , F]
+    #coldata <- coldata[rownames(coldata) %in% overlap_sample, , F]
+    coldata <- coldata[colnames(object), , F]
   }
 
   # overlap of features
@@ -91,7 +92,8 @@ import_SE <- function(
       stop("No overlap of features between assay and rowData, please check your data")
     }
     object <- object[rownames(object) %in% overlap_feature, , F]
-    rowdata <- rowdata[rownames(rowdata) %in% overlap_feature, , F]
+    #rowdata <- rowdata[rownames(rowdata) %in% overlap_feature, , F]
+    rowdata <- rowdata[rownames(object), , F]
   }
 
   # overlap of features
@@ -100,8 +102,9 @@ import_SE <- function(
     if (length(overlap_feature) == 0) {
       stop("No overlap of features between assay and rowRanges, please check your data")
     }
-    object <- object[rownames(object) %in% overlap_feature, , F]
-    rowranges <- rowranges[rownames(rowranges) %in% overlap_feature, , F]
+    object <- object[rownames(object), , F]
+    #rowranges <- rowranges[rownames(rowranges) %in% overlap_feature, , F]
+    rowranges <- rowranges[pmatch(rownames(rowranges), rownames(object)), , F]
   }
 
   if (all(!is.null(rowdata), length(rowranges) != 0)) {
@@ -119,6 +122,13 @@ import_SE <- function(
     res <- SummarizedExperiment::SummarizedExperiment(
       assays = object,
       rowRanges = rowranges,
+      colData = coldata,
+      metadata = metadata)
+  } else {
+    res <- SummarizedExperiment::SummarizedExperiment(
+      assays = object,
+      #rowData = rowdata,
+      #rowRanges = rowranges,
       colData = coldata,
       metadata = metadata)
   }
