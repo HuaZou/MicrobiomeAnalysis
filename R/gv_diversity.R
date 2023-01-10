@@ -25,6 +25,10 @@
 #' "InvSimpson", "Fisher", "Evenness").
 #' "Chao1", "ACE" and "Fisher" only supported by
 #' counts matrix (integers).
+#' @param mindepth (Optional). numeric,
+#' Subsample size for rarefying community (default: all).
+#' @param force (Optional). logical,
+#' whether to rarefy samples (default: FASLE).
 #'
 #' @return
 #'   A data.frame of alpha index with metadata.
@@ -39,7 +43,9 @@
 #'            "Species", "Strain", "unique"),
 #'     indices = c("all",
 #'       "Observed", "Chao1", "ACE", "Shannon",
-#'       "Simpson", "InvSimpson", "Fisher", "Evenness")
+#'       "Simpson", "InvSimpson", "Fisher", "Evenness"),
+#'     mindepth = NULL,
+#'     force = FALSE
 #'    )
 #'
 #' @export
@@ -68,25 +74,33 @@ get_alphaindex <- function(
     ps,
     level = NULL,
     indices = c("Observed", "Chao1", "ACE", "Shannon",
-                "Simpson", "InvSimpson", "Fisher", "Evenness")) {
-
-  # ps = enterotypes_arumugam
-  # level = "Genus"
-  # indices = "Shannon"
+                "Simpson", "InvSimpson", "Fisher", "Evenness"),
+    mindepth = NULL,
+    force = FALSE) {
 
   # ps = caporaso
   # level = "Genus"
   # indices = "Shannon"
+  # mindepth = NULL
+  # force = FALSE
 
   stopifnot(inherits(ps, "phyloseq"))
   ps <- preprocess_ps(ps)
-
 
   # taxa level
   if (!is.null(level)) {
     ps <- aggregate_taxa(x = ps, level = level)
   } else {
     ps <- ps
+  }
+
+  # rarefy
+  sample_LibrarySize <- colSums(ps@otu_table %>% data.frame())
+  if (missing(mindepth) || is.null(mindepth)){
+    mindepth <- min(sample_LibrarySize)
+  }
+  if (sample_LibrarySize %>% var != 0 && force){
+    ps <- norm_rarefy(object = ps, size = mindepth)
   }
 
   # alpha diversity indices
@@ -127,7 +141,7 @@ get_alphaindex <- function(
                         InvSimpson = InvSimpson,
                         Evenness = Evenness)
   } else {
-    message("Chao1, ACE and Fisher could not be calculated on integer values.")
+    message("Chao1, ACE and Fisher could not be calculated without integer values.")
 
     Observed <- apply(otu_tab, 1, function(x) {sum(x > 0)})
     # Fisher <- NULL
@@ -140,11 +154,14 @@ get_alphaindex <- function(
                         Evenness = Evenness)
   }
 
+  # overlap of index
+  index_overlap <- dplyr::intersect(colnames(alpha), indices)
+
   res <- phyloseq::sample_data(ps) %>%
     data.frame() %>%
     tibble::rownames_to_column("TempRowNames") %>%
     dplyr::inner_join(alpha %>%
-                        dplyr::select(all_of(indices)) %>%
+                        dplyr::select(all_of(index_overlap)) %>%
                         tibble::rownames_to_column("TempRowNames"),
                       by = "TempRowNames") %>%
     tibble::column_to_rownames("TempRowNames")

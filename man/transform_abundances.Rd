@@ -13,7 +13,7 @@ transform_abundances(
            "Species", "Strain", "unique"))
 }
 \arguments{
-\item{object}{\code{\linkS4class{otu_table}}, \code{\linkS4class{phyloseq}},
+\item{object}{(Required). a \code{\linkS4class{otu_table}}, \code{\linkS4class{phyloseq}},
 \code{\linkS4class{SummarizedExperiment}} or \code{\linkS4class{microbiomeMarker}}.}
 
 \item{transform}{transformation to apply, the options inclulde:

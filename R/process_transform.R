@@ -6,7 +6,7 @@
 #'
 #' @author Created by Yang Cao; modified by Hua Zou (11/30/2022 Shenzhen China)
 #'
-#' @param object  [`otu_table-class`], [`phyloseq-class`],
+#' @param object (Required). a [`otu_table-class`], [`phyloseq-class`],
 #' [`SummarizedExperiment-class`] or [`microbiomeMarker-class`].
 #' @param transform transformation to apply, the options inclulde:
 #' * "identity", return the original data without any transformation.

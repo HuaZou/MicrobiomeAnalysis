@@ -11,7 +11,9 @@ get_alphaindex(
            "Species", "Strain", "unique"),
     indices = c("all",
       "Observed", "Chao1", "ACE", "Shannon",
-      "Simpson", "InvSimpson", "Fisher", "Evenness")
+      "Simpson", "InvSimpson", "Fisher", "Evenness"),
+    mindepth = NULL,
+    force = FALSE
    )
 }
 \arguments{
@@ -29,6 +31,12 @@ c("Observed", "Chao1", "ACE", "Shannon", "Simpson",
 "InvSimpson", "Fisher", "Evenness").
 "Chao1", "ACE" and "Fisher" only supported by
 counts matrix (integers).}
+
+\item{mindepth}{(Optional). numeric,
+Subsample size for rarefying community (default: all).}
+
+\item{force}{(Optional). logical,
+whether to rarefy samples (default: FASLE).}
 }
 \value{
 A data.frame of alpha index with metadata.

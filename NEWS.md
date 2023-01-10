@@ -23,6 +23,8 @@
 + Modify `run_lefse` for example data. (2023-1-8)
 + Modify `filter_abundance` for *SummarizedExperiment* object. (2023-1-10)
 + Modify `import_SE` for correcting order of samples and features. (2023-1-10)
++ Add `run_rarecurve`. (2023-1-10)
++ Modify `get_alphaindex`. (2023-1-10)
 
 
 # MicrobiomeAnalysis v1.0.2
