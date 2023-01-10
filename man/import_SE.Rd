@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_import_SE.R
 \name{import_SE}
 \alias{import_SE}
-\title{Convert the output of dada2 into phyloseq object}
+\title{Convert inputs into SummarizedExperiment object}
 \usage{
 import_SE(
     object,

@@ -1,4 +1,4 @@
-#' @title Convert the output of dada2 into phyloseq object
+#' @title Convert inputs into SummarizedExperiment object
 #'
 #' @description
 #' Convert inputs into SummarizedExperiment object.
