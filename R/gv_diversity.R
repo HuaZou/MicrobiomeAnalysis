@@ -141,7 +141,7 @@ get_alphaindex <- function(
                         InvSimpson = InvSimpson,
                         Evenness = Evenness)
   } else {
-    message("Chao1, ACE and Fisher could not be calculated without integer values.")
+    #message("Chao1, ACE and Fisher could not be calculated without integer values.")
 
     Observed <- apply(otu_tab, 1, function(x) {sum(x > 0)})
     # Fisher <- NULL
