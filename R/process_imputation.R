@@ -17,7 +17,7 @@
 #' [`SummarizedExperiment::SummarizedExperiment`] object.
 #' @param level (Optional). character. Summarization
 #' level (from \code{rank_names(pseq)}, default: NULL).
-#' @param group_name (Required). character. group for determining missing values.
+#' @param group (Required). character. group for determining missing values.
 #' @param ZerosAsNA (Optional). logical. zeros in the data are missing
 #' values (default: FALSE).
 #' @param RemoveNA (Optional). logical. those features with more than selected
@@ -47,7 +47,7 @@
 #'    level = c(NULL, "Kingdom", "Phylum", "Class",
 #'            "Order", "Family", "Genus",
 #'            "Species", "Strain", "unique"),
-#'    group_name,
+#'    group,
 #'    ZerosAsNA = FALSE,
 #'    RemoveNA = TRUE,
 #'    cutoff = 20,
@@ -73,7 +73,7 @@
 #' impute_abundance(
 #'   Zeybel_2022_gut,
 #'   level = "Phylum",
-#'   group_name = "LiverFatClass",
+#'   group = "LiverFatClass",
 #'   ZerosAsNA = TRUE,
 #'   RemoveNA = TRUE,
 #'   cutoff = 20,
@@ -83,7 +83,7 @@
 #' data("Zeybel_2022_protein")
 #' impute_abundance(
 #'   Zeybel_2022_protein,
-#'   group_name = "LiverFatClass",
+#'   group = "LiverFatClass",
 #'   ZerosAsNA = TRUE,
 #'   RemoveNA = TRUE,
 #'   cutoff = 20,
@@ -93,7 +93,7 @@
 impute_abundance <- function(
     object,
     level = NULL,
-    group_name,
+    group,
     ZerosAsNA = FALSE,
     RemoveNA = TRUE,
     cutoff = 20,
@@ -105,7 +105,7 @@ impute_abundance <- function(
   # data("Zeybel_2022_gut")
   # object = Zeybel_2022_gut
   # level = "Phylum"
-  # group_name = "LiverFatClass"
+  # group = "LiverFatClass"
   # ZerosAsNA = TRUE
   # RemoveNA = TRUE
   # cutoff = 20
@@ -114,7 +114,7 @@ impute_abundance <- function(
   # data("Zeybel_2022_protein")
   # object = Zeybel_2022_protein
   # level = NULL
-  # group_name = "LiverFatClass"
+  # group = "LiverFatClass"
   # ZerosAsNA = TRUE
   # RemoveNA = TRUE
   # cutoff = 20
@@ -179,7 +179,7 @@ impute_abundance <- function(
       t()
   }
 
-  group_index <- which(colnames(sam_tab) == group_name)
+  group_index <- which(colnames(sam_tab) == group)
   samples_groups <- sam_tab[, group_index]
   to_imp_data <- prf_tab %>% as.matrix()
 

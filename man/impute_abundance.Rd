@@ -9,7 +9,7 @@ impute_abundance(
    level = c(NULL, "Kingdom", "Phylum", "Class",
            "Order", "Family", "Genus",
            "Species", "Strain", "unique"),
-   group_name,
+   group,
    ZerosAsNA = FALSE,
    RemoveNA = TRUE,
    cutoff = 20,
@@ -26,7 +26,7 @@ impute_abundance(
 \item{level}{(Optional). character. Summarization
 level (from \code{rank_names(pseq)}, default: NULL).}
 
-\item{group_name}{(Required). character. group for determining missing values.}
+\item{group}{(Required). character. group for determining missing values.}
 
 \item{ZerosAsNA}{(Optional). logical. zeros in the data are missing
 values (default: FALSE).}
@@ -73,7 +73,7 @@ data("Zeybel_2022_gut")
 impute_abundance(
   Zeybel_2022_gut,
   level = "Phylum",
-  group_name = "LiverFatClass",
+  group = "LiverFatClass",
   ZerosAsNA = TRUE,
   RemoveNA = TRUE,
   cutoff = 20,
@@ -83,7 +83,7 @@ impute_abundance(
 data("Zeybel_2022_protein")
 impute_abundance(
   Zeybel_2022_protein,
-  group_name = "LiverFatClass",
+  group = "LiverFatClass",
   ZerosAsNA = TRUE,
   RemoveNA = TRUE,
   cutoff = 20,

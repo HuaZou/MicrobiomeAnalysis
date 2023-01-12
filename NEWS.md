@@ -25,6 +25,7 @@
 + Modify `import_SE` for correcting order of samples and features. (2023-1-10)
 + Add `run_rarecurve`. (2023-1-10)
 + Modify `get_alphaindex`. (2023-1-10)
++ Modify `impute_abundance`. (2023-1-12)
 
 
 # MicrobiomeAnalysis v1.0.2

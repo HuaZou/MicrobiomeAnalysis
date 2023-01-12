@@ -143,7 +143,7 @@ head(ps_genus_transform@otu_table@.Data, 3)
 ```{r}
 ps_genus_impute <- impute_abundance(
     object = ps_genus,
-    group_name = "body.site",
+    group = "body.site",
     ZerosAsNA = TRUE,
     RemoveNA = TRUE,
     cutoff = 20,    
