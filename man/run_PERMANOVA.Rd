@@ -77,7 +77,14 @@ run_PERMANOVA(Zeybel_2022_gut,
 
 # SummarizedExperiment object
 data("Zeybel_2022_protein")
-run_PERMANOVA(Zeybel_2022_protein,
+se_impute <- impute_abundance(
+  object = Zeybel_2022_protein,
+  group = "LiverFatClass",
+  ZerosAsNA = TRUE,
+  RemoveNA = TRUE,
+  cutoff = 20,
+  method = "knn")
+run_PERMANOVA(se_impute,
           variables = c("LiverFatClass", "Liver_fat"),
           mode = "all",
           method = "bray")
