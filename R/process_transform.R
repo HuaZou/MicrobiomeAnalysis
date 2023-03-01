@@ -2,7 +2,9 @@
 #'
 #' @description
 #' Transform the abundances in `profile` sample by sample, which means
-#' the counts of each sample will be transformed individually.
+#' the values of each sample will be transformed individually. It will
+#' change the data distribution of features. For instance, transforming
+#' left skew distribution into nearly norml distribution by using log function.
 #'
 #' @author Created by Yang Cao; modified by Hua Zou (11/30/2022 Shenzhen China)
 #'

@@ -37,7 +37,9 @@ A object matches the class of argument \code{object} with the transformed
 }
 \description{
 Transform the abundances in \code{profile} sample by sample, which means
-the counts of each sample will be transformed individually.
+the values of each sample will be transformed individually. It will
+change the data distribution of features. For instance, transforming
+left skew distribution into nearly norml distribution by using log function.
 }
 \examples{
 \dontrun{

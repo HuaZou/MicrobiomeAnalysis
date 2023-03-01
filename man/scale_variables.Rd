@@ -38,7 +38,7 @@ A \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
 }
 \description{
 Data Normalization not only normalizes data by samples, but also
-scales data by variable/feature.Data scaling adjusts each variable/feature
+scales data by variable/feature. Data scaling adjusts each variable/feature
 by a scaling factor computed based on the dispersion of the variable. The
 former is to change data distribution per sample and the latter is to put
 variable/feature into same distribution.
