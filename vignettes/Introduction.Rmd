@@ -279,7 +279,7 @@ run_MRPP(object = ps_object,
 
 + calculating alpha diversity index on microbiota data
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 alphaindex <- get_alphaindex(
   ps = ps_object,
   level = "Genus",
@@ -292,7 +292,7 @@ head(alphaindex)
 ## Beta dispersion
 
 + Permutation test for homogeneity of multivariate dispersions on microbiota data
-```{r}
+```{r, warning=FALSE, message=FALSE}
 data("Zeybel_2022_gut")
 
 run_betadisper(
@@ -305,8 +305,21 @@ run_betadisper(
 ## Beta diversity
 
 + Principal Coordinate Analysis
-```{r}
+```{r, warning=FALSE, message=FALSE, fig.width=6, fig.height=5}
+data("Zeybel_2022_gut")
+ps_zeybel <- summarize_taxa(Zeybel_2022_gut, level = "Genus")
 
+ord_result <- run_ord(
+  object = ps_zeybel,
+  variable = "LiverFatClass",
+  method = "PCoA")
+
+plot_ord(
+  reslist = ord_result,
+  variable = "LiverFatClass",
+  ellipse_type = "ellipse_groups",
+  sideboxplot = TRUE,
+  sample_label = FALSE)
 ```
 
 
