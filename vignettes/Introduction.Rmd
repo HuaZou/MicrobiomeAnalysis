@@ -289,6 +289,27 @@ head(alphaindex)
 ```
 
 
+## Beta dispersion
+
++ Permutation test for homogeneity of multivariate dispersions on microbiota data
+```{r}
+data("Zeybel_2022_gut")
+
+run_betadisper(
+  object = Zeybel_2022_gut,
+  level = "Phylum",
+  variable = "LiverFatClass",
+  method = "bray")
+```
+
+## Beta diversity
+
++ Principal Coordinate Analysis
+```{r}
+
+```
+
+
 # Differential analysis
 
 ## Aldex

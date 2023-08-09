@@ -18,7 +18,7 @@ VignetteBuilder: knitr
 ByteCompile: true 
 biocViews: Metagenomics, DifferentialAnalysis, FeatureSelection, Visualization
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.3
 URL: https://github.com/HuaZou/MicrobiomeAnalysis
 BugReports: https://github.com/HuaZou/MicrobiomeAnalysis/issues
 Depends: 

@@ -94,25 +94,22 @@
 #' run_aldex(ps, group = "SampleType", method = "kruskal")
 #' }
 #'
-run_aldex <- function(ps,
-                      group,
-                      taxa_rank = "all",
-                      transform = c("identity", "log10", "log10p",
-                                    "SquareRoot", "CubicRoot", "logit"),
-                      norm = "none",
-                      norm_para = list(),
-                      method = c(
-                        "t.test", "wilcox.test",
-                        "kruskal", "glm_anova"
-                      ),
-                      p_adjust = c(
-                        "none", "fdr", "bonferroni", "holm",
-                        "hochberg", "hommel", "BH", "BY"
-                      ),
-                      pvalue_cutoff = 0.05,
-                      mc_samples = 128,
-                      denom = c("all", "iqlr", "zero", "lvha"),
-                      paired = FALSE) {
+run_aldex <- function(
+    ps,
+    group,
+    taxa_rank = "all",
+    transform = c("identity", "log10", "log10p",
+                  "SquareRoot", "CubicRoot", "logit"),
+    norm = "none",
+    norm_para = list(),
+    method = c("t.test", "wilcox.test",
+               "kruskal", "glm_anova"),
+    p_adjust = c("none", "fdr", "bonferroni", "holm",
+                 "hochberg", "hommel", "BH", "BY"),
+    pvalue_cutoff = 0.05,
+    mc_samples = 128,
+    denom = c("all", "iqlr", "zero", "lvha"),
+    paired = FALSE) {
 
   # ps = phyloseq::subset_samples(
   #   caporaso,

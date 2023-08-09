@@ -11,7 +11,8 @@ get_alphaindex(
            "Species", "Strain", "unique"),
     indices = c("all",
       "Observed", "Chao1", "ACE", "Shannon",
-      "Simpson", "InvSimpson", "Fisher", "Evenness"),
+      "Simpson", "InvSimpson", "Fisher",
+      "Evenness", "TaxaNumber"),
     mindepth = NULL,
     force = FALSE
    )
@@ -28,7 +29,7 @@ alpha-diversity indices will be included. Alternatively, you can specify
 one or more indices as a character vector of measure names (default: all).
 Values must be among those supported:
 c("Observed", "Chao1", "ACE", "Shannon", "Simpson",
-"InvSimpson", "Fisher", "Evenness").
+"InvSimpson", "Fisher", "Evenness", "TaxaNumber").
 "Chao1", "ACE" and "Fisher" only supported by
 counts matrix (integers).}
 

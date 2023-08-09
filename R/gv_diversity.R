@@ -22,7 +22,7 @@
 #' one or more indices as a character vector of measure names (default: all).
 #' Values must be among those supported:
 #' c("Observed", "Chao1", "ACE", "Shannon", "Simpson",
-#' "InvSimpson", "Fisher", "Evenness").
+#' "InvSimpson", "Fisher", "Evenness", "TaxaNumber").
 #' "Chao1", "ACE" and "Fisher" only supported by
 #' counts matrix (integers).
 #' @param mindepth (Optional). numeric,
@@ -43,7 +43,8 @@
 #'            "Species", "Strain", "unique"),
 #'     indices = c("all",
 #'       "Observed", "Chao1", "ACE", "Shannon",
-#'       "Simpson", "InvSimpson", "Fisher", "Evenness"),
+#'       "Simpson", "InvSimpson", "Fisher",
+#'       "Evenness", "TaxaNumber"),
 #'     mindepth = NULL,
 #'     force = FALSE
 #'    )
@@ -74,7 +75,8 @@ get_alphaindex <- function(
     ps,
     level = NULL,
     indices = c("Observed", "Chao1", "ACE", "Shannon",
-                "Simpson", "InvSimpson", "Fisher", "Evenness"),
+                "Simpson", "InvSimpson", "Fisher",
+                "Evenness", "TaxaNumber"),
     mindepth = NULL,
     force = FALSE) {
 
@@ -105,7 +107,8 @@ get_alphaindex <- function(
 
   # alpha diversity indices
   measures <- c("Observed", "Chao1", "ACE", "Shannon",
-                "Simpson", "InvSimpson", "Fisher", "Evenness")
+                "Simpson", "InvSimpson", "Fisher",
+                "Evenness", "TaxaNumber")
   if (all(length(indices) == 1, indices == "all")) {
     indices <- as.character(measures)
   }
@@ -125,6 +128,7 @@ get_alphaindex <- function(
   Simpson <- vegan::diversity(otu_tab, index = "simpson")
   InvSimpson <- vegan::diversity(otu_tab, index = "invsimpson")
   Evenness <- Shannon/log(vegan::specnumber(otu_tab))
+  TaxaNumber <- vegan::specnumber(otu_tab)
 
   if (identical(all.equal(otu_tab, round(otu_tab)), TRUE)) {
     spn <- vegan::estimateR(otu_tab)
@@ -139,10 +143,10 @@ get_alphaindex <- function(
                         Shannon = Shannon,
                         Simpson = Simpson,
                         InvSimpson = InvSimpson,
-                        Evenness = Evenness)
+                        Evenness = Evenness,
+                        TaxaNumber = TaxaNumber)
   } else {
     #message("Chao1, ACE and Fisher could not be calculated without integer values.")
-
     Observed <- apply(otu_tab, 1, function(x) {sum(x > 0)})
     # Fisher <- NULL
     # Chao1 <- NULL
@@ -151,7 +155,8 @@ get_alphaindex <- function(
                         Shannon = Shannon,
                         Simpson = Simpson,
                         InvSimpson = InvSimpson,
-                        Evenness = Evenness)
+                        Evenness = Evenness,
+                        TaxaNumber = TaxaNumber)
   }
 
   # overlap of index

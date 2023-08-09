@@ -26,6 +26,8 @@
 + Add `run_rarecurve`. (2023-1-10)
 + Modify `get_alphaindex`. (2023-1-10)
 + Modify `impute_abundance`. (2023-1-12)
++ Remove `run_rarecurve`. (2023-8-9)
++ Add **Alpha diversity** and **Beta dispersion** in *Introduction.Rmd*. (2023-8-9)
 
 
 # MicrobiomeAnalysis v1.0.2
