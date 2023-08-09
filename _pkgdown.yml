@@ -44,20 +44,8 @@ reference:
   - title: "Differential analysis"
     desc: Functions for identifying the microbiome markers
     contents:
-      - run_aldex
-      - run_ancom
-      - run_ancombc
-      - run_distance
-      - run_deseq2
-      - run_edger
-      - run_lefse
-      - run_limma_voom
-      - run_metagenomeseq
-      - run_test_multiple_groups
-      - run_simple_stat
-      - run_sl
-      - run_test_two_groups
-      - run_simple_stat
+      - starts_with("run")
+      - postHocTest
   - title: "Microbiome marker"
     desc: S4 class and methods for microbiomeMarker
     contents:
@@ -70,6 +58,7 @@ reference:
       - abundances
       - nmarker
       - starts_with("postHocTest-class")
+      - "["
   - title: "Statistical tookits"
     desc: >
       Functions to do statistical test
@@ -87,3 +76,12 @@ reference:
       - run_summarySE
       - insertRow
       - insertCol
+  - title: "Additional tookits"
+    desc: >
+      Additional Functions
+    contents:
+      - default_color
+      - check_sample_names
+      - get_GUniFrac
+      - get_eigValue
+      - confounder
