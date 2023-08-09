@@ -8,7 +8,7 @@ This package has many unique features:
 
 <div class="figure" style="text-align: center">
 
-<img src="./man/figures/Schematic.png" alt="The Overview of MicrobiomeAnalysis" width="108" />
+<img src="./man/figures/Schematic.png" alt="The Overview of MicrobiomeAnalysis" width="80%" height="80%" />
 <p class="caption">
 The Overview of MicrobiomeAnalysis
 </p>

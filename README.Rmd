@@ -22,7 +22,7 @@ This package has many unique features:
 
 ## The Overview of **MicrobiomeAnalysis**
 
-```{r, echo=FALSE, fig.width=12, fig.height=8, dpi=600, fig.align="center", fig.cap="The Overview of MicrobiomeAnalysis"}
+```{r, echo=FALSE, out.width="80%", out.height="80%", dpi=600, fig.align="center", fig.cap="The Overview of MicrobiomeAnalysis"}
 knitr::include_graphics("./man/figures/Schematic.png")
 ```
 
