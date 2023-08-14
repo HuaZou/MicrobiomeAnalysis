@@ -41,6 +41,8 @@
 #'  * "QRILC": missing values imputation based quantile regression.
 #'  (default: "none").
 #' @param LOD (Optional). Numeric. limit of detection (default: NULL).
+#' @param knum (Optional). Numeric. Number of neighbors to be used in the
+#' imputation (default=10).
 #'
 #' @usage impute_abundance(
 #'    object,
@@ -54,8 +56,8 @@
 #'    method = c("none", "LOD", "half_min", "median",
 #'        "mean", "min", "knn", "rf",
 #'        "global_mean", "svd", "QRILC"),
-#'    LOD = NULL
-#'    )
+#'    LOD = NULL,
+#'    knum = 10)
 #'
 #' @export
 #'
@@ -100,7 +102,8 @@ impute_abundance <- function(
     method = c("none", "LOD", "half_min", "median",
                "mean", "min", "knn", "rf",
                "global_mean", "svd", "QRILC"),
-    LOD = NULL) {
+    LOD = NULL,
+    knum = 10) {
 
   # data("Zeybel_2022_gut")
   # object = Zeybel_2022_gut
@@ -118,7 +121,8 @@ impute_abundance <- function(
   # ZerosAsNA = TRUE
   # RemoveNA = TRUE
   # cutoff = 20
-  # method = "rf"
+  # method = "knn"
+  # knum = 10
 
   if (base::missing(object)) {
     stop("object argument is empty!")
@@ -174,6 +178,7 @@ impute_abundance <- function(
     sam_tab <- SummarizedExperiment::colData(object) %>%
       data.frame() %>%
       tibble::rownames_to_column("TempRowNames")
+    ## samples->Row; features->Column
     prf_tab <- SummarizedExperiment::assay(object) %>%
       data.frame() %>%
       t()
@@ -214,11 +219,15 @@ impute_abundance <- function(
     names(supress) <- correct_names
     correct_names <- names(supress[supress == "FALSE"])
     depurdata <- to_imp_data[, 2:ncol(to_imp_data)][!supress]
+    samplename <- rownames(depurdata)
     depurdata <- sapply(depurdata, function(x) as.numeric(as.character(x)))
+    rownames(depurdata) <- samplename
   } else {
     depurdata <- to_imp_data[, 2:ncol(to_imp_data)]
+    samplename <- rownames(depurdata)
     depurdata <- sapply(depurdata, function(x) as.numeric(as.character(x)))
     correct_names <- colnames(prf_tab)
+    rownames(depurdata) <- samplename
   }
 
   # Row->feature;Col->sample
@@ -246,7 +255,12 @@ impute_abundance <- function(
       if(is.numeric(x)) ifelse(is.na(x), min(x, na.rm = TRUE), x) else x})
   } else if (method == "knn") {
     depurdata <- t(depurdata)
-    datai <- impute::impute.knn(depurdata)
+    datai <- impute::impute.knn(
+      depurdata,
+      k = knum,
+      rowmax = 0.5,
+      colmax = 0.8,
+      maxp = 1500)
     depurdata <- t(datai$data)
   } else if (method == "rf") {
     # depurdata <- data.frame(group = samples_groups, depurdata)
@@ -279,7 +293,23 @@ impute_abundance <- function(
 
   if (methods::is(object, "SummarizedExperiment")) {
     res <- object
-    SummarizedExperiment::assay(res) <- t(depurdata)
+    if (ncol(depurdata) != ncol(prf_tab)) {
+      # rdata <- SummarizedExperiment::rowData(object)
+      # cdata <- SummarizedExperiment::colData(object)
+      # if (length(object@metadata) == 0) {
+      #   mdata <- NULL
+      # } else {
+      #   mdata <- object@metadata
+      # }
+      # res <- import_SE(object = t(depurdata),
+      #                  rowdata = rdata,
+      #                  coldata = cdata,
+      #                  metadata = mdata)
+
+      res <- base::subset(res, colnames(prf_tab) %in% colnames(depurdata))
+    } else {
+      SummarizedExperiment::assay(res) <- t(depurdata)
+    }
   }
 
   return(res)
@@ -289,7 +319,7 @@ impute_abundance <- function(
 #' Global Standard imputation
 #'
 #' Global Standard imputation is used the Global mean and standard as the
-#' cutoff to impute the missing value. We calculate the mean  for
+#' cutoff to impute the missing value. We calculate the mean for
 #' all non missing values of that variable then replace missing
 #' value with mean.
 #'

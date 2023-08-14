@@ -80,7 +80,6 @@
 #' @return
 #'   A list of the ordination's results.
 #'
-#' @importFrom ape pcoa
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom vegan adonis vegdist
 #' @importFrom stats setNames

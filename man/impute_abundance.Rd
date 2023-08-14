@@ -16,8 +16,8 @@ impute_abundance(
    method = c("none", "LOD", "half_min", "median",
        "mean", "min", "knn", "rf",
        "global_mean", "svd", "QRILC"),
-   LOD = NULL
-   )
+   LOD = NULL,
+   knum = 10)
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
@@ -57,6 +57,9 @@ fraction of the standard deviation of the sample distribution.
 }}
 
 \item{LOD}{(Optional). Numeric. limit of detection (default: NULL).}
+
+\item{knum}{(Optional). Numeric. Number of neighbors to be used in the
+imputation (default=10).}
 }
 \value{
 A \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or

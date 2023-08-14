@@ -114,7 +114,12 @@ transform_abundances <- function(
   if (any(inherits(object, "environment"), inherits(object, "phyloseq"))) {
     otu_table(object) <- otu_table(abd, taxa_are_rows = taxa_are_rows(object))
   } else if (inherits(object, "SummarizedExperiment")) {
-    SummarizedExperiment::assay(object) <- t(abd)
+
+    if (nrow(t(otu)) != nrow(t(abd))) {
+      object <- base::subset(object, rownames(t(otu)) %in% rownames(t(abd)))
+    } else {
+      SummarizedExperiment::assay(object) <- t(abd)
+    }
   } else {
     object <- abd
   }

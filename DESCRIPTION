@@ -71,4 +71,9 @@ Suggests:
     patchwork,
     ggsignif,
     imputeLCMD,
-    missForest
+    missForest,
+    ape,
+    Rtsne,
+    umap,
+    impute
+    

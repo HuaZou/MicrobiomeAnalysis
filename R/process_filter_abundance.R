@@ -101,9 +101,8 @@ filter_abundance <- function(
     return(object)
   }
 
-  # profile: row->samples; col->features
   if (all(!is.null(object), inherits(object, "phyloseq"))) {
-
+    # profile: row->features; col->samples
     stopifnot(inherits(object, "phyloseq"))
 
     res <- LowAbundance_taxa(
@@ -138,6 +137,7 @@ filter_abundance <- function(
                                                        taxa_are_rows = TRUE)
 
   } else if (all(!is.null(object), inherits(object, "SummarizedExperiment"))) {
+    # profile: row->features; col->samples
     res <- LowAbundance_feature(
       dat = object,
       cutoff_mean = cutoff_mean,
@@ -217,7 +217,7 @@ LowAbundance_taxa <- function(
   # threshold_one = cutoff_one
   # unclassify = unclass
 
-  # OTU table
+  # OTU table: row->features; col->samples
   otus <- phyloseq::otu_table(ps)
   otus_extend <- slot(otus, ".Data") %>%
     data.frame()
@@ -349,33 +349,48 @@ LowAbundance_feature <- function(
                       by = "TaxaID") %>%
     dplyr::select(-TaxaID)
 
-  feature_aggregate <-  feature_merge %>%
-    dplyr::group_by(TaxaID2) %>%
-    dplyr::summarise(across(everything(), ~ sum(., is.na(.), 0))) %>%
+  # feature_aggregate <- feature_merge %>%
+  #   dplyr::group_by(TaxaID2) %>%
+  #   dplyr::summarise(across(everything(), ~ sum(., is.na(.), 0))) %>%
+  #   tibble::column_to_rownames("TaxaID2")
+
+  feature_final <- feature_merge %>%
+    dplyr::filter(!TaxaID2 %in% c("Others_LowAbundance")) %>%
     tibble::column_to_rownames("TaxaID2")
 
 
-  if (is.null(dat@elementMetadata)) {
-    res <- import_SE(object = feature_aggregate,
-                     #rowdata = dat@elementMetadata,
-                     coldata = dat@colData %>% data.frame(),
-                     metadata = dat@metadata %>% data.frame())
-  } else {
-    rowdf <- dat@elementMetadata %>% data.frame()
-    overlap_featureID <- intersect(rownames(feature_aggregate),
-                                 rowdf[, 1])
-    lowdf <- data.frame(matrix(NA, nrow = 1, ncol = ncol(rowdf))) %>%
-      stats::setNames(colnames(rowdf))
-    lowdf[1, 1] <- setdiff(rownames(feature_aggregate),
-                           rowdf[, 1])
+  # if (is.null(dat@elementMetadata)) {
+  #   res <- import_SE(object = feature_aggregate,
+  #                    coldata = dat@colData,
+  #                    metadata = dat@metadata)
+  # } else {
+  #   rowdf <- dat@elementMetadata %>% as.data.frame()
+  #   overlap_featureID <- intersect(rownames(feature_aggregate),
+  #                                rowdf[, 1])
+  #   lowdf <- data.frame(matrix(NA, nrow = 1, ncol = ncol(rowdf))) %>%
+  #     stats::setNames(colnames(rowdf))
+  #   lowdf[1, 1] <- setdiff(rownames(feature_aggregate),
+  #                          rowdf[, 1])
+  #
+  #   rowdf_cln <- rowdf[rowdf[, 1] %in% overlap_featureID, , F] %>%
+  #     rbind(lowdf)
+  #   rownames(rowdf_cln) <- rowdf_cln[, 1]
+  #
+  #   # the latter ordered by the former
+  #   data_assay <- feature_aggregate[pmatch(rownames(rowdf_cln),
+  #                                          rownames(feature_aggregate)), ]
+  #
+  #   res <- import_SE(object = data_assay,
+  #                    rowdata = rowdf_cln,
+  #                    coldata = dat@colData,
+  #                    metadata = dat@metadata)
+  # }
 
-    rowdf_cln <- rowdf[rowdf[, 1] %in% overlap_featureID, , F] %>%
-      rbind(lowdf)
-    rownames(rowdf_cln) <- rowdf_cln[, 1]
-    res <- import_SE(object = feature_aggregate,
-                     rowdata = rowdf_cln,
-                     coldata = dat@colData %>% data.frame(),
-                     metadata = dat@metadata %>% data.frame())
+  res <- dat
+  if (nrow(prof_tab) != nrow(feature_final)) {
+    res <- base::subset(res, rownames(prof_tab) %in% rownames(feature_final))
+  } else {
+    SummarizedExperiment::assay(res) <- feature_final
   }
 
   return(res)

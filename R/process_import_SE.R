@@ -72,6 +72,16 @@ import_SE <- function(
   #   data.frame()
   # metadata = list(lab="hua")
 
+  if (!is.null(object)) {
+    # profile: row->features; col->samples
+    object <- object %>% as.data.frame()
+  }
+  if (!is.null(rowdata)) {
+    rowdata <- rowdata %>% as.data.frame()
+  }
+  if (!is.null(coldata)) {
+    coldata <- coldata %>% as.data.frame()
+  }
 
   # overlap of samples
   if (all(!is.null(object), !is.null(coldata))) {
@@ -81,8 +91,8 @@ import_SE <- function(
     }
     object <- object %>%
       dplyr::select(dplyr::all_of(overlap_sample))
-    #coldata <- coldata[rownames(coldata) %in% overlap_sample, , F]
-    coldata <- coldata[colnames(object), , F]
+    # coldata <- coldata[rownames(coldata) %in% colnames(object), , F]
+    coldata <- coldata[pmatch(colnames(object), rownames(coldata)), , F]
   }
 
   # overlap of features
@@ -91,9 +101,11 @@ import_SE <- function(
     if (length(overlap_feature) == 0) {
       stop("No overlap of features between assay and rowData, please check your data")
     }
-    object <- object[rownames(object) %in% overlap_feature, , F]
-    #rowdata <- rowdata[rownames(rowdata) %in% overlap_feature, , F]
-    rowdata <- rowdata[rownames(object), , F]
+    # object <- object[rownames(object) %in% overlap_feature, , F]
+    # rowdata <- rowdata[rownames(rowdata) %in% rownames(object), , F]
+
+    object <- object[pmatch(overlap_feature, rownames(object)), , F]
+    rowdata <- rowdata[pmatch(overlap_feature, rownames(rowdata)), , F]
   }
 
   # overlap of features

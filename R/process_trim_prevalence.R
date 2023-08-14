@@ -129,9 +129,9 @@ trim_prevalence <- function(
   } else if (inherits(object, "environment")) {
     prf <- as(object$.Data, "matrix")
   } else if (inherits(object, "SummarizedExperiment")) {
+    # profile: row->features; col->samples
     prf <- SummarizedExperiment::assay(object) %>%
-      data.frame() #%>%
-      #t()
+      data.frame()
   } else {
     prf <- object
   }
@@ -186,7 +186,6 @@ trim_prevalence <- function(
                                                    taxa_are_rows = taxa_are_rows(ps))
     object <- ps
   } else if (inherits(object, "SummarizedExperiment")) {
-    # SummarizedExperiment::assay(object, withDimnames = TRUE) <- prf_remain #t(prf_remain)
 
     object <- base::subset(object, rownames(object) %in% rownames(prf_remain))
 
