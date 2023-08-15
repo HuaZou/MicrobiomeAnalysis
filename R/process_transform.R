@@ -15,6 +15,9 @@
 #' * "log10", the transformation is `log10(object)`, and if the data contains
 #'   zeros the transformation is `log10(1 + object)`.
 #' * "log10p", the transformation is `log10(1 + object)`.
+#' * "log2", the transformation is `log2(object)`, and if the data contains
+#'   zeros the transformation is `log2(1 + object)`.
+#' * "log2p", the transformation is `log2(1 + object)`.
 #' * "SquareRoot", the transformation is `Square Root`.
 #' * "CubicRoot", the transformation is `Cubic Root`.
 #' * "logit", the transformation is `Zero-inflated Logit Transformation`
@@ -31,6 +34,7 @@
 #' @usage transform_abundances(
 #'    object,
 #'    transform = c("identity", "log10", "log10p",
+#'             "log2", "log2p",
 #'             "SquareRoot", "CubicRoot", "logit"),
 #'    level = c(NULL, "Kingdom", "Phylum", "Class",
 #'            "Order", "Family", "Genus",
@@ -59,6 +63,7 @@
 transform_abundances <- function(
     object,
     transform = c("identity", "log10", "log10p",
+                  "log2", "log2p",
                  "SquareRoot", "CubicRoot", "logit"),
     level = NULL) {
 
@@ -74,6 +79,7 @@ transform_abundances <- function(
 
   transform <- match.arg(
     transform, c("identity", "log10", "log10p",
+                 "log2", "log2p",
                  "SquareRoot", "CubicRoot", "logit")
   )
 
@@ -102,6 +108,10 @@ transform_abundances <- function(
     abd <- transform_log10(otu)
   } else if (transform == "log10p") {
     abd <- transform_log10p(otu)
+  } else if (transform == "log2") {
+    abd <- transform_log2(otu)
+  } else if (transform == "log2p") {
+    abd <- transform_log2p(otu)
   } else if (transform == "SquareRoot") {
     min_val <- min(abs(otu[otu != 0 & !is.na(otu)]))/10
     abd <- transform_SquareRoot(otu, min_val)
@@ -163,6 +173,48 @@ transform_log10p <- function(x) {
         x_norm[i, j] <- log10(x_norm[i, j] + 1)
       } else {
         x_norm[i, j] <- log10(x_norm[i, j])
+      }
+    }
+  }
+  return(x_norm)
+}
+
+#' the data is transformed using log2(1 + x) if the data contains zeroes
+#' @keywords internal
+#' @noRd
+transform_log2 <- function(x) {
+
+  x_norm <- x
+  if (min(x[!is.na(x)]) == 0) {
+    warning("OTU table contains zeroes. Using log10(1 + x) instead.")
+    for(i in 1:nrow(x_norm)) {
+      for (j in 1:ncol(x_norm)) {
+        if (x_norm[i, j] == 0 | is.na(x_norm[i, j])) {
+          x_norm[i, j] <- log2(x_norm[i, j] + 1)
+        } else {
+          x_norm[i, j] <- log2(x_norm[i, j])
+        }
+      }
+    }
+  } else {
+    x_norm <- log2(x)
+  }
+
+  return(x_norm)
+}
+
+#' the data is transformed using log2(1 + x)
+#' @keywords internal
+#' @noRd
+transform_log2p <- function(x) {
+
+  x_norm <- x
+  for(i in 1:nrow(x_norm)) {
+    for (j in 1:ncol(x_norm)) {
+      if (x_norm[i, j] == 0 | is.na(x_norm[i, j])) {
+        x_norm[i, j] <- log2(x_norm[i, j] + 1)
+      } else {
+        x_norm[i, j] <- log2(x_norm[i, j])
       }
     }
   }

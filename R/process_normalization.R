@@ -644,28 +644,27 @@ scale_variables <- function(
 
   if (any(inherits(object, "environment"), inherits(object, "phyloseq"))) {
     otu_table(object) <- otu_table(abd, taxa_are_rows = taxa_are_rows(object))
-  }  else if (inherits(object, "SummarizedExperiment")) {
+  } else if (inherits(object, "SummarizedExperiment")) {
     SummarizedExperiment::assay(object) <- t(abd)
   } else {
     object <- abd
   }
 
   return(object)
-
 }
 
 #' values minus mean statistic
 #' @keywords internal
 #' @noRd
 scale_MeanCenter <- function(x) {
-  return(x - mean(x)) # mean(x, na.rm = TRUE)
+  return(x - mean(x, na.rm = TRUE)) # mean(x, na.rm = TRUE)
 }
 
 #' mean-centered and divided by the standard deviation of each variable
 #' @keywords internal
 #' @noRd
 scale_Zscore <- function(x) {
-  return((x - mean(x))/sd(x, na.rm = TRUE))
+  return((x - mean(x, na.rm = TRUE))/sd(x, na.rm = TRUE))
 }
 
 #' mean-centered and divided by the square root of the standard deviation
@@ -673,16 +672,16 @@ scale_Zscore <- function(x) {
 #' @keywords internal
 #' @noRd
 scale_Pareto <- function(x) {
-  return((x - mean(x))/sqrt(sd(x, na.rm = T)))
+  return((x - mean(x, na.rm = TRUE))/sqrt(sd(x, na.rm = TRUE)))
 }
 
 #' mean-centered and divided by the range of each variable.
 #' @keywords internal
 #' @noRd
 scale_Range <- function(x) {
-  if (max(x) == min(x)) {
+  if (max(x, na.rm = TRUE) == min(x, na.rm = TRUE)) {
     return(x)
   } else {
-    return((x - mean(x))/(max(x) - min(x)))
+    return((x - mean(x, na.rm = TRUE))/(max(x, na.rm = TRUE) - min(x, na.rm = TRUE)))
   }
 }

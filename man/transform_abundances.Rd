@@ -7,6 +7,7 @@
 transform_abundances(
    object,
    transform = c("identity", "log10", "log10p",
+            "log2", "log2p",
             "SquareRoot", "CubicRoot", "logit"),
    level = c(NULL, "Kingdom", "Phylum", "Class",
            "Order", "Family", "Genus",
@@ -22,6 +23,9 @@ transform_abundances(
 \item "log10", the transformation is \code{log10(object)}, and if the data contains
 zeros the transformation is \code{log10(1 + object)}.
 \item "log10p", the transformation is \code{log10(1 + object)}.
+\item "log2", the transformation is \code{log2(object)}, and if the data contains
+zeros the transformation is \code{log2(1 + object)}.
+\item "log2p", the transformation is \code{log2(1 + object)}.
 \item "SquareRoot", the transformation is \verb{Square Root}.
 \item "CubicRoot", the transformation is \verb{Cubic Root}.
 \item "logit", the transformation is \verb{Zero-inflated Logit Transformation}
