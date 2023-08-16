@@ -63,16 +63,51 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">abundances</span><span class="op">(</span><span class="va">object</span>, transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span><span class="op">)</span>, norm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">abundances</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span>, <span class="st">"log2"</span>, <span class="st">"log2p"</span>, <span class="st">"SquareRoot"</span>,</span>
+<span>    <span class="st">"CubicRoot"</span>, <span class="st">"logit"</span><span class="op">)</span>,</span>
+<span>  norm <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for otu_table</span></span>
-<span><span class="fu">abundances</span><span class="op">(</span><span class="va">object</span>, transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span><span class="op">)</span>, norm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">abundances</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span>, <span class="st">"log2"</span>, <span class="st">"log2p"</span>, <span class="st">"SquareRoot"</span>,</span>
+<span>    <span class="st">"CubicRoot"</span>, <span class="st">"logit"</span><span class="op">)</span>,</span>
+<span>  norm <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for phyloseq</span></span>
-<span><span class="fu">abundances</span><span class="op">(</span><span class="va">object</span>, transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span><span class="op">)</span>, norm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">abundances</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span>, <span class="st">"log2"</span>, <span class="st">"log2p"</span>, <span class="st">"SquareRoot"</span>,</span>
+<span>    <span class="st">"CubicRoot"</span>, <span class="st">"logit"</span><span class="op">)</span>,</span>
+<span>  norm <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for microbiomeMarker</span></span>
-<span><span class="fu">abundances</span><span class="op">(</span><span class="va">object</span>, transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">abundances</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span>, <span class="st">"log2"</span>, <span class="st">"log2p"</span>, <span class="st">"SquareRoot"</span>,</span>
+<span>    <span class="st">"CubicRoot"</span>, <span class="st">"logit"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for assay</span></span>
+<span><span class="fu">abundances</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span>, <span class="st">"log2"</span>, <span class="st">"log2p"</span>, <span class="st">"SquareRoot"</span>,</span>
+<span>    <span class="st">"CubicRoot"</span>, <span class="st">"logit"</span><span class="op">)</span>,</span>
+<span>  norm <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for SummarizedExperiment</span></span>
+<span><span class="fu">abundances</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span>, <span class="st">"log2"</span>, <span class="st">"log2p"</span>, <span class="st">"SquareRoot"</span>,</span>
+<span>    <span class="st">"CubicRoot"</span>, <span class="st">"logit"</span><span class="op">)</span>,</span>
+<span>  norm <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -87,6 +122,13 @@
 <li><p>"log10", the transformation is <code>log10(object)</code>, and if the data contains
 zeros the transformation is <code>log10(1 + object)</code>.</p></li>
 <li><p>"log10p", the transformation is <code>log10(1 + object)</code>.</p></li>
+<li><p>"log2", the transformation is <code>log2(object)</code>, and if the data contains
+zeros the transformation is <code>log2(1 + object)</code>.</p></li>
+<li><p>"log2p", the transformation is <code>log2(1 + object)</code>.</p></li>
+<li><p>"SquareRoot", the transformation is <code>Square Root</code>.</p></li>
+<li><p>"CubicRoot", the transformation is <code>Cubic Root</code>.</p></li>
+<li><p>"logit", the transformation is <code>Zero-inflated Logit Transformation</code>
+(Does not work well for microbiome data).</p></li>
 </ul></dd>
 
 

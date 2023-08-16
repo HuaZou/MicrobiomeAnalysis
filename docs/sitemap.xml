@@ -154,6 +154,9 @@
     <loc>/reference/phyloseq2metagenomeSeq.html</loc>
   </url>
   <url>
+    <loc>/reference/plot_ord.html</loc>
+  </url>
+  <url>
     <loc>/reference/postHocTest-class.html</loc>
   </url>
   <url>
@@ -221,6 +224,9 @@
   </url>
   <url>
     <loc>/reference/run_metagenomeseq.html</loc>
+  </url>
+  <url>
+    <loc>/reference/run_ord.html</loc>
   </url>
   <url>
     <loc>/reference/run_simple_stat.html</loc>

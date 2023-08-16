@@ -75,8 +75,8 @@
 <span>   method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"LOD"</span>, <span class="st">"half_min"</span>, <span class="st">"median"</span>,</span>
 <span>       <span class="st">"mean"</span>, <span class="st">"min"</span>, <span class="st">"knn"</span>, <span class="st">"rf"</span>,</span>
 <span>       <span class="st">"global_mean"</span>, <span class="st">"svd"</span>, <span class="st">"QRILC"</span><span class="op">)</span>,</span>
-<span>   LOD <span class="op">=</span> <span class="cn">NULL</span></span>
-<span>   <span class="op">)</span></span></code></pre></div>
+<span>   LOD <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>   knum <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -131,6 +131,11 @@ fraction of the standard deviation of the sample distribution.</p></li>
 
 <dt>LOD</dt>
 <dd><p>(Optional). Numeric. limit of detection (default: NULL).</p></dd>
+
+
+<dt>knum</dt>
+<dd><p>(Optional). Numeric. Number of neighbors to be used in the
+imputation (default=10).</p></dd>
 
 </dl></div>
     <div id="value">

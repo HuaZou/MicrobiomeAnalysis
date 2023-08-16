@@ -72,6 +72,7 @@ left skew distribution into nearly norml distribution by using log function.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">transform_abundances</span><span class="op">(</span></span>
 <span>   <span class="va">object</span>,</span>
 <span>   transform <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"identity"</span>, <span class="st">"log10"</span>, <span class="st">"log10p"</span>,</span>
+<span>            <span class="st">"log2"</span>, <span class="st">"log2p"</span>,</span>
 <span>            <span class="st">"SquareRoot"</span>, <span class="st">"CubicRoot"</span>, <span class="st">"logit"</span><span class="op">)</span>,</span>
 <span>   level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="st">"Kingdom"</span>, <span class="st">"Phylum"</span>, <span class="st">"Class"</span>,</span>
 <span>           <span class="st">"Order"</span>, <span class="st">"Family"</span>, <span class="st">"Genus"</span>,</span>
@@ -90,6 +91,9 @@ left skew distribution into nearly norml distribution by using log function.</p>
 <li><p>"log10", the transformation is <code>log10(object)</code>, and if the data contains
 zeros the transformation is <code>log10(1 + object)</code>.</p></li>
 <li><p>"log10p", the transformation is <code>log10(1 + object)</code>.</p></li>
+<li><p>"log2", the transformation is <code>log2(object)</code>, and if the data contains
+zeros the transformation is <code>log2(1 + object)</code>.</p></li>
+<li><p>"log2p", the transformation is <code>log2(1 + object)</code>.</p></li>
 <li><p>"SquareRoot", the transformation is <code>Square Root</code>.</p></li>
 <li><p>"CubicRoot", the transformation is <code>Cubic Root</code>.</p></li>
 <li><p>"logit", the transformation is <code>Zero-inflated Logit Transformation</code>

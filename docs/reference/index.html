@@ -209,6 +209,10 @@
         </td>
         <td><p>Permutational multivariate analysis of variance (PERMANOVA)</p></td>
       </tr><tr><td>
+          <p><code><a href="run_ord.html">run_ord()</a></code> </p>
+        </td>
+        <td><p>Ordination for microbiota data</p></td>
+      </tr><tr><td>
           <p><code><a href="get_alphaindex.html">get_alphaindex()</a></code> </p>
         </td>
         <td><p>Calculating index of Alpha diversity on microbiota data</p></td>
@@ -217,34 +221,6 @@
           <p class="section-desc"></p><p>Functions for identifying the microbiome markers</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="run_ANOSIM.html">run_ANOSIM()</a></code> </p>
-        </td>
-        <td><p>Analysis of Similarity (ANOSIM)</p></td>
-      </tr><tr><td>
-          <p><code><a href="run_CI.html">run_CI()</a></code> </p>
-        </td>
-        <td><p>Confidence Interval</p></td>
-      </tr><tr><td>
-          <p><code><a href="run_MANTEL.html">run_MANTEL()</a></code> </p>
-        </td>
-        <td><p>Mantel Test (MANTEL)</p></td>
-      </tr><tr><td>
-          <p><code><a href="run_MRPP.html">run_MRPP()</a></code> </p>
-        </td>
-        <td><p>Multi-response Permutation Procedures (MRPP)</p></td>
-      </tr><tr><td>
-          <p><code><a href="run_OddRatio.html">run_OddRatio()</a></code> </p>
-        </td>
-        <td><p>95% confidential interval Odds Ratio</p></td>
-      </tr><tr><td>
-          <p><code><a href="run_PERMANOVA.html">run_PERMANOVA()</a></code> </p>
-        </td>
-        <td><p>Permutational multivariate analysis of variance (PERMANOVA)</p></td>
-      </tr><tr><td>
-          <p><code><a href="run_STDERR.html">run_STDERR()</a></code> </p>
-        </td>
-        <td><p>Standard Error</p></td>
-      </tr><tr><td>
           <p><code><a href="run_aldex.html">run_aldex()</a></code> </p>
         </td>
         <td><p>Perform differential analysis using ALDEx2</p></td>
@@ -258,29 +234,13 @@
         <td><p>Differential analysis of compositions of microbiomes with bias correction
 (ANCOM-BC).</p></td>
       </tr><tr><td>
-          <p><code><a href="run_betadisper.html">run_betadisper()</a></code> </p>
-        </td>
-        <td><p>Multivariate homogeneity of groups dispersions (variances)</p></td>
-      </tr><tr><td>
           <p><code><a href="run_deseq2.html">run_deseq2()</a></code> </p>
         </td>
         <td><p>Perform DESeq differential analysis</p></td>
       </tr><tr><td>
-          <p><code><a href="run_distance.html">run_distance()</a></code> </p>
-        </td>
-        <td><p>Calculate the distance among samples</p></td>
-      </tr><tr><td>
           <p><code><a href="run_edger.html">run_edger()</a></code> </p>
         </td>
         <td><p>Perform differential analysis using edgeR</p></td>
-      </tr><tr><td>
-          <p><code><a href="run_group.CI.html">run_group.CI()</a></code> </p>
-        </td>
-        <td><p>Group Confidence Interval</p></td>
-      </tr><tr><td>
-          <p><code><a href="run_group.STDERR.html">run_group.STDERR()</a></code> </p>
-        </td>
-        <td><p>Group Standard Error Interval</p></td>
       </tr><tr><td>
           <p><code><a href="run_lefse.html">run_lefse()</a></code> </p>
         </td>
@@ -289,10 +249,6 @@
           <p><code><a href="run_limma_voom.html">run_limma_voom()</a></code> </p>
         </td>
         <td><p>Differential analysis using limma-voom</p></td>
-      </tr><tr><td>
-          <p><code><a href="run_marker.html">run_marker()</a></code> </p>
-        </td>
-        <td><p>Find makers (differentially expressed metagenomic features)</p></td>
       </tr><tr><td>
           <p><code><a href="run_metagenomeseq.html">run_metagenomeseq()</a></code> </p>
         </td>
@@ -306,10 +262,6 @@
         </td>
         <td><p>Identify biomarkers using supervised leaning (SL) methods</p></td>
       </tr><tr><td>
-          <p><code><a href="run_summarySE.html">run_summarySE()</a></code> </p>
-        </td>
-        <td><p>Summarizes data for mean median sd etc</p></td>
-      </tr><tr><td>
           <p><code><a href="run_test_multiple_groups.html">run_test_multiple_groups()</a></code> </p>
         </td>
         <td><p>Statistical test for multiple groups</p></td>
@@ -317,6 +269,10 @@
           <p><code><a href="run_test_two_groups.html">run_test_two_groups()</a></code> </p>
         </td>
         <td><p>Statistical test between two groups</p></td>
+      </tr><tr><td>
+          <p><code><a href="run_marker.html">run_marker()</a></code> </p>
+        </td>
+        <td><p>Find makers (differentially expressed metagenomic features)</p></td>
       </tr><tr><td>
           <p><code><a href="postHocTest.html">postHocTest()</a></code> </p>
         </td>
@@ -446,6 +402,14 @@ multiple groups</p></td>
           <p><code><a href="confounder.html">confounder()</a></code> </p>
         </td>
         <td><p>Confounder analysis</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="functions-to-visualization">Functions to visualization <a href="#functions-to-visualization" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>visualization Functions</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="plot_ord.html">plot_ord()</a></code> </p>
+        </td>
+        <td><p>Visualization of Ordination results with scatterplot</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
