@@ -40,11 +40,24 @@ reference:
       - run_MANTEL
       - run_MRPP
       - run_PERMANOVA
+      - run_ord
       - get_alphaindex
   - title: "Differential analysis"
     desc: Functions for identifying the microbiome markers
     contents:
-      - starts_with("run")
+      - run_aldex
+      - run_ancom
+      - run_ancombc
+      - run_deseq2
+      - run_edger
+      - run_lefse
+      - run_limma_voom
+      - run_metagenomeseq
+      - run_simple_stat
+      - run_sl
+      - run_test_multiple_groups
+      - run_test_two_groups
+      - run_marker
       - postHocTest
   - title: "Microbiome marker"
     desc: S4 class and methods for microbiomeMarker
@@ -85,3 +98,8 @@ reference:
       - get_GUniFrac
       - get_eigValue
       - confounder
+  - title: "Functions to visualization"
+    desc: >
+      visualization Functions
+    contents:
+      - plot_ord

@@ -30,6 +30,7 @@
 + Add **Alpha diversity** and **Beta dispersion** in *Introduction.Rmd*. (2023-8-9)
 + Add `run_ord` and `plot_ord`. (2023-8-10)
 + Modify `process_import_SE`, `process_imputation`, `process_transform`, and `process_trim_prevalence` for building *SummarizedExperiment* object. (2023-8-14)
++ Fix bugs in `process_imputation`, `process_transform`, and `process_trim_prevalence` for building *SummarizedExperiment* object. (2023-8-16)
 
 
 # MicrobiomeAnalysis v1.0.2

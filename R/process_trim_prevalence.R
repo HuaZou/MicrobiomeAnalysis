@@ -131,7 +131,7 @@ trim_prevalence <- function(
   } else if (inherits(object, "SummarizedExperiment")) {
     # profile: row->features; col->samples
     prf <- SummarizedExperiment::assay(object) %>%
-      data.frame()
+      as.data.frame()
   } else {
     prf <- object
   }

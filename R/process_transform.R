@@ -96,8 +96,7 @@ transform_abundances <- function(
     otu <- as(otu_table(object), "matrix")
   } else if (inherits(object, "SummarizedExperiment")) {
     otu <- SummarizedExperiment::assay(object) %>%
-      data.frame() %>%
-      t()
+      as.data.frame()
   } else {
     otu <- as.matrix(object)
   }
@@ -125,10 +124,10 @@ transform_abundances <- function(
     otu_table(object) <- otu_table(abd, taxa_are_rows = taxa_are_rows(object))
   } else if (inherits(object, "SummarizedExperiment")) {
 
-    if (nrow(t(otu)) != nrow(t(abd))) {
-      object <- base::subset(object, rownames(t(otu)) %in% rownames(t(abd)))
+    if (nrow(otu) != nrow(abd)) {
+      object <- base::subset(object, rownames(otu) %in% rownames(abd))
     } else {
-      SummarizedExperiment::assay(object) <- t(abd)
+      SummarizedExperiment::assay(object) <- abd
     }
   } else {
     object <- abd

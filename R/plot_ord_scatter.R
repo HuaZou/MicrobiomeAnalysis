@@ -42,7 +42,7 @@
 #'
 #' @export
 #'
-#' @usage plot_Ordination(
+#' @usage plot_ord(
 #'     reslist,
 #'     variable,
 #'     variable_name = NULL,
@@ -374,26 +374,27 @@ plot_ord <- function(
 #' @importFrom MASS cov.trob
 #' @import ggplot2
 #'
-geom_enterotype <- function(mapping = NULL,
-                            data = NULL,
-                            stat = "identity",
-                            position = "identity",
-                            alpha = 0.2,
-                            prop = 0.5,
-                            lineend = "butt",
-                            linejoin = "round",
-                            linemitre = 1,
-                            arrow = NULL,
-                            na.rm = FALSE,
-                            parse = FALSE,
-                            nudge_x = 0,
-                            nudge_y = 0,
-                            label.padding = unit(0.15, "lines"),
-                            label.r = unit(0.15, "lines"),
-                            label.size = 0.1,
-                            show.legend = TRUE,
-                            inherit.aes = TRUE,
-                            ...) {
+geom_enterotype <- function(
+    mapping = NULL,
+    data = NULL,
+    stat = "identity",
+    position = "identity",
+    alpha = 0.2,
+    prop = 0.5,
+    lineend = "butt",
+    linejoin = "round",
+    linemitre = 1,
+    arrow = NULL,
+    na.rm = FALSE,
+    parse = FALSE,
+    nudge_x = 0,
+    nudge_y = 0,
+    label.padding = unit(0.15, "lines"),
+    label.r = unit(0.15, "lines"),
+    label.size = 0.1,
+    show.legend = TRUE,
+    inherit.aes = TRUE,
+    ...) {
 
   # create new stat and geom for scatterplot with ellipses
   StatEllipse <- ggproto(

@@ -4,7 +4,7 @@
 \alias{plot_ord}
 \title{Visualization of Ordination results with scatterplot}
 \usage{
-plot_Ordination(
+plot_ord(
     reslist,
     variable,
     variable_name = NULL,

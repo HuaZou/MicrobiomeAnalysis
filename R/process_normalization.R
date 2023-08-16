@@ -584,7 +584,7 @@ normalize_feature <- function(feature, normalization) {
 #' scale_variables(
 #'   object = enterotypes_arumugam,
 #'   level = "Phylum",
-#'   method = "pareto")
+#'   method = "mean_center")
 #'
 #' # SummarizedExperiment object
 #' data("Zeybel_2022_protein")
@@ -603,6 +603,10 @@ scale_variables <- function(
   # level = "Genus"
   # method = "zscore"
 
+  # object = Zeybel_2022_protein
+  # level = NULL
+  # method = "zscore"
+
   method <- match.arg(
     method, c("none", "mean_center", "zscore",
                  "pareto", "range")
@@ -617,11 +621,12 @@ scale_variables <- function(
       object <- object
     }
 
+    # profile: Row->features; Column->samples
     otu <- as(otu_table(object), "matrix")
   } else if (inherits(object, "SummarizedExperiment")) {
+    # profile: Row->features; Column->samples
     otu <- SummarizedExperiment::assay(object) %>%
-      data.frame() %>%
-      t()
+      as.data.frame()
   } else {
     otu <- as.matrix(object)
   }
@@ -643,9 +648,27 @@ scale_variables <- function(
   }
 
   if (any(inherits(object, "environment"), inherits(object, "phyloseq"))) {
-    otu_table(object) <- otu_table(abd, taxa_are_rows = taxa_are_rows(object))
+    phyloseq::otu_table(object) <- phyloseq::otu_table(abd, taxa_are_rows = taxa_are_rows(object))
   } else if (inherits(object, "SummarizedExperiment")) {
-    SummarizedExperiment::assay(object) <- t(abd)
+
+    if (nrow(abd) != nrow(otu)) {
+      rdata <- SummarizedExperiment::rowData(object)
+      cdata <- SummarizedExperiment::colData(object)
+      if (length(object@metadata) == 0) {
+        mdata <- NULL
+      } else {
+        mdata <- object@metadata
+      }
+      res <- import_SE(object = abd,
+                       rowdata = rdata,
+                       coldata = cdata,
+                       metadata = mdata)
+
+      # res <- base::subset(res, colnames(prf_tab) %in% colnames(depurdata))
+    } else {
+      SummarizedExperiment::assay(object) <- abd
+    }
+
   } else {
     object <- abd
   }
@@ -664,7 +687,7 @@ scale_MeanCenter <- function(x) {
 #' @keywords internal
 #' @noRd
 scale_Zscore <- function(x) {
-  return((x - mean(x, na.rm = TRUE))/sd(x, na.rm = TRUE))
+  return((x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE))
 }
 
 #' mean-centered and divided by the square root of the standard deviation
@@ -672,7 +695,7 @@ scale_Zscore <- function(x) {
 #' @keywords internal
 #' @noRd
 scale_Pareto <- function(x) {
-  return((x - mean(x, na.rm = TRUE))/sqrt(sd(x, na.rm = TRUE)))
+  return((x - mean(x, na.rm = TRUE)) / sqrt(sd(x, na.rm = TRUE)))
 }
 
 #' mean-centered and divided by the range of each variable.
@@ -682,6 +705,6 @@ scale_Range <- function(x) {
   if (max(x, na.rm = TRUE) == min(x, na.rm = TRUE)) {
     return(x)
   } else {
-    return((x - mean(x, na.rm = TRUE))/(max(x, na.rm = TRUE) - min(x, na.rm = TRUE)))
+    return((x - mean(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE)))
   }
 }

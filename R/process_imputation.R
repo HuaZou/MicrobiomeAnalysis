@@ -180,7 +180,7 @@ impute_abundance <- function(
       tibble::rownames_to_column("TempRowNames")
     ## samples->Row; features->Column
     prf_tab <- SummarizedExperiment::assay(object) %>%
-      data.frame() %>%
+      as.data.frame() %>%
       t()
   }
 
@@ -200,7 +200,7 @@ impute_abundance <- function(
 
   percent_na <- sum(is.na(to_imp_data))
   if (percent_na == 0) {
-    message("No missing values detected in your data")
+    print("No missing values detected in your data")
     if (method != "none") {
       method <- "none"
     }
@@ -256,7 +256,7 @@ impute_abundance <- function(
   } else if (method == "knn") {
     depurdata <- t(depurdata)
     datai <- impute::impute.knn(
-      depurdata,
+      depurdata, # Row->features; Column->samples
       k = knum,
       rowmax = 0.5,
       colmax = 0.8,
@@ -292,22 +292,22 @@ impute_abundance <- function(
   }
 
   if (methods::is(object, "SummarizedExperiment")) {
-    res <- object
     if (ncol(depurdata) != ncol(prf_tab)) {
-      # rdata <- SummarizedExperiment::rowData(object)
-      # cdata <- SummarizedExperiment::colData(object)
-      # if (length(object@metadata) == 0) {
-      #   mdata <- NULL
-      # } else {
-      #   mdata <- object@metadata
-      # }
-      # res <- import_SE(object = t(depurdata),
-      #                  rowdata = rdata,
-      #                  coldata = cdata,
-      #                  metadata = mdata)
+      rdata <- SummarizedExperiment::rowData(object)
+      cdata <- SummarizedExperiment::colData(object)
+      if (length(object@metadata) == 0) {
+        mdata <- NULL
+      } else {
+        mdata <- object@metadata
+      }
+      res <- import_SE(object = t(depurdata),
+                       rowdata = rdata,
+                       coldata = cdata,
+                       metadata = mdata)
 
-      res <- base::subset(res, colnames(prf_tab) %in% colnames(depurdata))
+      # res <- base::subset(res, colnames(prf_tab) %in% colnames(depurdata))
     } else {
+      res <- object
       SummarizedExperiment::assay(res) <- t(depurdata)
     }
   }

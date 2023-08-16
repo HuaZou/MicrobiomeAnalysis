@@ -51,7 +51,7 @@ data("enterotypes_arumugam")
 scale_variables(
   object = enterotypes_arumugam,
   level = "Phylum",
-  method = "pareto")
+  method = "mean_center")
 
 # SummarizedExperiment object
 data("Zeybel_2022_protein")

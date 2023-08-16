@@ -8,15 +8,51 @@
 \alias{otu_table-method}
 \alias{abundances,phyloseq-method}
 \alias{abundances,microbiomeMarker-method}
+\alias{abundances,assay-method}
+\alias{assay-method}
+\alias{abundances,SummarizedExperiment-method}
 \title{Extract taxa abundances}
 \usage{
-abundances(object, transform = c("identity", "log10", "log10p"), norm = FALSE)
+abundances(
+  object,
+  transform = c("identity", "log10", "log10p", "log2", "log2p", "SquareRoot",
+    "CubicRoot", "logit"),
+  norm = FALSE
+)
 
-\S4method{abundances}{otu_table}(object, transform = c("identity", "log10", "log10p"), norm = FALSE)
+\S4method{abundances}{otu_table}(
+  object,
+  transform = c("identity", "log10", "log10p", "log2", "log2p", "SquareRoot",
+    "CubicRoot", "logit"),
+  norm = FALSE
+)
 
-\S4method{abundances}{phyloseq}(object, transform = c("identity", "log10", "log10p"), norm = FALSE)
+\S4method{abundances}{phyloseq}(
+  object,
+  transform = c("identity", "log10", "log10p", "log2", "log2p", "SquareRoot",
+    "CubicRoot", "logit"),
+  norm = FALSE
+)
 
-\S4method{abundances}{microbiomeMarker}(object, transform = c("identity", "log10", "log10p"))
+\S4method{abundances}{microbiomeMarker}(
+  object,
+  transform = c("identity", "log10", "log10p", "log2", "log2p", "SquareRoot",
+    "CubicRoot", "logit")
+)
+
+\S4method{abundances}{assay}(
+  object,
+  transform = c("identity", "log10", "log10p", "log2", "log2p", "SquareRoot",
+    "CubicRoot", "logit"),
+  norm = FALSE
+)
+
+\S4method{abundances}{SummarizedExperiment}(
+  object,
+  transform = c("identity", "log10", "log10p", "log2", "log2p", "SquareRoot",
+    "CubicRoot", "logit"),
+  norm = FALSE
+)
 }
 \arguments{
 \item{object}{\code{\linkS4class{otu_table}}, \code{\linkS4class{phyloseq}}, or
@@ -28,6 +64,13 @@ abundances(object, transform = c("identity", "log10", "log10p"), norm = FALSE)
 \item "log10", the transformation is \code{log10(object)}, and if the data contains
 zeros the transformation is \code{log10(1 + object)}.
 \item "log10p", the transformation is \code{log10(1 + object)}.
+\item "log2", the transformation is \code{log2(object)}, and if the data contains
+zeros the transformation is \code{log2(1 + object)}.
+\item "log2p", the transformation is \code{log2(1 + object)}.
+\item "SquareRoot", the transformation is \verb{Square Root}.
+\item "CubicRoot", the transformation is \verb{Cubic Root}.
+\item "logit", the transformation is \verb{Zero-inflated Logit Transformation}
+(Does not work well for microbiome data).
 }}
 
 \item{norm}{logical, indicating whether or not to return the normalized

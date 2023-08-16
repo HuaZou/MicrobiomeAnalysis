@@ -11,6 +11,13 @@
 #' * "log10", the transformation is `log10(object)`, and if the data contains
 #'   zeros the transformation is `log10(1 + object)`.
 #' * "log10p", the transformation is `log10(1 + object)`.
+#' * "log2", the transformation is `log2(object)`, and if the data contains
+#'   zeros the transformation is `log2(1 + object)`.
+#' * "log2p", the transformation is `log2(1 + object)`.
+#' * "SquareRoot", the transformation is `Square Root`.
+#' * "CubicRoot", the transformation is `Cubic Root`.
+#' * "logit", the transformation is `Zero-inflated Logit Transformation`
+#' (Does not work well for microbiome data).
 #' @param norm logical, indicating whether or not to return the normalized
 #'   taxa abundances.
 #' @return abundance matrix with taxa in rows and samples in columns.
@@ -25,7 +32,9 @@
 setGeneric(
     "abundances",
     function(object,
-    transform = c("identity", "log10", "log10p"),
+    transform = c("identity", "log10", "log10p",
+                  "log2", "log2p",
+                  "SquareRoot", "CubicRoot", "logit"),
     norm = FALSE) {
         standardGeneric("abundances")
     }
@@ -37,10 +46,14 @@ setGeneric(
 setMethod(
     abundances, "otu_table",
     function(object,
-        transform = c("identity", "log10", "log10p"),
+        transform = c("identity", "log10", "log10p",
+                      "log2", "log2p",
+                      "SquareRoot", "CubicRoot", "logit"),
         norm = FALSE) {
 
-        transform <- match.arg(transform, c("identity", "log10", "log10p"))
+        transform <- match.arg(transform, c("identity", "log10", "log10p",
+                                            "log2", "log2p",
+                                            "SquareRoot", "CubicRoot", "logit"))
         obj_transed <- transform_abundances(object, transform = transform)
         abd <- as(otu_table(obj_transed), "matrix")
 
@@ -61,10 +74,14 @@ setMethod(
 setMethod(
     abundances, "phyloseq",
     function(object,
-        transform = c("identity", "log10", "log10p"),
+        transform = c("identity", "log10", "log10p",
+                      "log2", "log2p",
+                      "SquareRoot", "CubicRoot", "logit"),
         norm = FALSE) {
 
-        transform <- match.arg(transform, c("identity", "log10", "log10p"))
+        transform <- match.arg(transform, c("identity", "log10", "log10p",
+                                            "log2", "log2p",
+                                            "SquareRoot", "CubicRoot", "logit"))
         otu <- otu_table(object)
         if (norm) {
             nf <- get_norm_factors(object)
@@ -84,12 +101,71 @@ setMethod(
 setMethod(
     abundances, "microbiomeMarker",
     function(object,
-        transform = c("identity", "log10", "log10p")) {
+        transform = c("identity", "log10", "log10p",
+                      "log2", "log2p",
+                      "SquareRoot", "CubicRoot", "logit")) {
 
-        transform <- match.arg(transform, c("identity", "log10", "log10p"))
+        transform <- match.arg(transform, c("identity", "log10", "log10p",
+                                            "log2", "log2p",
+                                            "SquareRoot", "CubicRoot", "logit"))
         otu <- otu_table(object)
         otu <- abundances(otu, transform = transform, norm = FALSE)
 
         return(otu)
     }
+)
+
+# assay object
+#' @aliases abundances, assay-method
+#' @rdname abundances-methods
+setMethod(
+  abundances, "assay",
+  function(object,
+           transform = c("identity", "log10", "log10p",
+                         "log2", "log2p",
+                         "SquareRoot", "CubicRoot", "logit"),
+           norm = FALSE) {
+
+    transform <- match.arg(transform, c("identity", "log10", "log10p",
+                                        "log2", "log2p",
+                                        "SquareRoot", "CubicRoot", "logit"))
+    obj_transed <- transform_abundances(object, transform = transform)
+    abd <- as(SummarizedExperiment::assay(obj_transed), "matrix")
+
+    if (norm) {
+      nf <- get_norm_factors(object)
+      if (!is.null(nf)) {
+        abd <- sweep(abd, 2, nf, "/")
+      }
+    }
+
+    return(abd)
+  }
+)
+
+# SummarizedExperiment object
+#' @aliases abundances,SummarizedExperiment-method
+#' @rdname abundances-methods
+setMethod(
+  abundances, "SummarizedExperiment",
+  function(object,
+           transform = c("identity", "log10", "log10p",
+                         "log2", "log2p",
+                         "SquareRoot", "CubicRoot", "logit"),
+           norm = FALSE) {
+
+    transform <- match.arg(transform, c("identity", "log10", "log10p",
+                                        "log2", "log2p",
+                                        "SquareRoot", "CubicRoot", "logit"))
+    otu <- SummarizedExperiment::assay(object)
+    if (norm) {
+      nf <- get_norm_factors(object)
+      if (!is.null(nf)) {
+        attr(otu, "norm_factor") <- nf
+      }
+    }
+    otu <- abundances(otu, transform = transform, norm = norm)
+
+    return(otu)
+  }
 )
