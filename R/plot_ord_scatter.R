@@ -116,6 +116,7 @@ plot_ord <- function(
     geom_label_repel_size = 2,
     ...) {
 
+
   if ("dat" %in% names(reslist)) {
     plotdata <- reslist$dat
   } else {
@@ -271,15 +272,20 @@ plot_ord <- function(
   }
 
   p_theme <- p_circle +
+    labs(x = xlabel, y = ylabel) +
     theme_bw() +
     theme(text = element_text(size = theme_text_size - 1, color = "black"),
           strip.text = element_text(size = theme_strip_size, color = "black"),
           panel.grid = element_blank(),
+          # transparent legend (2023/12/1 update)
+          legend.key = element_rect(color = NA, fill = NA),
+          legend.background = element_rect(fill = "transparent"),
+          legend.box.background = element_rect(fill = "transparent", color = NA),
+
           legend.position = legend_position,
           legend.justification = legend_justification,
           legend.title = element_text(size = legend_title_size, color = "black"),
-          legend.text = element_text(size = legend_text_size, color = "black"),
-          legend.background = element_rect(linewidth = 0.1))
+          legend.text = element_text(size = legend_text_size, face = "bold", color = "black"))
 
 
   # PERMANOVA
