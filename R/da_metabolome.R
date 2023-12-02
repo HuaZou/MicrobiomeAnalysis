@@ -164,6 +164,7 @@ run_metabolomeDA <- function(
       vip_result = VIP_res,
       test_result = t_res,
       group_names = variable_name)
+
   } else if (DA_method == "fc") {
 
     # fold change analysis
@@ -181,6 +182,7 @@ run_metabolomeDA <- function(
       }
     )
     res <- fc_res
+
   } else if (DA_method == "vip") {
 
     # VIP analysis
@@ -199,6 +201,7 @@ run_metabolomeDA <- function(
     )
 
     res <- VIP_res
+
   } else if (DA_method == "t") {
 
     # t-test analysis
@@ -215,7 +218,6 @@ run_metabolomeDA <- function(
         print(e)
       }
     )
-
     res <- t_res
   }
 
@@ -329,8 +331,8 @@ DA_FoldChange <- function(
 
   colnames(fc_res) <- c("FeatureID", "FoldChange",
                         "Log2FoldChange",
-                        "Mean Abundance\n(All)",
-                        paste0("Mean Abundance\n", group_names))
+                        "Mean Abundance (All)",
+                        paste0("Mean Abundance ", group_names))
 
   # Number of Group
   dat_status <- table(phen$CompVar)
