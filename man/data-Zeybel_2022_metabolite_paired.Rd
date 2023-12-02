@@ -6,7 +6,7 @@
 \alias{Zeybel_2022_metabolite_paired}
 \title{Paired fecal metabolites from Zeybel et al. - 2022 paper}
 \format{
-a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} object
+a \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::SummarizedExperiment}} object
 }
 \description{
 The data from Zeybel et al. - 2022 paper, which investigated the

@@ -32,6 +32,8 @@
 + Modify `process_import_SE`, `process_imputation`, `process_transform`, and `process_trim_prevalence` for building *SummarizedExperiment* object. (2023-8-14)
 + Fix bugs in `process_imputation`, `process_transform`, and `process_trim_prevalence` for building *SummarizedExperiment* object. (2023-8-16)
 + Fix bugs in `plot_ord`. (2023-12-1)
++ Add in `run_metabolomeDA` and `plot_volcano`. (2023-12-2)
++ Fix bugs in *Alldata.R*. (2023-12-1)
 
 # MicrobiomeAnalysis v1.0.2
 

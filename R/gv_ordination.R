@@ -163,7 +163,18 @@ run_ord <- function(
 
   if (!is.null(object)) {
     stopifnot(inherits(object, "phyloseq"))
-    ps <- preprocess_ps(object)
+
+    # add tryCatch (2023/12/2 update)
+    tryCatch(
+      expr = {
+        ps <- preprocess_ps(object)
+      },
+      error = function(e){
+        message('preprocess_ps Caught an error!')
+        print(e)
+      }
+    )
+
     if (!is.null(level)) {
       ps <- summarize_taxa(ps, level = level)
     } else {
@@ -232,10 +243,19 @@ run_ord <- function(
                           atop("p-value="~.(bd_pva)~.(bd_sig_lab), phantom())))
 
   # permanova
-  per_res <- .calculatePERMANOVA(
-    object = ps_trim,
-    distance = distance,
-    group = variable)
+  ## add tryCatch (2023/12/2 update)
+  tryCatch(
+    expr = {
+      per_res <- .calculatePERMANOVA(
+        object = ps_trim,
+        distance = distance,
+        group = variable)
+    },
+    error = function(e){
+      message('.calculatePERMANOVA Caught an error!')
+      print(e)
+    }
+  )
 
   # metadata and profile
   meta_ps <- phyloseq::sample_data(ps_trim) %>%
@@ -244,15 +264,24 @@ run_ord <- function(
     data.frame()
 
   # ordination methods
-  res <- .calculateOrdination(
-    metadata = meta_ps,
-    profile = prof_ps,
-    method = method,
-    distance = distance,
-    group = variable,
-    permanova = per_res,
-    betadisperion = bd_res,
-    parameters = para)
+  ## add tryCatch (2023/12/2 update)
+  tryCatch(
+    expr = {
+      res <- .calculateOrdination(
+        metadata = meta_ps,
+        profile = prof_ps,
+        method = method,
+        distance = distance,
+        group = variable,
+        permanova = per_res,
+        betadisperion = bd_res,
+        parameters = para)
+    },
+    error = function(e){
+      message('.calculateOrdination Caught an error!')
+      print(e)
+    }
+  )
 
   return(res)
 }
@@ -264,6 +293,7 @@ run_ord <- function(
 .calculatePERMANOVA <- function(object, distance, group) {
 
   set.seed(123)
+
   per <- run_PERMANOVA(
     object = object,
     method = distance,

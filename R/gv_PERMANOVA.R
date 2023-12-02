@@ -41,6 +41,10 @@
 #' @param seedNum (Optional). numeric. specify seeds for reproduction (default: 123).
 #' @param alpha (Optional). numeric. the parameter for "GUniFrac" controlling
 #' weight on abundant lineages (default: 0.5).
+#' @param p_adjust (Optional). character. method to adjust p-values by.
+#' Options include "holm", "hochberg", "hommel",
+#' "bonferroni", "BH", "BY", "fdr", "none". See [`stats::p.adjust()`]
+#' for more details (default: "BH").
 #'
 #' @return
 #'   A data.frame of PERMANOVA result.
@@ -59,7 +63,9 @@
 #'    method = c("unifrac", "wunifrac", "GUniFrac", "bray", "dpcoa", "jsd"),
 #'    mode = c("one", "all"),
 #'    seedNum = 123,
-#'    alpha = 0.5)
+#'    alpha = 0.5,
+#'    p_adjust = c("none", "fdr", "bonferroni", "holm",
+#'        "hochberg", "hommel", "BH", "BY"))
 #'
 #' @export
 #'
@@ -96,7 +102,8 @@ run_PERMANOVA <- function(
                "GUniFrac", "dpcoa", "jsd"),
     mode = "one",
     seedNum = 123,
-    alpha = 0.5) {
+    alpha = 0.5,
+    p_adjust = "BH") {
 
   # data("Zeybel_2022_gut")
   # object = Zeybel_2022_gut
@@ -111,6 +118,10 @@ run_PERMANOVA <- function(
     method, c("bray", "unifrac", "wunifrac",
               "GUniFrac", "dpcoa", "jsd")
   )
+  p_adjust <- match.arg(
+    p_adjust, c("none", "fdr", "bonferroni", "holm",
+                "hochberg", "hommel", "BH", "BY")
+    )
 
   # phyloseq object
   if (all(!is.null(object), inherits(object, "phyloseq"))) {
@@ -156,8 +167,18 @@ run_PERMANOVA <- function(
   }
 
   # distance
-  disMatrix <- run_distance(object = object, method = method, alpha = alpha)
-
+  tryCatch(
+    expr = {
+      disMatrix <- run_distance(
+        object = object,
+        method = method,
+        alpha = alpha)
+    },
+    error = function(e){
+      message('run_distance Caught an error!')
+      print(e)
+    }
+  )
   # variables for test
   if (all(length(variables) == 1, variables == "all")) {
     sam_tab <- sam_tab
@@ -172,14 +193,32 @@ run_PERMANOVA <- function(
   }
 
   if (mode == "one") {
-    res <- .one_permanova(x = sam_tab,
-                          y = disMatrix,
-                          z = prf_tab,
-                          m = method)
+    tryCatch(
+      expr = {
+        res <- .one_permanova(x = sam_tab,
+                              y = disMatrix,
+                              z = prf_tab,
+                              m = method,
+                              padjust = p_adjust)
+      },
+      error = function(e){
+        message('.one_permanova Caught an error!')
+        print(e)
+      }
+    )
   } else {
-    res <- .all_permanova(x = sam_tab,
-                          y = prf_tab,
-                          m = method)
+    tryCatch(
+      expr = {
+        res <- .all_permanova(x = sam_tab,
+                              y = prf_tab,
+                              m = method,
+                              padjust = p_adjust)
+      },
+      error = function(e){
+        message('.all_permanova Caught an error!')
+        print(e)
+      }
+    )
   }
 
   return(res)
@@ -187,7 +226,7 @@ run_PERMANOVA <- function(
 
 #' @keywords internal
 #' @noRd
-.one_permanova <- function(x, y, z, m) {
+.one_permanova <- function(x, y, z, m, padjust) {
 
   # x = sam_tab
   # y = disMatrix
@@ -245,7 +284,7 @@ run_PERMANOVA <- function(
 
   colnames(res) <- c("SumsOfSample", "Df", "SumsOfSqs",
                      "MeanSqs", "F.Model", "R2", "Pr(>F)")
-  res$AdjustedPvalue <- stats::p.adjust(res$`Pr(>F)`, method = "BH")
+  res$AdjustedPvalue <- stats::p.adjust(res$`Pr(>F)`, method = padjust)
   rownames(res) <- colnames(dat_x)
 
   return(res)
@@ -253,7 +292,7 @@ run_PERMANOVA <- function(
 
 #' @keywords internal
 #' @noRd
-.all_permanova <- function(x, y, m) {
+.all_permanova <- function(x, y, m, padjust) {
 
   # x = sam_tab
   # y = prf_tab
@@ -291,7 +330,7 @@ run_PERMANOVA <- function(
   colnames(temp_res) <- c("Df", "SumsOfSqs",
                      "R2", "F.Model", "Pr(>F)")
   temp_res$SumsOfSample <- nrow(dat_x)
-  temp_res$AdjustedPvalue <- stats::p.adjust(temp_res$`Pr(>F)`, method = "BH")
+  temp_res$AdjustedPvalue <- stats::p.adjust(temp_res$`Pr(>F)`, method = padjust)
 
   res <- temp_res %>%
     dplyr::select(SumsOfSample, everything())

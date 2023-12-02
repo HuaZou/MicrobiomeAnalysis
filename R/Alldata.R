@@ -101,7 +101,7 @@ NA
 #' microbiome composition and development of 56 MAFLD,
 #' identifying gut microbiome associations with oral microbiome.
 #'
-#' @format a [`phyloseq::phyloseq-class`] object
+#' @format a [`SummarizedExperiment::SummarizedExperiment`] object
 #'
 #' @references
 #' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota
@@ -119,7 +119,7 @@ NA
 #' microbiome composition and development of 56 MAFLD,
 #' identifying gut microbiome associations with oral microbiome.
 #'
-#' @format a [`phyloseq::phyloseq-class`] object
+#' @format a [`SummarizedExperiment::SummarizedExperiment`] object
 #'
 #' @references
 #' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota
@@ -174,7 +174,7 @@ NA
 #' microbiome composition and development of 56 MAFLD,
 #' identifying gut microbiome associations with oral microbiome.
 #'
-#' @format a [`phyloseq::phyloseq-class`] object
+#' @format a [`SummarizedExperiment::SummarizedExperiment`] object
 #'
 #' @references
 #' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota
@@ -192,7 +192,7 @@ NA
 #' microbiome composition and development of 56 MAFLD,
 #' identifying gut microbiome associations with oral microbiome.
 #'
-#' @format a [`phyloseq::phyloseq-class`] object
+#' @format a [`SummarizedExperiment::SummarizedExperiment`] object
 #'
 #' @references
 #' Zeybel, Mujdat, et al. "Multiomics analysis reveals the impact of microbiota

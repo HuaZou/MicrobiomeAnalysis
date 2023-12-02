@@ -75,5 +75,6 @@ Suggests:
     ape,
     Rtsne,
     umap,
-    impute
+    impute,
+    ropls
     

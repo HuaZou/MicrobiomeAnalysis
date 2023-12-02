@@ -13,7 +13,9 @@ run_PERMANOVA(
    method = c("unifrac", "wunifrac", "GUniFrac", "bray", "dpcoa", "jsd"),
    mode = c("one", "all"),
    seedNum = 123,
-   alpha = 0.5)
+   alpha = 0.5,
+   p_adjust = c("none", "fdr", "bonferroni", "holm",
+       "hochberg", "hommel", "BH", "BY"))
 }
 \arguments{
 \item{object}{(Required). a \code{\link[phyloseq:phyloseq-class]{phyloseq::phyloseq}} or
@@ -50,6 +52,11 @@ in some columns, providing two test model:
 
 \item{alpha}{(Optional). numeric. the parameter for "GUniFrac" controlling
 weight on abundant lineages (default: 0.5).}
+
+\item{p_adjust}{(Optional). character. method to adjust p-values by.
+Options include "holm", "hochberg", "hommel",
+"bonferroni", "BH", "BY", "fdr", "none". See \code{\link[stats:p.adjust]{stats::p.adjust()}}
+for more details (default: "BH").}
 }
 \value{
 A data.frame of PERMANOVA result.

@@ -423,6 +423,49 @@ mm
 ```
 
 
+# Differential analysis in metabolomics
+
++ Differential approaches:
+
+  - FoldChange analysis
+  
+  - VIP (Variable important in projection) analysis
+  
+  - T-test 
+
+```{r, warning=FALSE, message=FALSE}
+data("Zeybel_2022_protein")
+Zeybel_2022_protein_imput <- impute_abundance(
+      Zeybel_2022_protein,
+      group = "LiverFatClass",
+      method = "knn")
+Zeybel_2022_protein_norm <- scale_variables(
+      Zeybel_2022_protein_imput,
+      method == "zscore")
+DA_results <- run_metabolomeDA(
+  object_raw = Zeybel_2022_protein,
+  object_norm = Zeybel_2022_protein_norm,
+  variable = "LiverFatClass",
+  variable_name = c("None", "Severe"))
+
+head(DA_results[, 1:4], 4)
+```
+
++ Volcano to display the significant results
+
+```{r, warning=FALSE, message=FALSE, fig.width=8, fig.height=6}
+plot_volcano(
+   da_res = DA_results,
+   group_names = c("None", "Severe"),
+   x_index = "Log2FoldChange",
+   x_index_cutoff = 0,
+   y_index = "AdjustedPvalue",
+   y_index_cutoff = 0.5,
+   group_color = c("red", "grey", "blue"),
+   topN = 10)
+```
+
+
 # Session information {-}
 
 This vignette was created under the following conditions:

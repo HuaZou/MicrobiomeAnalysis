@@ -59,6 +59,7 @@ reference:
       - run_test_two_groups
       - run_marker
       - postHocTest
+      - run_metabolomeDA
   - title: "Microbiome marker"
     desc: S4 class and methods for microbiomeMarker
     contents:
@@ -103,3 +104,5 @@ reference:
       visualization Functions
     contents:
       - plot_ord
+      - plot_volcano
+

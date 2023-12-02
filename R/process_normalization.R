@@ -624,7 +624,7 @@ scale_variables <- function(
     # profile: Row->features; Column->samples
     otu <- as(otu_table(object), "matrix")
   } else if (inherits(object, "SummarizedExperiment")) {
-    # profile: Row->features; Column->samples
+    # profile: Row->features; Column->samples (features-by-samples matrix)
     otu <- SummarizedExperiment::assay(object) %>%
       as.data.frame()
   } else {

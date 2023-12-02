@@ -117,6 +117,36 @@ plot_ord <- function(
     ...) {
 
 
+  # data("Zeybel_2022_gut")
+  # ps_zeybel <- summarize_taxa(Zeybel_2022_gut, level = "Genus")
+  # ord_result <- run_ord(
+  #   object = ps_zeybel,
+  #   variable = "LiverFatClass",
+  #   method = "PCoA")
+  # reslist = ord_result
+  # variable = "LiverFatClass"
+  # variable_name = NULL
+  # variable_color = NULL
+  # var_shape = NULL
+  # var_shape_name = NULL
+  # var_shape_value = NULL
+  # display_test = FALSE
+  # sample_label = FALSE
+  # ellipse_type = "ellipse_groups"
+  # sideboxplot = FALSE
+  # point_size = 3
+  # line_size = 0.3
+  # ellipse_line_size = 0.5
+  # geom_text_size = 5
+  # theme_text_size = 8
+  # theme_strip_size = 6
+  # legend_position = c(0, 0)
+  # legend_justification = c(-0.02, -0.02)
+  # legend_title_size = 7
+  # legend_text_size = 6
+  # test_annotate_size = 4
+  # geom_label_repel_size = 2
+
   if ("dat" %in% names(reslist)) {
     plotdata <- reslist$dat
   } else {
