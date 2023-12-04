@@ -74,7 +74,9 @@ the community and environmental variables.</p>
 <span>   method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unifrac"</span>, <span class="st">"wunifrac"</span>, <span class="st">"GUniFrac"</span>, <span class="st">"bray"</span>, <span class="st">"dpcoa"</span>, <span class="st">"jsd"</span><span class="op">)</span>,</span>
 <span>   mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"one"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
 <span>   seedNum <span class="op">=</span> <span class="fl">123</span>,</span>
-<span>   alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<span>   alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>   p_adjust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"fdr"</span>, <span class="st">"bonferroni"</span>, <span class="st">"holm"</span>,</span>
+<span>       <span class="st">"hochberg"</span>, <span class="st">"hommel"</span>, <span class="st">"BH"</span>, <span class="st">"BY"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -122,6 +124,13 @@ in some columns, providing two test model:</p><ul><li><p>"one": test on one vari
 <dt>alpha</dt>
 <dd><p>(Optional). numeric. the parameter for "GUniFrac" controlling
 weight on abundant lineages (default: 0.5).</p></dd>
+
+
+<dt>p_adjust</dt>
+<dd><p>(Optional). character. method to adjust p-values by.
+Options include "holm", "hochberg", "hommel",
+"bonferroni", "BH", "BY", "fdr", "none". See <code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">stats::p.adjust()</a></code>
+for more details (default: "BH").</p></dd>
 
 </dl></div>
     <div id="value">
