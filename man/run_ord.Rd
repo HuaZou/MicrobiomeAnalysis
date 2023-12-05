@@ -19,7 +19,8 @@ run_ord(
     para = list(Perplexity = NULL,
                 Y_vars = NULL,
                 Z_vars = NULL,
-                scale = FALSE),
+                scale = TRUE,
+                center = TRUE,),
     ...)
 }
 \arguments{
@@ -96,7 +97,8 @@ distance method, if it has the form described in \code{designdist}.
 \item "Y_vars": Constraining matrix, typically of environmental variables.
 \item "Z_vars": Conditioning matrix, the effect of which is removed ("partial out")
 before next step.
-\item "scale": Scale species to unit variance (like correlations).
+\item "scale": Scale features to unit variance (like correlations).
+\item "center": Scale features to unit variance (like correlations).
 }}
 
 \item{...}{(Optional). additional parameters.}
@@ -117,14 +119,14 @@ where the total number of axes is less than or equal to the number of samples
 }
 \examples{
 
+\dontrun{
+
 data("Zeybel_2022_gut")
 ps_zeybel <- summarize_taxa(Zeybel_2022_gut, level = "Genus")
 ord_result <- run_ord(
   object = ps_zeybel,
   variable = "LiverFatClass",
   method = "PCoA")
-
-\dontrun{
 
 }
 

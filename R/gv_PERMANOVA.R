@@ -109,19 +109,25 @@ run_PERMANOVA <- function(
   # object = Zeybel_2022_gut
   # level = "Phylum"
   # variables = c("LiverFatClass", "Liver_fat", "Gender")
-  # mode = "all"
+  # mode = "one"
   # method = "bray"
   # seedNum = 123
   # alpha = 0.5
+  # p_adjust = "BH"
 
   method <- match.arg(
     method, c("bray", "unifrac", "wunifrac",
               "GUniFrac", "dpcoa", "jsd")
   )
+
   p_adjust <- match.arg(
     p_adjust, c("none", "fdr", "bonferroni", "holm",
                 "hochberg", "hommel", "BH", "BY")
     )
+
+  mode <- match.arg(
+    mode, c("one", "all")
+  )
 
   # phyloseq object
   if (all(!is.null(object), inherits(object, "phyloseq"))) {

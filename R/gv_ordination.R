@@ -74,7 +74,8 @@
 #'   * "Y_vars": Constraining matrix, typically of environmental variables.
 #'   * "Z_vars": Conditioning matrix, the effect of which is removed ("partial out")
 #'   before next step.
-#'   * "scale": Scale species to unit variance (like correlations).
+#'   * "scale": Scale features to unit variance (like correlations).
+#'   * "center": Scale features to unit variance (like correlations).
 #' @param ... (Optional). additional parameters.
 #'
 #' @return
@@ -99,12 +100,15 @@
 #'     para = list(Perplexity = NULL,
 #'                 Y_vars = NULL,
 #'                 Z_vars = NULL,
-#'                 scale = FALSE),
+#'                 scale = TRUE,
+#'                 center = TRUE,),
 #'     ...)
 #'
 #' @export
 #'
 #' @examples
+#'
+#' \dontrun{
 #'
 #' data("Zeybel_2022_gut")
 #' ps_zeybel <- summarize_taxa(Zeybel_2022_gut, level = "Genus")
@@ -112,8 +116,6 @@
 #'   object = ps_zeybel,
 #'   variable = "LiverFatClass",
 #'   method = "PCoA")
-#'
-#' \dontrun{
 #'
 #' }
 #'
@@ -128,7 +130,8 @@ run_ord <- function(
     para = list(Perplexity = NULL,
                 Y_vars = NULL,
                 Z_vars = NULL,
-                scale = FALSE),
+                scale = TRUE,
+                center = TRUE),
     ...) {
 
   # data("Zeybel_2022_gut")
@@ -289,6 +292,7 @@ run_ord <- function(
 
 #' calculate results of permanova
 #' @noRd
+#' @keywords internal
 #'
 .calculatePERMANOVA <- function(object, distance, group) {
 
@@ -317,6 +321,7 @@ run_ord <- function(
 
 #' calculate results of Ordination
 #' @noRd
+#' @keywords internal
 #'
 .calculateOrdination <- function(
     metadata,
@@ -348,145 +353,237 @@ run_ord <- function(
   }
 
   # ordination methods
-  if (method == "PCA") {
-    datfit <- stats::prcomp(scale(t(profile), center = TRUE, scale = TRUE))
-    eig <- get_eigValue(datfit)
-    explains <- paste0(paste0("PCA", seq(2)), "(", paste0(round(eig[1:2, 2], 2), "%"), ")")
-    # plotdata
-    score <- dplyr::inner_join(datfit$x %>% data.frame() %>%
-                                 dplyr::select(c(1:4)) %>%
-                                 stats::setNames(paste0("Axis", seq(4))) %>%
-                                 tibble::rownames_to_column("TempRowNames"),
-                               metadata %>% tibble::rownames_to_column("TempRowNames"),
-                               by = "TempRowNames")
-  } else if (method == "PCoA") {
-    ps_pcoa <- phyloseq::phyloseq(
-      phyloseq::otu_table(profile, taxa_are_rows = TRUE),
-      phyloseq::sample_data(metadata))
+  ord_list <- switch(
+    method,
+    "PCA" = PCA_fun(x = profile, y = metadata,
+                    center_ = parameters$center,
+                    scale_ = parameters$scale),
+    "PCoA" = PCoA_fun(x = profile, y = metadata,
+                     n = distance),
+    "tSNE" = tSNE_fun(x = profile, y = metadata,
+                      n = Perplexity,
+                      center_ = parameters$center,
+                      scale_ = parameters$scale,
+                      m = method),
+    "UMAP" = UMAP_fun(x = profile, y = metadata,
+                      center_ = parameters$center,
+                      scale_ = parameters$scale,
+                      m = method),
+    "NMDS" = NMDS_fun(x = profile, y = metadata,
+                      n = distance,
+                      m = method),
+    "CA" = CA_fun(x = profile, y = metadata),
+    "RDA" = RDA_fun(x = profile, y = metadata,
+                    n = parameters))
 
-    dat_dis <- run_distance(object = ps_pcoa, method = distance)
-    datfit <- ape::pcoa(dat_dis)
-    eig <- datfit$values[, "Eigenvalues"]
-    eig_var <- eig[1:2]
-    eig_var_explain <- round(eig_var / sum(eig), 4) * 100
-    # explains variable
-    explains <- paste0(paste0("PCoA", seq(2)), " (", paste0(eig_var_explain, "%"), ")")
-    # plotdata
-    score <- dplyr::inner_join(datfit$vectors[, c(1:4)] %>% data.frame() %>%
-                                 stats::setNames(paste0("Axis", seq(4))) %>%
-                                 tibble::rownames_to_column("TempRowNames"),
-                               metadata %>% tibble::rownames_to_column("TempRowNames"),
-                               by = "TempRowNames")
-  } else if (method == "tSNE") {
-    datfit <- Rtsne::Rtsne(scale(t(profile), center = TRUE, scale = TRUE),
-                           dims = 3,
-                           perplexity = Perplexity,
-                           verbose = FALSE,
-                           max_iter = 500,
-                           eta = 200)
-    explains <- paste0(method, c(1, 2))
-    eig <- NULL
-    point <- datfit$Y %>% data.frame() %>%
-      dplyr::select(c(1:3)) %>%
-      stats::setNames(paste0("Axis", seq(3)))
-    rownames(point) <- colnames(profile)
-    score <- dplyr::inner_join(point %>% tibble::rownames_to_column("TempRowNames"),
-                               metadata %>% tibble::rownames_to_column("TempRowNames"),
-                               by = "TempRowNames")
-  } else if (method == "UMAP") {
-    datfit <- umap::umap(scale(t(profile), center = TRUE, scale = TRUE))
-    explains <- paste0(method, c(1, 2))
-    eig <- NULL
-    point <- datfit$layout %>% data.frame() %>%
-      dplyr::select(c(1:2)) %>%
-      stats::setNames(c("Axis1", "Axis2"))
-    rownames(point) <- colnames(profile)
-    score <- dplyr::inner_join(point %>% tibble::rownames_to_column("TempRowNames"),
-                               metadata %>% tibble::rownames_to_column("TempRowNames"),
-                               by = "TempRowNames")
-  } else if (method == "NMDS") {
-    datfit <- vegan::metaMDS(t(profile), dist = distance)
-    explains <- paste0(method, c(1, 2))
-    eig <- NULL
-    point <- datfit$points %>% data.frame() %>%
-      dplyr::select(c(1:2)) %>%
-      stats::setNames(c("Axis1", "Axis2"))
-    rownames(point) <- colnames(profile)
-    score <- dplyr::inner_join(point %>% tibble::rownames_to_column("TempRowNames"),
-                               metadata %>% tibble::rownames_to_column("TempRowNames"),
-                               by = "TempRowNames")
-  } else if (method == "CA") {
-    datfit <- CA(profile, graph = FALSE) # FactoMineR R package
-    eig_var_explain <- c(signif(datfit$eig[1, 2], 4), signif(datfit$eig[2, 2], 4))
-    eig <- eig_var_explain
-    explains <- paste0(paste0("CA", seq(2)), " (", paste0(eig_var_explain, "%"), ")")
-    # default: samples points
-    point <- datfit$col$coord %>% data.frame() %>%
-      dplyr::select(c(1:2)) %>%
-      stats::setNames(c("Axis1", "Axis2"))
-    rownames(point) <- colnames(profile)
-    score <- dplyr::inner_join(point %>% tibble::rownames_to_column("TempRowNames"),
-                               metadata %>% tibble::rownames_to_column("TempRowNames"),
-                               by = "TempRowNames")
-  } else if (method == "RDA") {
 
-    if (!is.null(parameters$Y_vars)) {
-      Y_var <- metadata[, parameters$Y_vars]
-    } else {
-      Y_var <- NULL
-    }
+  # res <- list(fit = datfit,
+  #             dat = score,
+  #             explains = explains,
+  #             eigvalue = eig,
+  #             PERMANOVA = permanova,
+  #             BETADISPER = betadisperion)
 
-    if (!is.null(parameters$Z_vars)) {
-      Z_var <- metadata[, parameters$Z_vars]
-    } else {
-      Z_var <- NULL
-    }
-
-    datfit <- vegan::rda(X = t(profile),
-                         Y = Y_var,
-                         Z = Z_var,
-                         scale = parameters$scale)
-    if (all(is.null(parameters$Y_vars), is.null(parameters$Z_vars))) {
-      eig_var_explain <- as.numeric(c(signif(datfit$CA$eig[1], 4),
-                                      signif(datfit$CA$eig[2], 4)))
-      eig <- eig_var_explain
-      explains <- paste0(paste0("CA", seq(2)), " (", paste0(eig_var_explain, "%"), ")")
-      # default: samples points
-      point <- datfit$CA$u %>% data.frame() %>%
-        dplyr::select(c(1:2)) %>%
-        stats::setNames(c("Axis1", "Axis2"))
-    } else {
-      eig_var_explain <- as.numeric(c(signif(datfit$CCA$eig[1], 4),
-                                      signif(datfit$CCA$eig[2], 4)))
-      eig <- eig_var_explain
-      explains <- paste0(paste0("RDA", seq(2)), " (", paste0(eig_var_explain, "%"), ")")
-      # default: samples points
-      point <- datfit$CCA$u %>% data.frame() %>%
-        dplyr::select(c(1:2)) %>%
-        stats::setNames(c("Axis1", "Axis2"))
-    }
-
-    rownames(point) <- colnames(profile)
-    score <- dplyr::inner_join(point %>% tibble::rownames_to_column("TempRowNames"),
-                               metadata %>% tibble::rownames_to_column("TempRowNames"),
-                               by = "TempRowNames")
-  }
-
-  res <- list(fit = datfit,
-              dat = score,
-              explains = explains,
-              eigvalue = eig,
+  res <- list(fit = ord_list[[1]],
+              dat = ord_list[[2]],
+              explains = ord_list[[3]],
+              eigvalue = ord_list[[4]],
               PERMANOVA = permanova,
               BETADISPER = betadisperion)
 
   return(res)
-
 }
+
+#' @title PCA
+#' @noRd
+#' @keywords internal
+#'
+PCA_fun <- function(x, y, center_, scale_) {
+
+  datfit <- stats::prcomp(scale(t(x), center = center_, scale = scale_))
+  eig <- get_eigValue(datfit)
+  explains <- paste0(paste0("PCA", seq(2)), "(", paste0(round(eig[1:2, 2], 2), "%"), ")")
+  # plotdata
+  score <- dplyr::inner_join(datfit$x %>% data.frame() %>%
+                               dplyr::select(c(1:4)) %>%
+                               stats::setNames(paste0("Axis", seq(4))) %>%
+                               tibble::rownames_to_column("TempRowNames"),
+                             y %>% tibble::rownames_to_column("TempRowNames"),
+                             by = "TempRowNames")
+
+  return(list(datfit, score, explains, eig))
+}
+
+#' @title PCoA
+#' @noRd
+#' @keywords internal
+#'
+PCoA_fun <- function(x, y, n) {
+
+  ps_pcoa <- phyloseq::phyloseq(
+    phyloseq::otu_table(x, taxa_are_rows = TRUE),
+    phyloseq::sample_data(y))
+
+  dat_dis <- run_distance(object = ps_pcoa, method = n)
+  datfit <- ape::pcoa(dat_dis)
+  eig <- datfit$values[, "Eigenvalues"]
+  eig_var <- eig[1:2]
+  eig_var_explain <- round(eig_var / sum(eig), 4) * 100
+  # explains variable
+  explains <- paste0(paste0("PCoA", seq(2)), " (", paste0(eig_var_explain, "%"), ")")
+  # plotdata
+  score <- dplyr::inner_join(datfit$vectors[, c(1:4)] %>% data.frame() %>%
+                               stats::setNames(paste0("Axis", seq(4))) %>%
+                               tibble::rownames_to_column("TempRowNames"),
+                             y %>% tibble::rownames_to_column("TempRowNames"),
+                             by = "TempRowNames")
+
+  return(list(datfit, score, explains, eig))
+}
+
+#' @title Rtsne
+#' @noRd
+#' @keywords internal
+#'
+tSNE_fun <- function(x, y, n, center_, scale_, m) {
+
+  datfit <- Rtsne::Rtsne(scale(t(x), center = center_, scale = scale_),
+                         dims = 3,
+                         perplexity = n,
+                         verbose = FALSE,
+                         max_iter = 500,
+                         eta = 200)
+  explains <- paste0(m, c(1, 2))
+  eig <- NULL
+  point <- datfit$Y %>% data.frame() %>%
+    dplyr::select(c(1:3)) %>%
+    stats::setNames(paste0("Axis", seq(3)))
+  rownames(point) <- colnames(x)
+  score <- dplyr::inner_join(point %>% tibble::rownames_to_column("TempRowNames"),
+                             y %>% tibble::rownames_to_column("TempRowNames"),
+                             by = "TempRowNames")
+
+  return(list(datfit, score, explains, eig))
+}
+
+#' @title umap
+#' @noRd
+#' @keywords internal
+#'
+UMAP_fun <- function(x, y, center_, scale_, m) {
+
+  datfit <- umap::umap(scale(t(x), center = center_, scale = scale_))
+  explains <- paste0(m, c(1, 2))
+  eig <- NULL
+  point <- datfit$layout %>% data.frame() %>%
+    dplyr::select(c(1:2)) %>%
+    stats::setNames(c("Axis1", "Axis2"))
+  rownames(point) <- colnames(x)
+  score <- dplyr::inner_join(point %>% tibble::rownames_to_column("TempRowNames"),
+                             y %>% tibble::rownames_to_column("TempRowNames"),
+                             by = "TempRowNames")
+
+  return(list(datfit, score, explains, eig))
+}
+
+#' @title metaMDS
+#' @noRd
+#' @keywords internal
+#'
+NMDS_fun <- function(x, y, n, m) {
+
+  datfit <- vegan::metaMDS(t(x), dist = n)
+  explains <- paste0(m, c(1, 2))
+  eig <- NULL
+  point <- datfit$points %>% data.frame() %>%
+    dplyr::select(c(1:2)) %>%
+    stats::setNames(c("Axis1", "Axis2"))
+  rownames(point) <- colnames(x)
+  score <- dplyr::inner_join(point %>% tibble::rownames_to_column("TempRowNames"),
+                             y %>% tibble::rownames_to_column("TempRowNames"),
+                             by = "TempRowNames")
+
+  return(list(datfit, score, explains, eig))
+}
+
+#' @title CA
+#' @noRd
+#' @keywords internal
+#'
+CA_fun <- function(x, y) {
+
+  datfit <- CA(x, graph = FALSE) # FactoMineR R package
+  eig_var_explain <- c(signif(datfit$eig[1, 2], 4), signif(datfit$eig[2, 2], 4))
+  eig <- eig_var_explain
+  explains <- paste0(paste0("CA", seq(2)), " (", paste0(eig_var_explain, "%"), ")")
+  # default: samples points
+  point <- datfit$col$coord %>% data.frame() %>%
+    dplyr::select(c(1:2)) %>%
+    stats::setNames(c("Axis1", "Axis2"))
+  rownames(point) <- colnames(x)
+  score <- dplyr::inner_join(point %>% tibble::rownames_to_column("TempRowNames"),
+                             y %>% tibble::rownames_to_column("TempRowNames"),
+                             by = "TempRowNames")
+
+  return(list(datfit, score, explains, eig))
+}
+
+#' @title RDA
+#' @noRd
+#' @keywords internal
+#'
+RDA_fun <- function(x, y, n) {
+
+  if (!is.null(n$Y_vars)) {
+    Y_var <- y[, n$Y_vars]
+  } else {
+    Y_var <- NULL
+  }
+
+  if (!is.null(n$Z_vars)) {
+    Z_var <- y[, n$Z_vars]
+  } else {
+    Z_var <- NULL
+  }
+
+  datfit <- vegan::rda(X = t(x),
+                       Y = Y_var,
+                       Z = Z_var,
+                       scale = n$scale)
+  if (all(is.null(n$Y_vars), is.null(n$Z_vars))) {
+    eig_var_explain <- as.numeric(c(signif(datfit$CA$eig[1], 4),
+                                    signif(datfit$CA$eig[2], 4)))
+    eig <- eig_var_explain
+    explains <- paste0(paste0("CA", seq(2)), " (", paste0(eig_var_explain, "%"), ")")
+    # default: samples points
+    point <- datfit$CA$u %>% data.frame() %>%
+      dplyr::select(c(1:2)) %>%
+      stats::setNames(c("Axis1", "Axis2"))
+  } else {
+    eig_var_explain <- as.numeric(c(signif(datfit$CCA$eig[1], 4),
+                                    signif(datfit$CCA$eig[2], 4)))
+    eig <- eig_var_explain
+    explains <- paste0(paste0("RDA", seq(2)), " (", paste0(eig_var_explain, "%"), ")")
+    # default: samples points
+    point <- datfit$CCA$u %>% data.frame() %>%
+      dplyr::select(c(1:2)) %>%
+      stats::setNames(c("Axis1", "Axis2"))
+  }
+
+  rownames(point) <- colnames(x)
+  score <- dplyr::inner_join(point %>% tibble::rownames_to_column("TempRowNames"),
+                             y %>% tibble::rownames_to_column("TempRowNames"),
+                             by = "TempRowNames")
+
+  return(list(datfit, score, explains, eig))
+}
+
 
 # https://github.com/husson/FactoMineR/blob/master/R/CA.R
 #' @title Correspondence Analysis
 #'
 #' @noRd
+#' @keywords internal
 #'
 CA <- function (X,
                 ncp = 5,
@@ -780,6 +877,7 @@ CA <- function (X,
 #' @title Singular Value Decomposition of a Matrix
 #'
 #' @noRd
+#' @keywords internal
 #'
 svd_triplet <- function (X,
                          row.w = NULL,
