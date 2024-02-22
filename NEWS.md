@@ -34,6 +34,9 @@
 + Fix bugs in `plot_ord`. (2023-12-1)
 + Add in `run_metabolomeDA` and `plot_volcano`. (2023-12-2)
 + Fix bugs in *Alldata.R*. (2023-12-1)
++ Modify `run_ord` and `plot_ord` for *SummarizedExperiment-class object*. (2024-2-22)
++ Fix bugs in `run_ancombc` for replacing *zero_cut* by *prv_cut* using `ANCOMBC::ancombc` (v2.4.0). (2024-2-22)
+
 
 # MicrobiomeAnalysis v1.0.2
 

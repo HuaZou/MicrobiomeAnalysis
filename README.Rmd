@@ -69,8 +69,29 @@ install.packages("MicrobiomeAnalysis*.tar.gz", repos = NULL, type = "source")
 the development version from github:
 
 ```r
-remotes::install_github("HuaZou/MicrobiomeAnalysis")
+devtools::install_github("HuaZou/MicrobiomeAnalysis", 
+                         dependencies = c("Depends", "Imports", "LinkingTo"),
+                         repos = c("https://cloud.r-project.org/",
+                                   BiocManager::repositories()))
 ```
+
++ specific version
+```r
+devtools::install_github("HuaZou/MicrobiomeAnalysis@v1.0.3", 
+                         dependencies = c("Depends", "Imports", "LinkingTo"),
+                         repos = c("https://cloud.r-project.org/",
+                                   BiocManager::repositories()))
+```
+
++ specific branch
+```r
+devtools::install_github("HuaZou/MicrobiomeAnalysis", 
+                         dependencies = c("Depends", "Imports", "LinkingTo"),
+                         repos = c("https://cloud.r-project.org/",
+                                   BiocManager::repositories()),
+                         ref = "dev")
+```
+
 
 # :book: Vignette
 

@@ -71,6 +71,8 @@
 #' @examples
 #'
 #' \donttest{
+#'
+#' # phyloseq object
 #' data("Zeybel_2022_gut")
 #' ps_zeybel <- summarize_taxa(Zeybel_2022_gut, level = "Genus")
 #' ord_result <- run_ord(
@@ -85,7 +87,29 @@
 #'   sideboxplot = TRUE,
 #'   sample_label = TRUE
 #'   )
+#'  pl
 #'
+#' # SummarizedExperiment object
+#' data("Zeybel_2022_protein")
+#' Zeybel_2022_protein_imp <- impute_abundance(
+#'   Zeybel_2022_protein,
+#'   group = "LiverFatClass",
+#'   ZerosAsNA = TRUE,
+#'   RemoveNA = TRUE,
+#'   cutoff = 20,
+#'   method = "knn")
+#' ord_result <- run_ord(
+#'   object = Zeybel_2022_protein_imp,
+#'   variable = "LiverFatClass",
+#'   method = "PCA")
+#'
+#'  pl <- plot_ord(
+#'   reslist = ord_result,
+#'   variable = "LiverFatClass",
+#'   ellipse_type = "ellipse",
+#'   sideboxplot = TRUE,
+#'   sample_label = TRUE
+#'   )
 #'  pl
 #'
 #' }

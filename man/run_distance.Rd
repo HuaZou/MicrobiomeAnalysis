@@ -20,7 +20,7 @@ run_distance(
 level (from \code{rank_names(pseq)}, default: NULL).}
 
 \item{method}{(Required). character. Provide one of the currently supported
-options. See \code{distanceMethodList} for a detailed list of the supported options
+options. See \code{vegan::vegdist} for a detailed list of the supported options
 and links to accompanying documentation. Options include:
 \itemize{
 \item "bray": bray crutis distance.

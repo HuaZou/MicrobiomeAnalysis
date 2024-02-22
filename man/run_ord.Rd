@@ -5,7 +5,7 @@
 \title{Ordination for microbiota data}
 \usage{
 run_ord(
-    object = NULL,
+    object,
     level = NULL,
     variable,
     transform = c("identity", "log10", "log10p",
@@ -77,7 +77,7 @@ options include:
 }}
 
 \item{distance}{(Optional). character. Provide one of the currently supported
-options. See \code{distanceMethodList} for a detailed list of the supported options
+options. See \code{vegan::vegdist} for a detailed list of the supported options
 and links to accompanying documentation (default: "bray"). Options include:
 \itemize{
 \item "bray": bray crutis distance.
@@ -121,12 +121,27 @@ where the total number of axes is less than or equal to the number of samples
 
 \dontrun{
 
+# phyloseq object
 data("Zeybel_2022_gut")
 ps_zeybel <- summarize_taxa(Zeybel_2022_gut, level = "Genus")
 ord_result <- run_ord(
   object = ps_zeybel,
   variable = "LiverFatClass",
   method = "PCoA")
+
+# SummarizedExperiment object
+data("Zeybel_2022_protein")
+Zeybel_2022_protein_imp <- impute_abundance(
+  Zeybel_2022_protein,
+  group = "LiverFatClass",
+  ZerosAsNA = TRUE,
+  RemoveNA = TRUE,
+  cutoff = 20,
+  method = "knn")
+ord_result <- run_ord(
+  object = Zeybel_2022_protein_imp,
+  variable = "LiverFatClass",
+  method = "PCA")
 
 }
 

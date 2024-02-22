@@ -10,7 +10,7 @@
 #' @param level (Optional). character. Summarization
 #' level (from \code{rank_names(pseq)}, default: NULL).
 #' @param method (Required). character. Provide one of the currently supported
-#' options. See `distanceMethodList` for a detailed list of the supported options
+#' options. See `vegan::vegdist` for a detailed list of the supported options
 #' and links to accompanying documentation. Options include:
 #'  * "bray": bray crutis distance.
 #'  * "unifrac" : unweighted UniFrac distance.

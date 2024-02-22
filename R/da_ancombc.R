@@ -60,9 +60,9 @@
 #' @param p_adjust method to adjust p-values by. Default is "holm".
 #'   Options include "holm", "hochberg", "hommel", "bonferroni", "BH", "BY",
 #'   "fdr", "none". See [`stats::p.adjust()`] for more details.
-#' @param zero_cut a numerical fraction between 0 and 1. Taxa with proportion of
-#'   zeroes greater than `zero_cut` will be excluded in the analysis. Default
-#'   is 0.90.
+#' @param prv_cut a numerical fraction between 0 and 1. Taxa with proportion of
+#'   zeroes greater than `prv_cut` will be excluded in the analysis. Default
+#'   is 0.10.
 #' @param lib_cut a numerical threshold for filtering samples based on library
 #'   sizes. Samples with library sizes less than `lib_cut` will be excluded
 #'   in the analysis. Default is 0, i.e. do not filter any sample.
@@ -110,7 +110,8 @@
 #' )
 #' run_ancombc(ps, group = "Enterotype")
 #'
-run_ancombc <- function(ps,
+run_ancombc <- function(
+    ps,
     group,
     confounders = character(0),
     contrast = NULL,
@@ -123,7 +124,7 @@ run_ancombc <- function(ps,
         "none", "fdr", "bonferroni", "holm",
         "hochberg", "hommel", "BH", "BY"
     ),
-    zero_cut = 0.9,
+    prv_cut = 0.1,
     lib_cut = 0,
     struc_zero = FALSE,
     neg_lb = FALSE,
@@ -131,9 +132,32 @@ run_ancombc <- function(ps,
     max_iter = 100,
     conserve = FALSE,
     pvalue_cutoff = 0.05) {
+
+
+  # ps = phyloseq::subset_samples(
+  #   enterotypes_arumugam,
+  #   Enterotype %in% c("Enterotype 3", "Enterotype 2", "Enterotype 1"))
+  # group = "Enterotype"
+  # confounders = character(0)
+  # contrast = NULL
+  # taxa_rank = "all"
+  # transform = "identity"
+  # norm = "none"
+  # norm_para = list()
+  # p_adjust = "none"
+  # prv_cut = 0.1
+  # lib_cut = 0
+  # struc_zero = FALSE
+  # neg_lb = FALSE
+  # tol = 1e-05
+  # max_iter = 100
+  # conserve = FALSE
+  # pvalue_cutoff = 0.05
+
+
     stopifnot(inherits(ps, "phyloseq"))
     ps <- check_rank_names(ps) %>%
-        check_taxa_rank( taxa_rank)
+        check_taxa_rank(taxa_rank)
 
     if (length(confounders)) {
         confounders <- check_confounder(ps, group, confounders)
@@ -207,7 +231,9 @@ run_ancombc <- function(ps,
         ps_summarized,
         formula = fml_char,
         p_adj_method = p_adjust,
-        zero_cut = zero_cut,
+        # prv_cut take place of zero_cut (version 2.4.0)
+        # zero_cut = zero_cut,
+        prv_cut = prv_cut,
         lib_cut = lib_cut,
         group = group,
         struc_zero = struc_zero,
@@ -223,38 +249,45 @@ run_ancombc <- function(ps,
     # variable has > 2 levels
     keep_var <- c("W", "p_val", "q_val", "diff_abn")
     if (n_lvl > 2) {
-        # ANCOM-BC global test to determine taxa that are differentially
-        # abundant between three or more groups of multiple samples.
-        # global result to marker_table
-        if (is.null(contrast)) {
-            mtab <- ancombc_out$res_global
-        } else {
-            exp_lvl <- paste0(group, contrast[2])
-            ancombc_res <- ancombc_out$res
-            mtab <- lapply(keep_var, function(x) ancombc_res[[x]][exp_lvl])
-            mtab <- do.call(cbind, mtab)
-        }
+      # ANCOM-BC global test to determine taxa that are differentially
+      # abundant between three or more groups of multiple samples.
+      # global result to marker_table
+      if (is.null(contrast)) {
+        mtab <- ancombc_out$res_global %>%
+          tibble::column_to_rownames("taxon")
+      } else {
+        exp_lvl <- paste0(group, contrast[2])
+        ancombc_res <- ancombc_out$res
+        mtab <- lapply(keep_var, function(x) ancombc_res[[x]][exp_lvl])
+        mtab <- do.call(cbind, mtab)
+      }
     } else {
-        ancombc_out_res <- ancombc_out$res
-        mtab <- do.call(
-            cbind,
-            ancombc_out_res[c("W", "p_val", "q_val", "diff_abn")]
-        )
+      ancombc_out_res <- ancombc_out$res
+      # drop intercept
+      ancombc_out_res <- lapply(
+        ancombc_out_res,
+        function(x) x[-1])
+      mtab <- do.call(
+        cbind,
+        ancombc_out_res[c("W", "p_val", "q_val", "diff_abn")]
+      )
+      rownames(mtab) <- ancombc_out$res$lfc$taxon
     }
-    names(mtab) <- keep_var
+    colnames(mtab) <- keep_var
 
     # determine enrich group based on coefficients
-    cf <- ancombc_out$res$beta
+    # drop intercept
+    cf <- ancombc_out$res$lfc[-c(1:2)]
     if (n_lvl > 2) {
-        if (!is.null(contrast)) {
-            cf <- cf[exp_lvl]
-            enrich_group <- ifelse(cf[[1]] > 0, contrast[2], contrast[1])
-        } else {
-            cf <- cbind(0, cf)
-            enrich_group <- lvl[apply(cf, 1, which.max)]
-        }
+      if (!is.null(contrast)) {
+        cf <- cf[exp_lvl]
+        enrich_group <- ifelse(cf[[1]] > 0, contrast[2], contrast[1])
+      } else {
+        cf <- cbind(0, cf)
+        enrich_group <- lvl[apply(cf, 1, which.max)]
+      }
     } else {
-        enrich_group <- ifelse(cf[[1]] > 0, lvl[2], lvl[1])
+      enrich_group <- ifelse(cf[[1]] > 0, lvl[2], lvl[1])
     }
 
     # # enriched group
@@ -275,7 +308,7 @@ run_ancombc <- function(ps,
         tax_table = tax_table(ps_summarized)
     )
 
-    marker
+    return(marker)
 }
 
 get_ancombc_enrich_group <- function(ps, ancombc_out, group) {

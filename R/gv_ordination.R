@@ -58,7 +58,7 @@
 #'   * "UMAP": Uniform Manifold Approximation and Projection.
 #'   * "NMDS": Non-metric Multidimensional Scaling.
 #' @param distance (Optional). character. Provide one of the currently supported
-#' options. See `distanceMethodList` for a detailed list of the supported options
+#' options. See `vegan::vegdist` for a detailed list of the supported options
 #' and links to accompanying documentation (default: "bray"). Options include:
 #'  * "bray": bray crutis distance.
 #'  * "unifrac" : unweighted UniFrac distance.
@@ -86,7 +86,7 @@
 #' @importFrom stats setNames
 #'
 #' @usage run_ord(
-#'     object = NULL,
+#'     object,
 #'     level = NULL,
 #'     variable,
 #'     transform = c("identity", "log10", "log10p",
@@ -110,6 +110,7 @@
 #'
 #' \dontrun{
 #'
+#' # phyloseq object
 #' data("Zeybel_2022_gut")
 #' ps_zeybel <- summarize_taxa(Zeybel_2022_gut, level = "Genus")
 #' ord_result <- run_ord(
@@ -117,10 +118,24 @@
 #'   variable = "LiverFatClass",
 #'   method = "PCoA")
 #'
+#' # SummarizedExperiment object
+#' data("Zeybel_2022_protein")
+#' Zeybel_2022_protein_imp <- impute_abundance(
+#'   Zeybel_2022_protein,
+#'   group = "LiverFatClass",
+#'   ZerosAsNA = TRUE,
+#'   RemoveNA = TRUE,
+#'   cutoff = 20,
+#'   method = "knn")
+#' ord_result <- run_ord(
+#'   object = Zeybel_2022_protein_imp,
+#'   variable = "LiverFatClass",
+#'   method = "PCA")
+#'
 #' }
 #'
 run_ord <- function(
-    object = NULL,
+    object,
     level = NULL,
     variable,
     transform = "identity",
@@ -147,6 +162,17 @@ run_ord <- function(
   #             Z_vars = NULL,
   #             scale = FALSE)
 
+  # data("Zeybel_2022_protein")
+  # object = Zeybel_2022_protein
+  # level = NULL
+  # variable = "LiverFatClass"
+  # transform = "identity"
+  # norm = "none"
+  # method = "PCA"
+  # distance = "bray"
+  # para = list(scale = TRUE,
+  #             center = TRUE)
+
   # transform
   transform <- match.arg(
     transform, c("identity", "log10", "log10p",
@@ -165,41 +191,47 @@ run_ord <- function(
   )
 
   if (!is.null(object)) {
-    stopifnot(inherits(object, "phyloseq"))
-
-    # add tryCatch (2023/12/2 update)
-    tryCatch(
-      expr = {
-        ps <- preprocess_ps(object)
-      },
-      error = function(e){
-        message('preprocess_ps Caught an error!')
-        print(e)
+    # stopifnot(inherits(object, "phyloseq"))
+    if (inherits(object, "phyloseq")) {
+      # add tryCatch (2023/12/2 update)
+      tryCatch(
+        expr = {
+          ps <- preprocess_ps(object)
+        },
+        error = function(e){
+          message('preprocess_ps Caught an error!')
+          print(e)
+        }
+      )
+      if (!is.null(level)) {
+        ps <- summarize_taxa(ps, level = level)
+      } else {
+        ps <- ps
       }
-    )
-
-    if (!is.null(level)) {
-      ps <- summarize_taxa(ps, level = level)
-    } else {
-      ps <- ps
-    }
-
-    # preprocess phyloseq object
-    ps <- transform_abundances(ps, transform = transform)
-    # normalize the data
-    ps_normed <- normalize(object, method = norm)
-    # otu table: row -> taxa; column -> SampleID
-    if (!(otu_table(ps_normed)@taxa_are_rows)) {
-      otu_tab <- phyloseq::otu_table(ps_normed) %>%
-        data.frame() %>%
-        t() %>% data.frame()
-    } else {
-      otu_tab <- phyloseq::otu_table(ps_normed) %>%
+      # preprocess phyloseq object
+      ps <- transform_abundances(ps, transform = transform)
+      # normalize the data
+      ps_normed <- normalize(object, method = norm)
+      # otu table: row -> taxa; column -> SampleID
+      if (!(otu_table(ps_normed)@taxa_are_rows)) {
+        otu_tab <- phyloseq::otu_table(ps_normed) %>%
+          data.frame() %>%
+          t() %>% data.frame()
+      } else {
+        otu_tab <- phyloseq::otu_table(ps_normed) %>%
+          data.frame()
+      }
+      # sample data
+      sam_tab <- phyloseq::sample_data(ps_normed) %>%
         data.frame()
+    } else if (inherits(object, "SummarizedExperiment")) {
+      ps_normed <- transform_abundances(object, transform = transform)
+      otu_tab <- SummarizedExperiment::assay(ps_normed) %>%
+        data.frame()
+      sam_tab <- SummarizedExperiment::colData(ps_normed) %>%
+        data.frame()
+
     }
-    # sample data
-    sam_tab <- phyloseq::sample_data(ps_normed) %>%
-      data.frame()
   }
 
   # check whether group is valid
@@ -261,10 +293,17 @@ run_ord <- function(
   )
 
   # metadata and profile
-  meta_ps <- phyloseq::sample_data(ps_trim) %>%
-    data.frame()
-  prof_ps <- phyloseq::otu_table(ps_trim) %>%
-    data.frame()
+  if (inherits(object, "phyloseq")) {
+    meta_ps <- phyloseq::sample_data(ps_trim) %>%
+      data.frame()
+    prof_ps <- phyloseq::otu_table(ps_trim) %>%
+      data.frame()
+  } else if (inherits(object, "SummarizedExperiment")) {
+    meta_ps <- SummarizedExperiment::colData(ps_trim) %>%
+      data.frame()
+    prof_ps <- SummarizedExperiment::assay(ps_trim) %>%
+      data.frame()
+  }
 
   # ordination methods
   ## add tryCatch (2023/12/2 update)
